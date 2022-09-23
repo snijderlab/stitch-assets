@@ -1,4 +1,5 @@
 "use strict";
+var assets_folder = undefined;
 
 function sortTable(id, column_number, type) {
     var table, rows, switching, i, x, y, shouldSwitch, dir = 0;
@@ -101,18 +102,20 @@ function get(name) {
 
 var t;
 function Setup() {
-    var back_button = document.getElementById("back-button");
-    var ref = window.name.split('|').pop();
-    if (back_button && ref) {
-        back_button.href = ref;
-        var id = ref.split('/').pop().split('.')[0].replace(/-/g, ':');
-        back_button.innerText = id;
-        if (id != assets_folder.replace(/-/g, ':')) back_button.style = "display: inline-block;"
+    if (assets_folder != undefined) {
+        var back_button = document.getElementById("back-button");
+        var ref = window.name.split('|').pop();
+        if (back_button && ref) {
+            back_button.href = ref;
+            var id = ref.split('/').pop().split('.')[0].replace(/-/g, ':');
+            back_button.innerText = id;
+            if (id != assets_folder.replace(/-/g, ':')) back_button.style = "display: inline-block;"
+        }
+
+        window.name = window.name + "|" + window.location.href
+
+        if (window.name.split('|').pop().split('/').pop().split('.')[0].replace(/-/g, ':') == assets_folder.replace(/-/g, ':')) window.name = window.location.href;
     }
-
-    window.name = window.name + "|" + window.location.href
-
-    if (window.name.split('|').pop().split('/').pop().split('.')[0].replace(/-/g, ':') == assets_folder.replace(/-/g, ':')) window.name = window.location.href;
 
     if (get('pos')) {
         var pos = parseInt(get('pos'));
@@ -124,8 +127,9 @@ function Setup() {
     for (var i = 0; i < elements.length; i++) {
         elements[i].addEventListener("click", CopyGraphData)
         var example = elements[i].getElementsByClassName("example")[0]
+        console.log(example)
         if (example)
-            example.innerText = GetGraphDataExample(elements[i]);
+            example.innerHTML = GetGraphDataExample(elements[i]);
     }
 
     var elements = document.getElementsByClassName("user-help")
@@ -215,6 +219,9 @@ function CopyGraphData(event) {
     }
 }
 
+/** Get the first four lines of the data to work as an example of how the data looks.
+ * @param {Element} element the .copy-data element to get the example for
+*/
 function GetGraphDataExample(element) {
     var children = element.children;
     if (element.classList.contains("mark"))
@@ -222,10 +229,27 @@ function GetGraphDataExample(element) {
     if (element.classList.contains("copy-data"))
         children = element.parentElement.children;
 
+    var example = undefined;
     for (var i = 0; i < children.length; i++) {
         if (children[i].classList.contains("graph-data")) {
-            return children[i].value.split("\n").slice(0, 4).join("\n");
+            example = children[i].value.split("\n").slice(0, 4);
+            break;
         }
+    }
+
+    if (example == undefined) {
+        return "No data found";
+    } else {
+        var output = "";
+        for (var line in example) {
+            output += example[line].substring(0, Math.min(30, example[line].length)).replace(/ /gi, "<span class='sp'> </span>").replace(/\t/gi, "<span class='tab'>\t</span>")
+            if (example[line].length <= 30) {
+                output += "<span class='nl'></span>\n";
+            } else {
+                output += "...\n";
+            }
+        }
+        return output;
     }
 }
 
@@ -266,7 +290,7 @@ function HighlightAminoAcid(event) {
         t = t.parentElement;
     if (highlight == t) return;
     highlight = t;
-    var canvas = t.parentElement.parentElement.children[4].children[1]; // Get the canvas
+    var canvas = t.parentElement.parentElement.querySelector(".canvas"); // Get the canvas
     canvas.classList.add("highlight");
 
     if (t.classList.contains("ion")) {
@@ -290,7 +314,7 @@ function RemoveHighlight(event) {
     var t = event.target; // <span> with the sequence
     if (t.classList.contains("corner"))
         return;
-    var canvas = t.parentElement.parentElement.children[4].children[1]; // Get the canvas
+    var canvas = t.parentElement.parentElement.querySelector(".canvas"); // Get the canvas
     canvas.classList.remove("highlight");
     var peaks = canvas.children;
     for (let i = 0; i < peaks.length; i++) {
@@ -305,18 +329,18 @@ function RemoveHighlight(event) {
 function SpectrumInputChange(event) {
     if (event.target.type == "checkbox") {
         if (event.target.checked) {
-            event.target.parentElement.parentElement.children[4].classList.add(event.target.className);
+            event.target.parentElement.parentElement.querySelector(".canvas-wrapper").classList.add(event.target.className);
         } else {
-            event.target.parentElement.parentElement.children[4].classList.remove(event.target.className);
+            event.target.parentElement.parentElement.querySelector(".canvas-wrapper").classList.remove(event.target.className);
         }
     } else if (event.target.type == "range") {
         var ele = document.getElementById(event.target.id + "_value");
         ele.value = event.target.value;
-        SpectrumUpdateLabels(Number(event.target.value), event.target.parentElement.parentElement.parentElement.children[4].children[1])
+        SpectrumUpdateLabels(Number(event.target.value), event.target.parentElement.parentElement.parentElement.querySelector(".canvas"))
     } else if (event.target.type == "number") {
         var ele = document.getElementById(event.target.id.substring(0, event.target.id.length - 6));
         ele.value = event.target.value;
-        SpectrumUpdateLabels(Number(event.target.value), event.target.parentElement.parentElement.parentElement.children[4].children[1])
+        SpectrumUpdateLabels(Number(event.target.value), event.target.parentElement.parentElement.parentElement.querySelector(".canvas"))
     }
 }
 

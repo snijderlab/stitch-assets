@@ -525,6 +525,10 @@ input:checked+label+.collapsable,
     vertical-align: middle;
 }
 
+summary {
+    user-select: none;
+}
+
 .user-help .mark {
     font-weight: bold;
     color: var(--color-used);
@@ -565,6 +569,25 @@ input:checked+label+.collapsable,
     text-overflow: ellipsis;
     width: 100%;
     max-width: 100%;
+}
+
+.copy-data .example .sp::before,
+.copy-data .example .tab::before,
+.copy-data .example .nl::before {
+    color: var(--color-halfway);
+    position: absolute;
+}
+
+.copy-data .example .sp::before {
+    content: "·";
+}
+
+.copy-data .example .nl::before {
+    content: "↩";
+}
+
+.copy-data .example .tab::before {
+    content: "→";
 }
 
 /* reads alignment */
@@ -1518,7 +1541,7 @@ input:checked+label .overhang-block .text {
     display: grid;
     grid-column: 1/3;
     grid-template-rows: 1fr 2em;
-    grid-template-columns: 4.5em 1fr;
+    grid-template-columns: 5em 1fr;
     grid-template-areas:
         "y-axis canvas"
         ". x-axis";
@@ -1549,7 +1572,7 @@ input:checked+label .overhang-block .text {
     content: "Intensity";
     position: absolute;
     top: 50%;
-    left: -50%;
+    left: -30%;
     text-align: center;
     font-style: italic;
     color: var(--color-halfway);
