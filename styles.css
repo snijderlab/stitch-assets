@@ -617,7 +617,9 @@ summary {
     border-right: 5px solid var(--color-primary);
 }
 
-.reads-alignment .wrapper {
+.reads-alignment .wrapper,
+.reads-alignment .front-overhang,
+.reads-alignment .end-overhang {
     font-family: "Roboto Mono", monospace;
     margin-top: 5px;
     margin-bottom: 0;
@@ -682,6 +684,10 @@ summary {
     margin-left: .5em;
 }
 
+.overhang-block .align-link {
+    height: 19.21px;
+}
+
 .overhang-block .symbol {
     letter-spacing: -4px;
     opacity: .5;
@@ -694,7 +700,7 @@ summary {
 
 .front-overhang-spacing,
 .end-overhang-spacing {
-    height: 73px;
+    height: 69px;
     display: block;
 }
 
@@ -922,9 +928,13 @@ input:checked+label .overhang-block .text {
 .graph {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     align-items: baseline;
     gap: 8px;
+}
+
+.graph h2 {
+    flex-basis: calc(100% - 100px);
 }
 
 .graph .title {
