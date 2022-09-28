@@ -127,7 +127,6 @@ function Setup() {
     for (var i = 0; i < elements.length; i++) {
         elements[i].addEventListener("click", CopyGraphData)
         var example = elements[i].getElementsByClassName("example")[0]
-        console.log(example)
         if (example)
             example.innerHTML = GetGraphDataExample(elements[i]);
     }
