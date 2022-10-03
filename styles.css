@@ -1568,16 +1568,6 @@ input:checked+label .overhang-block .text {
     padding-right: 2px;
 }
 
-.spectrum .unassigned .y-axis .unassigned,
-.spectrum .y-axis .assigned {
-    display: block;
-}
-
-.spectrum .unassigned .y-axis .assigned,
-.spectrum .y-axis .unassigned {
-    display: none;
-}
-
 .spectrum .y-axis::after {
     content: "Intensity";
     position: absolute;
@@ -1643,17 +1633,12 @@ input:checked+label .overhang-block .text {
 
 .spectrum .peak {
     position: absolute;
-    height: calc(var(--intensity) / var(--max-intensity) * 100%);
-    top: calc(100% - var(--intensity) / var(--max-intensity) * 100%);
+    height: min(calc(var(--intensity) / var(--max-intensity) * 100%), 100%);
+    top: clamp(0%, calc(100% - var(--intensity) / var(--max-intensity) * 100%), 100%);
     left: calc(100% * (var(--mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
     width: 1px;
     background-color: var(--color);
     transition: opacity 250ms;
-}
-
-.spectrum .unassigned .peak {
-    height: calc(var(--intensity) / var(--max-intensity-unassigned) * 100%);
-    top: calc(100% - var(--intensity) / var(--max-intensity-unassigned) * 100%);
 }
 
 .spectrum .peak.unassigned {
