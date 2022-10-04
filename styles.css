@@ -13,6 +13,7 @@
     --color-tertiary-o: rgba(244, 135, 113, 20%);
     --color-foreground: #1E1E1E;
     --color-halfway: #7E7E7E;
+    --color-halfway-o: rgb(126, 126, 126, 20%);
     --color-background: #fff;
     --color-label: var(--color-primary);
 }
@@ -1443,6 +1444,7 @@ input:checked+label .overhang-block .text {
     font-size: 1.25em;
     margin: 1em;
     display: flex;
+    flex-wrap: wrap;
     grid-column: 1/3;
     --spacing: 3px;
     --size: 50%;
@@ -1588,7 +1590,7 @@ input:checked+label .overhang-block .text {
 }
 
 .spectrum .x-axis::after {
-    content: "M/Z";
+    content: "m/z";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1607,6 +1609,10 @@ input:checked+label .overhang-block .text {
     --max-mz: calc(var(--zoom-max) * var(--initial-max-mz));
     overflow-x: clip;
     overflow-y: visible;
+}
+
+.spectrum .canvas.dragging {
+    background-color: var(--color-halfway-o);
 }
 
 .spectrum .canvas .zoom-out {
@@ -1639,6 +1645,15 @@ input:checked+label .overhang-block .text {
     width: 1px;
     background-color: var(--color);
     transition: opacity 250ms;
+}
+
+.spectrum .peak.cut::after {
+    content: "^";
+    display: block;
+    position: absolute;
+    color: var(--color);
+    left: -.17rem;
+    top: -.22rem;
 }
 
 .spectrum .peak.unassigned {

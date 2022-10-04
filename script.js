@@ -407,6 +407,8 @@ function spectrumDragOut(event) {
     }
     selection = undefined
     startPoint = undefined
+
+    document.querySelectorAll(".canvas.dragging").forEach(e => e.classList.remove("dragging"));
 }
 
 function spectrumDragEnd(event) {
@@ -437,36 +439,48 @@ function spectrumDragEnd(event) {
 }
 
 function spectrumZoomOut(event) {
-    var d = event.target.parentElement.dataset;
+    var canvas = event.target.parentElement;
+    var d = canvas.dataset;
     d.minMz = 0;
     d.maxMz = d.initialMaxMz;
     d.maxIntensity = d.initialMaxIntensity;
-    event.target.parentElement.style.setProperty("--min-mz", 0);
-    event.target.parentElement.style.setProperty("--max-mz", d.initialMaxMz);
-    event.target.parentElement.style.setProperty("--max-intensity", d.initialMaxIntensity);
+    canvas.style.setProperty("--min-mz", 0);
+    canvas.style.setProperty("--max-mz", d.initialMaxMz);
+    canvas.style.setProperty("--max-intensity", d.initialMaxIntensity);
 
-    UpdateSpectrumAxes(event.target.parentElement)
+    UpdateSpectrumAxes(canvas)
 }
 
 // Give the canvas element
-function UpdateSpectrumAxes(ele) {
+function UpdateSpectrumAxes(canvas) {
     // Update x-axis
-    var axis = ele.parentElement.getElementsByClassName("x-axis")[0];
+    var axis = canvas.parentElement.getElementsByClassName("x-axis")[0];
     var ticks = axis.children;
-    var min = Number(ele.dataset.minMz);
-    var max = Number(ele.dataset.maxMz);
+    var min = Number(canvas.dataset.minMz);
+    var max = Number(canvas.dataset.maxMz);
     var factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1;
     for (let i = 0; i < ticks.length; i++) {
         ticks[i].innerText = Math.round((min + i / 4 * (max - min)) * factor) / factor;
     }
+
     // Update y-axis
-    var axis = ele.parentElement.getElementsByClassName("y-axis")[0];
+    var axis = canvas.parentElement.getElementsByClassName("y-axis")[0];
     var ticks = axis.children;
-    var max = Number(ele.dataset.maxIntensity);
+    var max = Number(canvas.dataset.maxIntensity);
     for (let i = 0; i < ticks.length; i++) {
         if (i == 0)
             ticks[i].innerText = "0";
         else
             ticks[i].innerText = Math.round(i / 4 * (max)).toExponential(2);
+    }
+
+    var peaks = canvas.children;
+    for (let i = 0; i < peaks.length; i++) {
+        var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
+        if (v > max) {
+            peaks[i].classList.add("cut");
+        } else {
+            peaks[i].classList.remove("cut");
+        }
     }
 }
