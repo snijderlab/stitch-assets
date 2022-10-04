@@ -1559,6 +1559,13 @@ input:checked+label .overhang-block .text {
         ". x-axis";
 }
 
+.spectrum .canvas-wrapper.first {
+    grid-template-rows: 1fr;
+    grid-template-columns: 5em 1fr;
+    grid-template-areas:
+        "y-axis canvas"
+}
+
 .spectrum .y-axis {
     grid-area: y-axis;
     display: flex;
@@ -1568,6 +1575,7 @@ input:checked+label .overhang-block .text {
     align-items: flex-end;
     position: relative;
     padding-right: 2px;
+    user-select: none;
 }
 
 .spectrum .y-axis::after {
@@ -1581,12 +1589,26 @@ input:checked+label .overhang-block .text {
     transform: rotate(270deg);
 }
 
+.spectrum .second .y-axis {
+    flex-direction: column;
+}
+
+.spectrum .first .y-axis .n0 {
+    position: relative;
+    top: .6rem;
+}
+
+.spectrum .second .y-axis .n0 {
+    opacity: 0;
+}
+
 .spectrum .x-axis {
     position: relative;
     grid-area: x-axis;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    user-select: none;
 }
 
 .spectrum .x-axis::after {
@@ -1599,6 +1621,10 @@ input:checked+label .overhang-block .text {
     color: var(--color-halfway);
 }
 
+.spectrum .first .x-axis {
+    display: none;
+}
+
 .spectrum .canvas {
     grid-area: canvas;
     position: relative;
@@ -1609,6 +1635,10 @@ input:checked+label .overhang-block .text {
     --max-mz: calc(var(--zoom-max) * var(--initial-max-mz));
     overflow-x: clip;
     overflow-y: visible;
+}
+
+.spectrum .second .canvas {
+    border-bottom: none;
 }
 
 .spectrum .canvas.dragging {
@@ -1625,6 +1655,11 @@ input:checked+label .overhang-block .text {
     background-color: transparent;
     border-radius: .2rem;
     font-size: 0.8em;
+    display: none;
+}
+
+.spectrum .canvas.zoomed .zoom-out {
+    display: block;
 }
 
 .spectrum .canvas .zoom-out:hover {
@@ -1647,13 +1682,23 @@ input:checked+label .overhang-block .text {
     transition: opacity 250ms;
 }
 
+.spectrum .second .peak {
+    top: 0;
+}
+
 .spectrum .peak.cut::after {
-    content: "^";
+    content: "▲";
     display: block;
     position: absolute;
     color: var(--color);
-    left: -.17rem;
-    top: -.22rem;
+    left: -.45rem;
+    top: -.3rem;
+}
+
+.spectrum .second .peak.cut::after {
+    content: "▼";
+    bottom: -.45rem;
+    top: unset;
 }
 
 .spectrum .peak.unassigned {
@@ -1673,6 +1718,11 @@ input:checked+label .overhang-block .text {
     z-index: 10;
     cursor: default;
     opacity: 0;
+}
+
+.spectrum .second .peak span {
+    bottom: -1.6em;
+    top: unset;
 }
 
 .spectrum .peak.label span {

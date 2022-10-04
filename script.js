@@ -292,23 +292,24 @@ function HighlightAminoAcid(event) {
         t = t.parentElement;
     if (highlight == t) return;
     highlight = t;
-    var canvas = t.parentElement.parentElement.querySelector(".canvas"); // Get the canvas
-    canvas.classList.add("highlight");
+    t.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => {
+        canvas.classList.add("highlight");
 
-    if (t.classList.contains("ion")) {
-        var cl = t.classList[1];
-        var elements = canvas.querySelectorAll("." + cl);
-        for (let i = 0; i < elements.length; i++) {
-            elements[i].classList.add("highlight");
-        }
-    } else {
-        var peaks = canvas.children;
-        for (let i = 0; i < peaks.length; i++) {
-            if (peaks[i].dataset.pos == t.dataset.pos) {
-                peaks[i].classList.add("highlight")
+        if (t.classList.contains("ion")) {
+            var cl = t.classList[1];
+            var elements = canvas.querySelectorAll("." + cl);
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].classList.add("highlight");
+            }
+        } else {
+            var peaks = canvas.children;
+            for (let i = 0; i < peaks.length; i++) {
+                if (peaks[i].dataset.pos == t.dataset.pos) {
+                    peaks[i].classList.add("highlight")
+                }
             }
         }
-    }
+    });
 }
 
 /* Remove peptide spectrum highlight */
@@ -316,13 +317,14 @@ function RemoveHighlight(event) {
     var t = event.target; // <span> with the sequence
     if (t.classList.contains("corner"))
         return;
-    var canvas = t.parentElement.parentElement.querySelector(".canvas"); // Get the canvas
-    canvas.classList.remove("highlight");
-    var peaks = canvas.children;
-    for (let i = 0; i < peaks.length; i++) {
-        peaks[i].classList.remove("highlight")
-    }
-    highlight = undefined;
+    t.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => {
+        canvas.classList.remove("highlight");
+        var peaks = canvas.children;
+        for (let i = 0; i < peaks.length; i++) {
+            peaks[i].classList.remove("highlight")
+        }
+        highlight = undefined;
+    });
 }
 
 /** Toggle features on or off in the spectrum (eg background peaks, peak labels) 
@@ -330,23 +332,24 @@ function RemoveHighlight(event) {
 */
 function SpectrumInputChange(event) {
     if (event.target.type == "checkbox") { // Background
-        var wrapper = event.target.parentElement.parentElement.querySelector(".canvas-wrapper");
-        var canvas = wrapper.querySelector(".canvas");
-        if (event.target.checked) { // Will be adding all background peaks
-            wrapper.classList.add(event.target.className);
-            if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensityAssigned) {
-                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
-                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
-                UpdateSpectrumAxes(canvas)
+        event.target.parentElement.parentElement.querySelectorAll(".canvas-wrapper").forEach(wrapper => {
+            var canvas = wrapper.querySelector(".canvas");
+            if (event.target.checked) { // Will be adding all background peaks
+                wrapper.classList.add(event.target.className);
+                if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensityAssigned) {
+                    canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
+                    canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+                    UpdateSpectrumAxes(canvas)
+                }
+            } else { // Will be removing all background peaks
+                wrapper.classList.remove(event.target.className);
+                if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
+                    canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
+                    canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+                    UpdateSpectrumAxes(canvas)
+                }
             }
-        } else { // Will be removing all background peaks
-            wrapper.classList.remove(event.target.className);
-            if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
-                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
-                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
-                UpdateSpectrumAxes(canvas)
-            }
-        }
+        });
     } else if (event.target.type == "range") { // Peak labels
         var ele = document.getElementById(event.target.id + "_value");
         ele.value = event.target.value;
@@ -412,11 +415,13 @@ function spectrumDragOut(event) {
 }
 
 function spectrumDragEnd(event) {
-    if (event.target.classList.contains("canvas") && startPoint != undefined) {
-        var d = event.target.dataset;
-        event.target.classList.remove("dragging")
+    var canvas = event.target;
+    if (canvas.classList.contains("canvas") && startPoint != undefined) {
+        var d = canvas.dataset;
+        canvas.classList.remove("dragging");
+        canvas.classList.add("zoomed");
         selection.hidden = true;
-        var box = event.target.getBoundingClientRect();
+        var box = canvas.getBoundingClientRect();
         var width = box.width;
         var height = box.height;
         var min = Math.min(startPoint, event.offsetX) / width;
@@ -430,11 +435,11 @@ function spectrumDragEnd(event) {
         d.minMz = min;
         d.maxMz = max;
         d.maxIntensity = maxI;
-        event.target.style.setProperty("--min-mz", min);
-        event.target.style.setProperty("--max-mz", max);
-        event.target.style.setProperty("--max-intensity", maxI);
+        canvas.style.setProperty("--min-mz", min);
+        canvas.style.setProperty("--max-mz", max);
+        canvas.style.setProperty("--max-intensity", maxI);
 
-        UpdateSpectrumAxes(event.target)
+        UpdateSpectrumAxes(canvas)
     }
 }
 
@@ -447,6 +452,7 @@ function spectrumZoomOut(event) {
     canvas.style.setProperty("--min-mz", 0);
     canvas.style.setProperty("--max-mz", d.initialMaxMz);
     canvas.style.setProperty("--max-intensity", d.initialMaxIntensity);
+    canvas.classList.remove("zoomed");
 
     UpdateSpectrumAxes(canvas)
 }
