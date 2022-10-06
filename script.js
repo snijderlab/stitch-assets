@@ -413,7 +413,10 @@ function spectrumDragStart(event) {
         } else if (wrapper.classList.contains("second")) {
             linked_selection = wrapper.parentElement.querySelector(".selection.first")
         }
-        if (linked_selection != undefined) linked_selection.hidden = false;
+        if (linked_selection != undefined) {
+            linked_selection.hidden = false;
+            linked_selection.classList.add("linked");
+        }
         updateSelections(startPoint, event.offsetY, 0);
     }
 }
@@ -445,7 +448,10 @@ function spectrumDrag(event) {
 
 function spectrumDragOut(event) {
     if (selection != undefined) selection.hidden = true;
-    if (linked_selection != undefined) linked_selection.hidden = true;
+    if (linked_selection != undefined) {
+        linked_selection.hidden = true;
+        linked_selection.classList.remove("linked");
+    }
     selection = undefined
     linked_selection = undefined
     startPoint = undefined

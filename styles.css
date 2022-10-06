@@ -1787,11 +1787,19 @@ input:checked+label .overhang-block .text {
 }
 
 .spectrum .selection {
-    border: 2px solid var(--color-primary);
+    border: 2px dashed var(--color-primary);
     height: 100%;
     box-sizing: border-box;
     position: absolute;
     pointer-events: none;
+}
+
+.spectrum .first .selection.first {
+    border-bottom: none;
+}
+
+.spectrum .selection.second {
+    border-top: none;
 }
 
 .spectrum .canvas.dragging * {
