@@ -288,19 +288,33 @@ function SpectrumSetUp() {
 
 var highlight;
 function ToggleHighlight(event, permanent, start = null) {
-    // TODO remaining problem: a peak that should still be highlighted based on an existing permanent highlight can be removed by another highlight rule. 
-    // Likely this can only be solved by amassing all rules in a list and evaluating them each time. 
     var t = event.target; // <span> with the sequence
     if (permanent) t.classList.toggle("permanent");
-    if (highlight == t && permanent) return;
     if (t.classList.contains("permanent") && !permanent) return;
 
     highlight = t;
     var container = t.parentElement.parentElement;
     function toggle(element) {
-        if (start == true) element.classList.add("highlight");
-        else if (start == null) element.classList.toggle("highlight");
-        else element.classList.remove("highlight");
+        if (element.dataset.n == undefined) element.dataset.n = 0;
+        if (element.dataset.n < 0) element.dataset.n = 0;
+        if ((permanent && t.classList.contains("permanent"))) {
+            element.dataset.n = Number(element.dataset.n) + 1;
+            if (element.dataset.n == 1) element.classList.add("highlight");
+        }
+        else if (permanent) {
+            element.dataset.n = Number(element.dataset.n) - 1;
+            if (element.dataset.n <= 0) element.classList.remove("highlight");
+        } else {
+            if (element.dataset.n == undefined || element.dataset.n == 0) {
+                if (start) {
+                    element.classList.add("highlight");
+                } else if (start == null) {
+                    element.classList.toggle("highlight");
+                } else {
+                    element.classList.remove("highlight");
+                }
+            }
+        }
     }
     container.querySelectorAll(".canvas").forEach(canvas => {
         if (t.classList.contains("ion")) {
