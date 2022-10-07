@@ -254,13 +254,15 @@ function GetGraphDataExample(element) {
 function SpectrumSetUp() {
     var elements = document.querySelectorAll(".spectrum .peptide span");
     for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseenter", HighlightAminoAcid);
-        elements[i].addEventListener("mouseleave", RemoveHighlight);
+        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
+        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
+        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
     }
     var elements = document.querySelectorAll(".spectrum .legend .ion");
     for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseenter", HighlightAminoAcid);
-        elements[i].addEventListener("mouseleave", RemoveHighlight);
+        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
+        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
+        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
     }
     var elements = document.querySelectorAll(".spectrum .legend input");
     for (let i = 0; i < elements.length; i++) {
@@ -284,47 +286,63 @@ function SpectrumSetUp() {
     }
 }
 
-/* Highlight an aminoacid that the user hovered over in the peptide spectrum */
 var highlight;
-function HighlightAminoAcid(event) {
+function ToggleHighlight(event, permanent, start = null) {
     var t = event.target; // <span> with the sequence
-    if (t.classList.contains("corner"))
-        t = t.parentElement;
-    if (highlight == t) return;
-    highlight = t;
-    t.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => {
-        canvas.classList.add("highlight");
+    if (permanent) t.classList.toggle("permanent");
+    if (t.classList.contains("permanent") && !permanent) return;
 
+    highlight = t;
+    var container = t.parentElement.parentElement;
+    function toggle(element) {
+        if (element.dataset.n == undefined) element.dataset.n = 0;
+        if (element.dataset.n < 0) element.dataset.n = 0;
+        if ((permanent && t.classList.contains("permanent"))) {
+            element.dataset.n = Number(element.dataset.n) + 1;
+            if (element.dataset.n == 1) element.classList.add("highlight");
+        }
+        else if (permanent) {
+            element.dataset.n = Number(element.dataset.n) - 1;
+            if (element.dataset.n <= 0) element.classList.remove("highlight");
+        } else {
+            if (element.dataset.n == undefined || element.dataset.n == 0) {
+                if (start) {
+                    element.classList.add("highlight");
+                } else if (start == null) {
+                    element.classList.toggle("highlight");
+                } else {
+                    element.classList.remove("highlight");
+                }
+            }
+        }
+    }
+    container.querySelectorAll(".canvas").forEach(canvas => {
         if (t.classList.contains("ion")) {
             var cl = t.classList[1];
             var elements = canvas.querySelectorAll("." + cl);
             for (let i = 0; i < elements.length; i++) {
-                elements[i].classList.add("highlight");
+                toggle(elements[i]);
             }
         } else {
             var peaks = canvas.children;
             for (let i = 0; i < peaks.length; i++) {
                 if (peaks[i].dataset.pos == t.dataset.pos) {
-                    peaks[i].classList.add("highlight")
+                    toggle(peaks[i]);
                 }
             }
         }
-    });
-}
+    })
 
-/* Remove peptide spectrum highlight */
-function RemoveHighlight(event) {
-    var t = event.target; // <span> with the sequence
-    if (t.classList.contains("corner"))
-        return;
-    t.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => {
-        canvas.classList.remove("highlight");
-        var peaks = canvas.children;
-        for (let i = 0; i < peaks.length; i++) {
-            peaks[i].classList.remove("highlight")
-        }
-        highlight = undefined;
-    });
+    if (container.classList.contains("wrapper")) container = container.parentElement;
+    if (start || container.querySelector(".permanent") != null) {
+        container.querySelectorAll(".canvas").forEach(canvas => {
+            canvas.classList.add("highlight");
+        })
+    } else {
+        container.querySelectorAll(".canvas").forEach(canvas => {
+            canvas.classList.remove("highlight");
+        })
+    }
 }
 
 /** Toggle features on or off in the spectrum (eg background peaks, peak labels) 
@@ -353,11 +371,11 @@ function SpectrumInputChange(event) {
     } else if (event.target.type == "range") { // Peak labels
         var ele = document.getElementById(event.target.id + "_value");
         ele.value = event.target.value;
-        SpectrumUpdateLabels(Number(event.target.value), event.target.parentElement.parentElement.parentElement.querySelector(".canvas"))
+        event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => SpectrumUpdateLabels(Number(event.target.value), canvas))
     } else if (event.target.type == "number") { // Peak labels
         var ele = document.getElementById(event.target.id.substring(0, event.target.id.length - 6));
         ele.value = event.target.value;
-        SpectrumUpdateLabels(Number(event.target.value), event.target.parentElement.parentElement.parentElement.querySelector(".canvas"))
+        event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => SpectrumUpdateLabels(Number(event.target.value), canvas))
     }
 }
 
@@ -382,33 +400,60 @@ function SpectrumUpdateLabels(value, canvas) {
 
 var startPoint;
 var selection;
+var linked_selection;
 function spectrumDragStart(event) {
     if (event.target.classList.contains("canvas")) {
         event.target.classList.add("dragging")
         startPoint = event.offsetX;
-        selection = event.target.getElementsByClassName("selection")[0]
-        selection.hidden = false
-        selection.style.setProperty("left", startPoint + "px")
-        selection.style.setProperty("width", "0px")
-        selection.style.setProperty("top", event.offsetY + "px")
-        selection.style.setProperty("height", selection.parentElement.getBoundingClientRect().height - event.offsetY + "px")
+        selection = event.target.querySelector(".selection");
+        selection.hidden = false;
+        var wrapper = event.target.parentElement.parentElement;
+        if (wrapper.classList.contains("first")) {
+            linked_selection = wrapper.parentElement.querySelector(".selection.second")
+        } else if (wrapper.classList.contains("second")) {
+            linked_selection = wrapper.parentElement.querySelector(".selection.first")
+        }
+        if (linked_selection != undefined) {
+            linked_selection.hidden = false;
+            linked_selection.classList.add("linked");
+        }
+        updateSelections(startPoint, event.offsetY, 0);
+    }
+}
+
+function updateSelections(offsetX, offsetY, width) {
+    if (selection != undefined) updateSelection(selection, offsetX, offsetY, width);
+    if (linked_selection != undefined) updateSelection(linked_selection, offsetX, offsetY, width);
+}
+
+function updateSelection(select, offsetX, offsetY, width) {
+    select.style.setProperty("left", offsetX + "px")
+    select.style.setProperty("width", width + "px")
+    select.style.setProperty("height", select.parentElement.getBoundingClientRect().height - offsetY + "px")
+
+    if (select.classList.contains("first")) {
+        select.style.setProperty("top", offsetY + "px")
+    } else {
+        select.style.setProperty("bottom", offsetY + "px")
     }
 }
 
 function spectrumDrag(event) {
     if (startPoint != undefined) {
-        selection.style.setProperty("left", Math.min(event.offsetX, startPoint) + "px")
-        selection.style.setProperty("width", Math.abs(event.offsetX - startPoint) + "px")
-        selection.style.setProperty("top", event.offsetY + "px")
-        selection.style.setProperty("height", selection.parentElement.getBoundingClientRect().height - event.offsetY + "px")
+        var offsetY = event.offsetY;
+        if (selection.classList.contains("second")) offsetY = event.target.getBoundingClientRect().height - offsetY;
+        updateSelections(Math.min(event.offsetX, startPoint), offsetY, Math.abs(event.offsetX - startPoint))
     }
 }
 
 function spectrumDragOut(event) {
-    if (selection != undefined) {
-        selection.hidden = true
+    if (selection != undefined) selection.hidden = true;
+    if (linked_selection != undefined) {
+        linked_selection.hidden = true;
+        linked_selection.classList.remove("linked");
     }
     selection = undefined
+    linked_selection = undefined
     startPoint = undefined
 
     document.querySelectorAll(".canvas.dragging").forEach(e => e.classList.remove("dragging"));
@@ -418,9 +463,6 @@ function spectrumDragEnd(event) {
     var canvas = event.target;
     if (canvas.classList.contains("canvas") && startPoint != undefined) {
         var d = canvas.dataset;
-        canvas.classList.remove("dragging");
-        canvas.classList.add("zoomed");
-        selection.hidden = true;
         var box = canvas.getBoundingClientRect();
         var width = box.width;
         var height = box.height;
@@ -431,30 +473,41 @@ function spectrumDragEnd(event) {
         var maxIntensity = Number(d.maxIntensity);
         var min = min * Math.max(1, maxMz - minMz) + minMz;
         var max = max * Math.max(1, maxMz - minMz) + minMz;
-        var maxI = maxIntensity * (1 - Math.max(0, event.offsetY / height));
-        d.minMz = min;
-        d.maxMz = max;
-        d.maxIntensity = maxI;
-        canvas.style.setProperty("--min-mz", min);
-        canvas.style.setProperty("--max-mz", max);
-        canvas.style.setProperty("--max-intensity", maxI);
+        var offsetY = event.offsetY;
+        if (selection.classList.contains("second")) offsetY = height - offsetY;
+        var maxI = (1 - Math.max(0, offsetY / height));
 
-        UpdateSpectrumAxes(canvas)
+        Zoom(canvas, min, max, maxI);
+        if (linked_selection != undefined) Zoom(linked_selection.parentElement, min, max, maxI);
+        spectrumDragOut(event)
     }
 }
 
-function spectrumZoomOut(event) {
-    var canvas = event.target.parentElement;
-    var d = canvas.dataset;
-    d.minMz = 0;
-    d.maxMz = d.initialMaxMz;
-    d.maxIntensity = d.initialMaxIntensity;
-    canvas.style.setProperty("--min-mz", 0);
-    canvas.style.setProperty("--max-mz", d.initialMaxMz);
-    canvas.style.setProperty("--max-intensity", d.initialMaxIntensity);
-    canvas.classList.remove("zoomed");
+function Zoom(canvas, min, max, maxI) {
+    canvas.classList.add("zoomed");
+    canvas.dataset.minMz = min;
+    canvas.dataset.maxMz = max;
+    canvas.dataset.maxIntensity = maxI * canvas.dataset.maxIntensity;
+    canvas.style.setProperty("--min-mz", min);
+    canvas.style.setProperty("--max-mz", max);
+    canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
 
     UpdateSpectrumAxes(canvas)
+}
+
+function spectrumZoomOut(event) {
+    event.target.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => {
+        var d = canvas.dataset;
+        d.minMz = 0;
+        d.maxMz = d.initialMaxMz;
+        d.maxIntensity = d.initialMaxIntensity;
+        canvas.style.setProperty("--min-mz", 0);
+        canvas.style.setProperty("--max-mz", d.initialMaxMz);
+        canvas.style.setProperty("--max-intensity", d.initialMaxIntensity);
+        canvas.classList.remove("zoomed");
+
+        UpdateSpectrumAxes(canvas)
+    });
 }
 
 // Give the canvas element
