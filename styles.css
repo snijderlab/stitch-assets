@@ -423,7 +423,7 @@ td.bar::before {
     user-select: none;
 }
 
-.report>.collapsable>* {
+.report>.collapsible>* {
     --color-label: var(--color-primary-s1);
 }
 
@@ -440,7 +440,7 @@ td.bar::before {
     font-family: "Roboto Mono", monospace;
 }
 
-.report .collapsable>label {
+.report .collapsible>label {
     font-size: 1.5em;
     border: 2px solid var(--color-label);
     background-color: var(--color-background);
@@ -449,7 +449,7 @@ td.bar::before {
     margin-top: 0.75em;
 }
 
-.report .collapsable>label::after {
+.report .collapsible>label::after {
     border-color: var(--color-label);
     color: var(--color-label);
 }
@@ -462,7 +462,7 @@ input:checked+label {
     content: "-";
 }
 
-.collapsable {
+.collapsible {
     display: none;
     border-left: 2px solid var(--color-label);
     padding-left: .5rem;
@@ -484,8 +484,8 @@ input[type="radio"] {
     display: none;
 }
 
-input:checked+label+.collapsable,
-.collapsable:target {
+input:checked+label+.collapsible,
+.collapsible:target {
     display: block;
 }
 
@@ -1877,13 +1877,13 @@ input:checked+label .overhang-block .text {
     }
 
     .report label,
-    .report .collapsable>label {
+    .report .collapsible>label {
         background: none;
         color: var(--color-foreground);
         border: none;
     }
 
-    .collapsable {
+    .collapsible {
         border: none;
         padding: 0;
         display: block;
@@ -1948,7 +1948,7 @@ input:checked+label .overhang-block .text {
     .report label::after,
     .overview h3,
     .overview p,
-    .collapsable>.collapsable>label:last-of-type,
+    .collapsible>.collapsible>label:last-of-type,
     [id$="cdr"] p,
     [id$="segment-joining"] p,
     [id$="segment-joining"] pre,
