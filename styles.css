@@ -764,12 +764,17 @@ input:checked+label .overhang-block .text {
 
 /* footer */
 
-.footer {
+footer {
     margin: 3em 0;
 }
 
-.footer p {
+footer p {
     color: var(--color-halfway);
+}
+
+footer .version {
+    color: var(--color-foreground);
+    user-select: all;
 }
 
 
