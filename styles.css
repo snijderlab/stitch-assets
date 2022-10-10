@@ -1812,6 +1812,75 @@ footer .version {
 }
 
 
+/* Ambiguity Overview */
+
+.ambiguity-overview #ambiguity-wrapper {
+    overflow-x: auto;
+}
+
+.ambiguity-overview #ambiguity-wrapper>p:first() {
+    display: inline;
+}
+
+.ambiguity-overview [for=ambiguity-stroke-selector] {
+    border: 2px solid var(--color-primary);
+    border-radius: 1rem;
+    display: inline;
+    margin-left: .25rem;
+}
+
+.ambiguity-overview [for=ambiguity-stroke-selector]>* {
+    color: var(--color-foreground);
+    padding: .25rem;
+    user-select: none;
+    width: 3rem;
+    display: inline-block;
+    text-align: center;
+}
+
+.ambiguity-overview input:not(:checked)+label {
+    background: linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) 50%, transparent 50%, transparent 100%);
+}
+
+.ambiguity-overview input:not(:checked)+label>span:nth-child(1) {
+    color: var(--color-background);
+}
+
+.ambiguity-overview input:checked+label {
+    background: linear-gradient(to right, transparent 0%, transparent 50%, var(--color-primary) 50%, var(--color-primary) 100%);
+}
+
+.ambiguity-overview input:checked+label>span:nth-child(2) {
+    color: var(--color-background);
+}
+
+.ambiguity-overview svg {
+    display: block;
+}
+
+.ambiguity-overview svg .position {
+    fill: var(--color-halfway);
+}
+
+.ambiguity-overview svg .baseline {
+    stroke: var(--color-halfway);
+    stroke-width: 2px;
+}
+
+.ambiguity-overview svg .support-arrow {
+    stroke-width: calc(10px * var(--support-local));
+    stroke: var(--color-primary);
+}
+
+.ambiguity-overview svg .support-arrow:hover {
+    stroke: var(--color-secondary);
+}
+
+.ambiguity-overview input:checked+label+svg .support-arrow {
+    stroke-width: calc(10px * var(--support-global));
+}
+
+
 /* Special rules for depth of coverage plots */
 
 .doc-plot {
