@@ -326,9 +326,9 @@ td.bar::before {
 }
 
 
-/* Annotated Consensus Sequences */
+/* Annotated nsus Sequences */
 
-.annotated-consensus-sequence {
+.annotated-nsus-sequence {
     display: grid;
     grid-template-columns: 1fr max-content;
     grid-template-rows: min-content max-content max-content;
@@ -376,6 +376,10 @@ td.bar::before {
     color: var(--color-secondary);
 }
 
+.sequence-logo-position.ambiguous {
+    border-bottom: 2px solid var(--color-secondary);
+}
+
 .histogram .bar.CDR1,
 .histogram .bar.CDR2,
 .histogram .bar.CDR3,
@@ -383,12 +387,12 @@ td.bar::before {
     background-color: var(--color-secondary);
 }
 
-.annotated .Conserved,
-.sequence-logo-position.Conserved {
+.annotated .rved,
+.sequence-logo-position.rved {
     color: var(--color-tertiary);
 }
 
-.histogram .bar.Conserved {
+.histogram .bar.rved {
     background-color: var(--color-tertiary);
 }
 
@@ -905,7 +909,7 @@ footer .version {
     font-size: var(--sequence-logo-font-size);
     font-family: "Roboto Mono", monospace;
     margin-top: -0.4em;
-    margin-bottom: 1.5em;
+    /* margin-bottom: 1.5em; */
     color: var(--color-primary);
     align-items: end;
 }
@@ -950,7 +954,7 @@ footer .version {
 }
 
 .alignment .copy-data,
-.annotated-consensus-sequence .copy-data,
+.annotated-nsus-sequence .copy-data,
 .spectrum .copy-data {
     height: fit-content;
     width: -moz-fit-content;
@@ -1865,6 +1869,10 @@ footer .version {
 .ambiguity-overview svg .baseline {
     stroke: var(--color-halfway);
     stroke-width: 2px;
+}
+
+.ambiguity-overview svg .option {
+    fill: var(--color-foreground);
 }
 
 .ambiguity-overview svg .support-arrow {
