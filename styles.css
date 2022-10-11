@@ -603,6 +603,31 @@ summary {
     grid-template-rows: min-content 1fr;
 }
 
+.alignment .alignment-body {
+    display: grid;
+    grid-auto-flow: row dense;
+    overflow-x: scroll;
+}
+
+.alignment .alignment-body>* {
+    grid-column: var(--start) / calc(var(--start) + var(--length));
+    text-decoration: none;
+    color: var(--color-foreground);
+    border: 2px solid blue;
+    font-size: .8rem;
+    font-family: "Roboto Mono", monospace;
+}
+
+.alignment .alignment-body>*:hover {
+    color: var(--color-secondary);
+    border-color: red;
+}
+
+.alignment .alignment-body .template {
+    grid-column-start: 1;
+    color: var(--color-primary-s1);
+    grid-row: 1/1;
+}
 
 .reads-alignment {
     display: flex;
