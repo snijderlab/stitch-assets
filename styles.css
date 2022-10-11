@@ -1820,9 +1820,10 @@ footer .version {
 
 .ambiguity-overview #ambiguity-wrapper {
     overflow-x: auto;
+    border: 2px solid var(--color-halfway-o);
 }
 
-.ambiguity-overview #ambiguity-wrapper>p:first() {
+.ambiguity-overview p {
     display: inline;
 }
 
@@ -1884,7 +1885,7 @@ footer .version {
     stroke: var(--color-secondary);
 }
 
-.ambiguity-overview input:checked+label+svg .support-arrow {
+.ambiguity-overview input:checked+label+div>svg .support-arrow {
     stroke-width: calc(10px * var(--support-global));
 }
 
