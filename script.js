@@ -250,6 +250,10 @@ function GetGraphDataExample(element) {
     }
 }
 
+function ToggleCDRReads() {
+    document.querySelector(".alignment-body").classList.toggle("cdr");
+}
+
 /* Spectrum viewer code */
 function SpectrumSetUp() {
     var elements = document.querySelectorAll(".spectrum .peptide span");
