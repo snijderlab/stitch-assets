@@ -37,11 +37,19 @@
     }
 }
 
+html {
+    min-height: 100vh;
+}
+
 body {
     font-family: "Roboto", sans-serif;
     margin: 0;
     color: var(--color-foreground);
     background-color: var(--color-background);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 h1,
@@ -494,26 +502,27 @@ input:checked+label+.collapsible,
 }
 
 /* source code */
-.source-code {
+code {
     margin: 0;
     padding-top: 1em;
     font-family: "Roboto Mono";
     font-size: 12px;
+    white-space: break-spaces;
 }
 
-.source-code .op {
+code .op {
     color: var(--color-halfway);
 }
 
-.source-code .id {
+code .id {
     color: var(--color-primary);
 }
 
-.source-code .value {
+code .value {
     color: var(--color-secondary);
 }
 
-.source-code .comment {
+code .comment {
     color: var(--color-tertiary);
 }
 
@@ -859,7 +868,7 @@ input:checked+label .overhang-block .text {
 /* footer */
 
 footer {
-    margin: 3em 0;
+    margin: 1em;
 }
 
 footer p {
