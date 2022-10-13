@@ -254,6 +254,25 @@ function ToggleCDRReads() {
     document.querySelector(".alignment-body").classList.toggle("cdr");
 }
 
+/** Update the reads alignment to only show the read supporting the given position. Or if only this position is shown remove the highlight.
+ * @param {String} position the class of the position eg for position 42 this would be "a42".
+ * @param {Number} alignment_position the position of this node in the template alignment.
+*/
+function HighlightAmbiguous(position, alignment_position) {
+    var body = document.querySelector(".alignment-body")
+    if (body.classList.contains("highlight") && body.dataset.position == position) {
+        body.style.setProperty("--highlight-pos", "-1ch");
+        body.dataset.position = undefined;
+        document.querySelectorAll(".highlight").forEach(e => e.classList.remove("highlight")); // Removes highlight from all reads, the .node, and .alignment-body
+    } else {
+        document.querySelectorAll(".highlight").forEach(e => e.classList.remove("highlight"));
+        body.style.setProperty("--highlight-pos", String(alignment_position) + "ch");
+        body.dataset.position = position;
+        body.classList.add("highlight")
+        document.querySelectorAll("." + position).forEach(e => e.classList.add("highlight")); // Highlights all reads and the .node 
+    }
+}
+
 /* Spectrum viewer code */
 function SpectrumSetUp() {
     var elements = document.querySelectorAll(".spectrum .peptide span");

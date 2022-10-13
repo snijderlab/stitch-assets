@@ -27,7 +27,7 @@
         --color-tertiary: #DCD08F;
         --color-quaternary: #4EC9B0;
         --color-quinary: #b57fd7;
-        --color-primary-o: rgba(86, 156, 214, 20%);
+        --color-primary-o: rgba(86, 156, 214, 30%);
         --color-primary-shade-o: rgba(156, 220, 254, 20%);
         --color-secondary-o: rgba(244, 135, 113, 20%);
         --color-tertiary-o: rgba(220, 208, 143, 20%);
@@ -648,6 +648,7 @@ summary {
     width: fit-content;
     font-size: 1rem;
     padding-bottom: .5rem;
+    --highlight-pos: -1ch;
 }
 
 .alignment .alignment-body>* {
@@ -683,11 +684,13 @@ summary {
     font-weight: 500;
 }
 
-.alignment .alignment-body.cdr>a {
+.alignment .alignment-body.cdr>a,
+.alignment .alignment-body.highlight>a {
     display: none;
 }
 
-.alignment .alignment-body.cdr>a.cdr {
+.alignment .alignment-body.cdr>a.cdr,
+.alignment .alignment-body.highlight>a.highlight {
     display: block;
 }
 
@@ -1953,26 +1956,41 @@ footer .version {
     display: block;
 }
 
+.ambiguity-overview svg .node {
+    fill: transparent;
+    cursor: pointer;
+}
+
+.ambiguity-overview svg .node:hover {
+    fill: var(--color-primary-o);
+}
+
+.ambiguity-overview svg .node.highlight {
+    fill: var(--color-tertiary-o);
+}
+
 .ambiguity-overview svg .position {
     fill: var(--color-halfway);
+    pointer-events: none;
+    user-select: none;
 }
 
 .ambiguity-overview svg .baseline {
     stroke: var(--color-halfway);
     stroke-width: 2px;
+    pointer-events: none;
 }
 
 .ambiguity-overview svg .option {
     fill: var(--color-foreground);
+    pointer-events: none;
+    user-select: none;
 }
 
 .ambiguity-overview svg .support-arrow {
     stroke-width: calc(10px * var(--support-local));
     stroke: var(--color-primary);
-}
-
-.ambiguity-overview svg .support-arrow:hover {
-    stroke: var(--color-secondary);
+    pointer-events: none;
 }
 
 .ambiguity-overview input:checked+label+div>svg .support-arrow {
