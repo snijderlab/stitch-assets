@@ -379,17 +379,10 @@ td.bar::before {
 .annotated .CDR1,
 .annotated .CDR2,
 .annotated .CDR3,
-.annotated .CDR,
-.sequence-logo-position.CDR1,
-.sequence-logo-position.CDR2,
-.sequence-logo-position.CDR3,
-.sequence-logo-position.CDR {
+.annotated .CDR {
     color: var(--color-secondary);
 }
 
-.sequence-logo-position.ambiguous {
-    border-bottom: 2px solid var(--color-secondary);
-}
 
 .histogram .bar.CDR1,
 .histogram .bar.CDR2,
@@ -666,7 +659,7 @@ summary {
 .alignment .alignment-body>* {
     grid-column: var(--start) / calc(var(--start) + var(--length));
     text-decoration: none;
-    font-size: .935rem;
+    font-size: .936rem;
     color: var(--color-foreground);
     font-family: "Roboto Mono", monospace;
     overflow-x: visible;
@@ -705,144 +698,6 @@ summary {
 .alignment .alignment-body.highlight>a.highlight {
     display: block;
 }
-
-.reads-alignment {
-    display: flex;
-    flex-wrap: wrap;
-    grid-column: 1/3;
-    grid-row: 2;
-}
-
-.\" {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-}
-
-.\".last:not(:last-child):not(:nth-last-child(2)) {
-    padding-right: 2px;
-    border-right: 5px solid var(--color-primary);
-}
-
-.reads-alignment .wrapper,
-.reads-alignment .front-overhang,
-.reads-alignment .end-overhang {
-    font-family: "Roboto Mono", monospace;
-    margin-top: 5px;
-    margin-bottom: 0;
-}
-
-.reads-alignment .wrapper>* {
-    height: 1.2em;
-}
-
-.reads-alignment .seq {
-    color: var(--color-primary);
-    font-weight: 500;
-}
-
-.reads-alignment .number {
-    color: var(--color-secondary);
-}
-
-.reads-alignment.only-cdr .align-link {
-    display: none;
-}
-
-.reads-alignment.only-cdr .align-link.cdr {
-    display: block;
-}
-
-.align-link {
-    color: var(--color-primary-s1);
-    text-decoration: none;
-}
-
-.align-link.unique {
-    font-weight: 500;
-}
-
-.align-link:hover {
-    color: var(--color-secondary);
-}
-
-.coverage-depth-wrapper {
-    height: 50px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-}
-
-.coverage-depth-bar {
-    height: calc(var(--value) / var(--max-value) * 50px);
-    background-color: var(--color-primary-s1);
-    width: calc(1ch - 2px);
-    display: inline-block;
-    margin: 0 1px;
-}
-
-.front-overhang {
-    text-align: right;
-    margin-right: .5em;
-}
-
-.end-overhang {
-    text-align: left;
-    margin-left: .5em;
-}
-
-.overhang-block .align-link {
-    height: 19.21px;
-}
-
-.overhang-block .symbol {
-    letter-spacing: -4px;
-    opacity: .5;
-    margin-right: .25em;
-}
-
-.overhang-block .text {
-    display: none;
-}
-
-.front-overhang-spacing,
-.end-overhang-spacing {
-    height: 69px;
-    display: block;
-}
-
-input:checked+label .overhang-block .symbol {
-    display: none;
-}
-
-input:checked+label .overhang-block .text {
-    display: inline-block;
-}
-
-.reads-alignment label {
-    padding: 0;
-    margin: 0;
-    font-size: 1rem;
-    color: var(--color-foreground);
-    background-color: transparent;
-}
-
-.reads-alignment label::before {
-    content: "+";
-    color: var(--color-background);
-    background-color: var(--color-primary-s1);
-    margin: .2em;
-    padding: .1em .4em;
-    border-radius: 50%;
-    width: 1em;
-    height: 1em;
-}
-
-.reads-alignment input:checked+label::before {
-    content: "-";
-    padding: .1em .45em;
-}
-
 
 /* Original sequence peaks */
 
@@ -1011,8 +866,7 @@ footer .version {
     font-size: var(--sequence-logo-font-size);
     font-family: "Roboto Mono", monospace;
     margin-top: -0.4em;
-    /* margin-bottom: 1.5em; */
-    color: var(--color-primary);
+    --color: var(--color-primary);
     align-items: end;
 }
 
@@ -1023,6 +877,7 @@ footer .version {
     flex-direction: column;
     justify-content: end;
     width: 16px;
+    color: var(--color);
 }
 
 .sequence-logo-position span {
@@ -1030,6 +885,20 @@ footer .version {
     transform-origin: bottom;
 }
 
+.sequence-logo-position.CDR1,
+.sequence-logo-position.CDR2,
+.sequence-logo-position.CDR3,
+.sequence-logo-position.CDR {
+    --color: var(--color-secondary);
+}
+
+.sequence-logo-position.ambiguous {
+    box-shadow: 0px 2px var(--color);
+}
+
+.sequence-logo-position.highlight {
+    background-color: var(--color-tertiary-o);
+}
 
 /* Graph - title and button */
 
