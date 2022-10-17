@@ -1833,7 +1833,8 @@ footer .version {
     color: var(--color-background);
 }
 
-.ambiguity-overview svg {
+.ambiguity-overview svg,
+.ambiguity-overview .higher-order-graphs.highlight {
     display: block;
 }
 
@@ -1878,6 +1879,13 @@ footer .version {
     stroke-width: calc(10px * var(--support-global));
 }
 
+.ambiguity-overview .higher-order-graphs {
+    display: none;
+}
+
+.ambiguity-overview .higher-order-graphs svg:nth-child(2n) .support-arrow {
+    stroke: var(--color-secondary);
+}
 
 /* Special rules for depth of coverage plots */
 
