@@ -1869,6 +1869,17 @@ footer .version {
     user-select: none;
 }
 
+.ambiguity-overview svg .option.root {
+    fill: var(--color-tertiary);
+    font-weight: 500;
+}
+
+.ambiguity-overview svg rect.root {
+    stroke: var(--color-tertiary);
+    stroke-width: 2px;
+    fill: transparent;
+}
+
 .ambiguity-overview svg .support-arrow {
     stroke-width: calc(10px * var(--support-local));
     stroke: var(--color-primary);
@@ -1885,6 +1896,10 @@ footer .version {
 
 .ambiguity-overview .higher-order-graphs svg:nth-child(2n) .support-arrow {
     stroke: var(--color-secondary);
+}
+
+.ambiguity-overview .higher-order-graphs svg {
+    margin-left: calc(80px * (var(--max-backward-length) - var(--backward-length)));
 }
 
 /* Special rules for depth of coverage plots */
