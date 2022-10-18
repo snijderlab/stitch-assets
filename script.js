@@ -269,6 +269,7 @@ function HighlightAmbiguous(position, alignment_position) {
         body.style.setProperty("--highlight-pos", String(alignment_position) + "ch");
         body.dataset.position = position;
         body.classList.add("highlight")
+        document.querySelector(".higher-order-graphs").classList.add("highlight")
         document.querySelectorAll("." + position).forEach(e => e.classList.add("highlight")); // Highlights all reads and the .node 
     }
 }
