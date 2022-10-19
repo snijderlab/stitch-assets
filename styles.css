@@ -352,9 +352,9 @@ td.bar::before {
 }
 
 
-/* Annotated nsus Sequences */
+/* Annotated consensus Sequences */
 
-.annotated-nsus-sequence {
+.annotated-consensus-sequence {
     display: grid;
     grid-template-columns: 1fr max-content;
     grid-template-rows: min-content max-content max-content;
@@ -406,17 +406,15 @@ td.bar::before {
     background-color: var(--color-secondary);
 }
 
-.annotated .rved,
-.sequence-logo-position.rved {
+.annotated .Conserved {
     color: var(--color-tertiary);
 }
 
-.histogram .bar.rved {
+.histogram .bar.Conserved {
     background-color: var(--color-tertiary);
 }
 
-.annotated .Glycosylationsite,
-.sequence-logo-position.Glycosylationsite {
+.annotated .Glycosylationsite {
     color: var(--color-primary);
 }
 
@@ -907,6 +905,14 @@ footer .version {
     --color: var(--color-secondary);
 }
 
+.sequence-logo-position.Glycosylationsite {
+    --color: var(--color-primary);
+}
+
+.sequence-logo-position.Conserved {
+    --color: var(--color-tertiary);
+}
+
 .sequence-logo-position.ambiguous {
     box-shadow: 0px 2px var(--color);
 }
@@ -940,7 +946,7 @@ footer .version {
 }
 
 .alignment .copy-data,
-.annotated-nsus-sequence .copy-data,
+.annotated-consensus-sequence .copy-data,
 .spectrum .copy-data {
     height: fit-content;
     width: -moz-fit-content;
