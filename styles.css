@@ -624,6 +624,8 @@ summary {
 .alignment .buttons {
     grid-column: 1/3;
     padding-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
 }
 
 .alignment .buttons button {
@@ -710,6 +712,17 @@ summary {
 .alignment .alignment-body.cdr>a.cdr,
 .alignment .alignment-body.highlight>a.highlight {
     display: block;
+}
+
+.alignment .alignment-body.comic>a {
+    background-color: var(--color-foreground);
+    max-height: 2px;
+    margin-top: 2px;
+    overflow: clip;
+}
+
+.alignment .alignment-body.comic>a.unique {
+    background-color: var(--color-primary);
 }
 
 /* Original sequence peaks */

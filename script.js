@@ -254,6 +254,10 @@ function ToggleCDRReads() {
     document.querySelector(".alignment-body").classList.toggle("cdr");
 }
 
+function ToggleAlignmentComic() {
+    document.querySelector(".alignment-body").classList.toggle("comic");
+}
+
 /** Update the reads alignment to only show the read supporting the given position. Or if only this position is shown remove the highlight.
  * @param {String} position the class of the position eg for position 42 this would be "a42".
  * @param {Number} alignment_position the position of this node in the template alignment.
