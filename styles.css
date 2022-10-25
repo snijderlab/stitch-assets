@@ -748,6 +748,17 @@ summary {
     font-family: "Roboto Mono", monospace;
 }
 
+/* Changed sequence */
+
+.changed-sequence .seq {
+    margin: 0 .5em;
+    font-family: "Roboto Mono", monospace;
+}
+
+.changed-sequence .offset {
+    font-style: italic;
+}
+
 
 /* footer */
 
