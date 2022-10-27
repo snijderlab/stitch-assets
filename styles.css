@@ -399,10 +399,10 @@ td.bar::before {
 }
 
 
-.histogram .bar.CDR1,
-.histogram .bar.CDR2,
-.histogram .bar.CDR3,
-.histogram .bar.CDR {
+.histogram .b.CDR1,
+.histogram .b.CDR2,
+.histogram .b.CDR3,
+.histogram .b.CDR {
     background-color: var(--color-secondary);
 }
 
@@ -410,7 +410,7 @@ td.bar::before {
     color: var(--color-tertiary);
 }
 
-.histogram .bar.Conserved {
+.histogram .b.Conserved {
     background-color: var(--color-tertiary);
 }
 
@@ -418,7 +418,7 @@ td.bar::before {
     color: var(--color-primary);
 }
 
-.histogram .bar.Glycosylationsite {
+.histogram .b.Glycosylationsite {
     background-color: var(--color-primary);
 }
 
@@ -725,7 +725,7 @@ summary {
     background-color: var(--color-primary);
 }
 
-/* Original sequence peaks */
+/* Original sequence  */
 
 .original-sequence {
     display: flex;
@@ -733,9 +733,20 @@ summary {
 
 .original-sequence>div {
     width: 1ch;
+    position: relative;
 }
 
-.modification {
+.original-sequence>div::after {
+    position: absolute;
+    content: "";
+    left: 1px;
+    right: 1px;
+    background-color: var(--color-primary);
+    height: calc(var(--value) / var(--max-value) * 1.1em);
+    top: calc((1 - var(--value) / var(--max-value)) * 1.1em)
+}
+
+.original-sequence .modification {
     font-size: .5em;
     margin: 0;
     margin-top: -2em;
@@ -1041,6 +1052,7 @@ footer .version {
     grid-template-columns: 3ch;
     flex-basis: 100%;
     align-self: flex-end;
+    grid-auto-columns: 1fr;
 }
 
 .histogram .y-axis {
@@ -1053,27 +1065,25 @@ footer .version {
     align-items: flex-end;
 }
 
-.histogram .bar {
+.histogram:not(.negative) .y-axis .min {
+    transform: translateY(.5em);
+}
+
+.histogram .b {
     background-color: var(--color-primary);
     align-self: end;
     display: flex;
     flex-direction: column;
     border-bottom: 2px solid var(--color-foreground);
+    margin-bottom: -2px;
 }
 
-.histogram .bar span {
-    color: var(--color-background);
-    opacity: 0;
-    transition: opacity .25s;
-    padding-top: 3px;
-    align-self: center;
+.histogram .b:nth-child(3) {
+    border-left: 2px solid var(--color-foreground);
+    margin-left: -2px;
 }
 
-.histogram .bar:hover span {
-    opacity: 1;
-}
-
-.histogram .label {
+.histogram .l {
     justify-self: center;
     font-size: .8em;
     font-weight: 500;
@@ -1087,9 +1097,8 @@ footer .version {
     grid-row-end: 3;
 }
 
-.histogram .bar.negative {
+.histogram .b.negative {
     align-self: start;
-    margin-top: -2px;
     border-top: 2px solid var(--color-foreground);
     border-bottom: none;
 }
@@ -2000,12 +2009,12 @@ footer .version {
     grid-template-columns: minmax(0px, max-content) repeat(auto-fit, minmax(0px, 1fr));
 }
 
-.doc-plot .histogram .bar span {
+.doc-plot .histogram .b span {
     position: absolute;
     color: var(--color-foreground)
 }
 
-.doc-plot .histogram .label {
+.doc-plot .histogram .l {
     overflow-x: visible;
 }
 
@@ -2044,13 +2053,13 @@ footer .version {
     grid-template-columns: none;
 }
 
-.alignment-details .histogram .bar {
+.alignment-details .histogram .b {
     min-width: 1ch;
     max-width: 1ch;
     border-bottom: none;
 }
 
-.alignment-details .histogram .label {
+.alignment-details .histogram .l {
     font-size: .7em;
     width: 1ch;
     overflow-x: visible;
