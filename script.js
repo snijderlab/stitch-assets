@@ -284,13 +284,23 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
         elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
+        elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
+        elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
         elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") ToggleHighlight(e, true) });
     }
     var elements = document.querySelectorAll(".spectrum .legend .ion");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
         elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
+        elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
+        elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
         elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") ToggleHighlight(e, true) });
+    }
+    var elements = document.querySelectorAll(".spectrum .legend .unassigned");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
     }
     var elements = document.querySelectorAll(".spectrum .legend input");
     for (let i = 0; i < elements.length; i++) {
@@ -312,7 +322,8 @@ function SpectrumSetUp() {
     }
     var elements = document.querySelectorAll(".spectrum .zoom-out");
     for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mousedown", spectrumZoomOut)
+        elements[i].addEventListener("mouseup", spectrumZoomOut)
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") spectrumZoomOut(e) })
     }
 }
 

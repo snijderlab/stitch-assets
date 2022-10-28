@@ -1422,7 +1422,8 @@ footer .version {
     padding: .5rem;
 }
 
-.spectrum .legend>.ion:hover {
+.spectrum .legend>.ion:hover,
+.spectrum .legend>.ion:focus {
     background-color: var(--color-primary-o);
 }
 
@@ -1538,7 +1539,8 @@ footer .version {
     user-select: none;
 }
 
-.spectrum .peptide>*:hover {
+.spectrum .peptide>*:hover,
+.spectrum .peptide>*:focus {
     background-color: var(--color-primary-o);
 }
 
@@ -1747,7 +1749,8 @@ footer .version {
     display: none;
 }
 
-.spectrum .canvas .zoom-out:hover {
+.spectrum .canvas .zoom-out:hover,
+.spectrum .canvas .zoom-out:focus {
     color: var(--color-primary);
     border-color: var(--color-primary);
 }
