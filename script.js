@@ -296,7 +296,7 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", SpectrumInputChange);
     }
-    var elements = document.querySelectorAll(".spectrum .canvas");
+    var elements = document.querySelectorAll(".spectrum .wrapper");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousedown", spectrumDragStart)
         elements[i].addEventListener("mousemove", spectrumDrag)
@@ -430,12 +430,15 @@ var startPoint;
 var selection;
 var linked_selection;
 function spectrumDragStart(event) {
-    if (event.target.classList.contains("canvas")) {
-        event.target.classList.add("dragging")
-        startPoint = event.offsetX;
-        selection = event.target.querySelector(".selection");
+    var wrapper = event.target;
+    if (wrapper.classList.contains("peptide") || wrapper.classList.contains("canvas-wrapper")) wrapper = wrapper.parentElement;
+    if (wrapper.classList.contains("canvas") || wrapper.classList.contains("y-axis") || wrapper.classList.contains("x-axis")) wrapper = wrapper.parentElement.parentElement;
+    if (wrapper.classList.contains("wrapper")) {
+        var canvas = wrapper.querySelector(".canvas");
+        wrapper.classList.add("dragging")
+        startPoint = event.pageX - wrapper.getBoundingClientRect().x;
+        selection = canvas.querySelector(".selection");
         selection.hidden = false;
-        var wrapper = event.target.parentElement.parentElement;
         if (wrapper.classList.contains("first")) {
             linked_selection = wrapper.parentElement.querySelector(".selection.second")
         } else if (wrapper.classList.contains("second")) {
@@ -445,14 +448,22 @@ function spectrumDragStart(event) {
             linked_selection.hidden = false;
             linked_selection.classList.add("linked");
         }
-        updateSelections(startPoint, event.offsetY, 0);
+        updateSelections(wrapper, canvas, startPoint, event.pageY - wrapper.getBoundingClientRect().y, startPoint);
     }
 }
 
-function updateSelections(offsetX, offsetY, width) {
-    if (selection != undefined) updateSelection(selection, offsetX, offsetY, width);
-    if (linked_selection != undefined) updateSelection(linked_selection, offsetX, offsetY, width);
+function updateSelections(wrapper, canvas, x, y, end_x) {
+    var wrapper_box = wrapper.getBoundingClientRect();
+    var canvas_box = canvas.getBoundingClientRect();
+    var new_x = Math.min(Math.max(0, x - (canvas_box.left - wrapper_box.left)), canvas_box.width);
+    var new_y = Math.min(Math.max(1, y - (canvas_box.top - wrapper_box.top)), canvas_box.height);
+    var new_end_x = Math.min(Math.max(0, end_x - (canvas_box.left - wrapper_box.left)), canvas_box.width);
+    var new_w = Math.min(Math.abs(new_end_x - new_x), canvas_box.width);
+    var new_x = Math.min(new_x, new_end_x);
+    if (selection != undefined) updateSelection(selection, new_x, new_y, new_w);
+    if (linked_selection != undefined) updateSelection(linked_selection, new_x, new_y, new_w);
 }
+
 
 function updateSelection(select, offsetX, offsetY, width) {
     select.style.setProperty("left", offsetX + "px")
@@ -470,26 +481,29 @@ function spectrumDrag(event) {
     if (startPoint != undefined) {
         var offsetY = event.offsetY;
         if (selection.classList.contains("second")) offsetY = event.target.getBoundingClientRect().height - offsetY;
-        updateSelections(Math.min(event.offsetX, startPoint), offsetY, Math.abs(event.offsetX - startPoint))
+        updateSelections(event.target, event.target.querySelector(".canvas"), startPoint, offsetY, event.offsetX)
     }
 }
 
 function spectrumDragOut(event) {
-    if (selection != undefined) selection.hidden = true;
-    if (linked_selection != undefined) {
-        linked_selection.hidden = true;
-        linked_selection.classList.remove("linked");
-    }
-    selection = undefined
-    linked_selection = undefined
-    startPoint = undefined
+    if (event.target.classList.contains("wrapper")) {
+        if (selection != undefined) selection.hidden = true;
+        if (linked_selection != undefined) {
+            linked_selection.hidden = true;
+            linked_selection.classList.remove("linked");
+        }
+        selection = undefined
+        linked_selection = undefined
+        startPoint = undefined
 
-    document.querySelectorAll(".canvas.dragging").forEach(e => e.classList.remove("dragging"));
+        document.querySelectorAll(".wrapper.dragging").forEach(e => e.classList.remove("dragging"));
+    }
 }
 
 function spectrumDragEnd(event) {
-    var canvas = event.target;
-    if (canvas.classList.contains("canvas") && startPoint != undefined) {
+    var canvas = event.target.querySelector(".canvas");
+    console.log("dragend", event.target, canvas);
+    if (startPoint != undefined) {
         var d = canvas.dataset;
         var box = canvas.getBoundingClientRect();
         var width = box.width;
