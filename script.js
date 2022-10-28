@@ -302,7 +302,9 @@ function SpectrumSetUp() {
         elements[i].addEventListener("mousemove", spectrumDrag)
         elements[i].addEventListener("mouseup", spectrumDragEnd)
         elements[i].addEventListener("mouseout", spectrumDragOut)
-
+    }
+    var elements = document.querySelectorAll(".spectrum .canvas");
+    for (let i = 0; i < elements.length; i++) {
         var d = elements[i].dataset;
         d.minMz = 0;
         d.maxMz = d.initialMaxMz;
@@ -479,9 +481,11 @@ function updateSelection(select, offsetX, offsetY, width) {
 
 function spectrumDrag(event) {
     if (startPoint != undefined) {
-        var offsetY = event.offsetY;
-        if (selection.classList.contains("second")) offsetY = event.target.getBoundingClientRect().height - offsetY;
-        updateSelections(event.target, event.target.querySelector(".canvas"), startPoint, offsetY, event.offsetX)
+        var canvas = event.target.querySelector(".canvas");
+        var box = canvas.getBoundingClientRect();
+        var offsetY = Math.min(box.height, Math.max(0, event.pageY - box.y));
+        if (selection.classList.contains("second")) offsetY = box.height - offsetY;
+        updateSelections(event.target, canvas, startPoint, offsetY, event.offsetX)
     }
 }
 
@@ -502,20 +506,21 @@ function spectrumDragOut(event) {
 
 function spectrumDragEnd(event) {
     var canvas = event.target.querySelector(".canvas");
-    console.log("dragend", event.target, canvas);
     if (startPoint != undefined) {
         var d = canvas.dataset;
         var box = canvas.getBoundingClientRect();
+        var wrapper_box = event.target.getBoundingClientRect();
         var width = box.width;
         var height = box.height;
-        var min = Math.min(startPoint, event.offsetX) / width;
-        var max = Math.max(startPoint, event.offsetX) / width;
+        startPoint = startPoint + wrapper_box.x - box.x;
+        var min = Math.max(0, Math.min(startPoint, event.pageX - box.x)) / width;
+        var max = Math.min(width, Math.max(startPoint, event.pageX - box.x)) / width;
         var minMz = Number(d.minMz);
         var maxMz = Number(d.maxMz);
         var maxIntensity = Number(d.maxIntensity);
         var min = min * Math.max(1, maxMz - minMz) + minMz;
         var max = max * Math.max(1, maxMz - minMz) + minMz;
-        var offsetY = event.offsetY;
+        var offsetY = Math.min(Math.max(0, event.pageY - box.y), height);
         if (selection.classList.contains("second")) offsetY = height - offsetY;
         var maxI = (1 - Math.max(0, offsetY / height));
 

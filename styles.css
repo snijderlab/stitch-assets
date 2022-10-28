@@ -1482,11 +1482,6 @@ footer .version {
     grid-column: 1/3;
     display: flex;
     flex-direction: column;
-    outline: 1px solid red;
-}
-
-.spectrum .wrapper * {
-    outline: 1px solid blue;
 }
 
 .spectrum .wrapper.second {
