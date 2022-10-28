@@ -1546,6 +1546,22 @@ footer .version {
     background-color: var(--color-secondary-o);
 }
 
+.spectrum .peptide>*.modification::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: calc(50% - 2px);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+}
+
+.spectrum .peptide>*.modification.term::before {
+    top: calc(50% - 2px);
+}
+
 .spectrum .corner {
     position: absolute;
     display: block;
