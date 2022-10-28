@@ -1718,7 +1718,11 @@ footer .version {
     border-bottom: none;
 }
 
-.spectrum .wrapper.dragging .canvas {
+.spectrum .wrapper.dragging {
+    cursor: pointer;
+}
+
+.spectrum:has(.wrapper.dragging) .canvas {
     background-color: var(--color-halfway-o);
 }
 
