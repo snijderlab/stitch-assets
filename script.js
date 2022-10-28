@@ -374,7 +374,6 @@ function ToggleHighlight(event, permanent, start = null) {
         }
     })
 
-    if (container.classList.contains("wrapper")) container = container.parentElement;
     if (start || container.querySelector(".permanent") != null) {
         container.querySelectorAll(".canvas").forEach(canvas => {
             canvas.classList.add("highlight");
@@ -391,24 +390,24 @@ function ToggleHighlight(event, permanent, start = null) {
 */
 function SpectrumInputChange(event) {
     if (event.target.type == "checkbox") { // Background
-        event.target.parentElement.parentElement.querySelectorAll(".canvas-wrapper").forEach(wrapper => {
-            var canvas = wrapper.querySelector(".canvas");
-            if (event.target.checked) { // Will be adding all background peaks
-                wrapper.classList.add(event.target.className);
-                if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensityAssigned) {
-                    canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
-                    canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
-                    UpdateSpectrumAxes(canvas)
-                }
-            } else { // Will be removing all background peaks
-                wrapper.classList.remove(event.target.className);
-                if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
-                    canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
-                    canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
-                    UpdateSpectrumAxes(canvas)
-                }
+        var wrapper = event.target.parentElement.parentElement;
+        var canvas = wrapper.querySelector(".canvas");
+        var update_axes = !wrapper.classList.contains("first") && !wrapper.classList.contains("second");
+        if (event.target.checked) { // Will be adding all background peaks
+            wrapper.classList.add(event.target.className);
+            if (update_axes && canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensityAssigned) {
+                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
+                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+                UpdateSpectrumAxes(canvas)
             }
-        });
+        } else { // Will be removing all background peaks
+            wrapper.classList.remove(event.target.className);
+            if (update_axes && canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
+                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
+                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+                UpdateSpectrumAxes(canvas)
+            }
+        }
     } else if (event.target.type == "range") { // Peak labels
         var ele = document.getElementById(event.target.id + "_value");
         ele.value = event.target.value;
