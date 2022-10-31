@@ -6,9 +6,9 @@ function sortTable(id, column_number, type) {
     table = document.getElementById(id);
     switching = true;
     dir = "desc";
-    let headers = table.getElementsByTagName("TR")[0].getElementsByTagName("th");
+    let headers = table.getElementsByTagName("tr")[0].getElementsByTagName("th");
 
-    sorted = false
+    var sorted = false;
     if (headers[column_number].getAttribute('data-sort-order') == "asc") {
         dir = "desc";
         sorted = true
@@ -23,10 +23,10 @@ function sortTable(id, column_number, type) {
     }
     headers[column_number].setAttribute('data-sort-order', dir);
 
-    rows = Array.from(table.getElementsByTagName("TR"));
-    values = [null]
+    rows = Array.from(table.getElementsByTagName("tr"));
+    var values = [null];
     for (i = 1; i < rows.length; i++) {
-        x = rows[i].getElementsByTagName("TD")[column_number]
+        x = rows[i].getElementsByTagName("td")[column_number]
         switch (type) {
             case "string":
                 values.push(x.innerHTML.toLowerCase())
@@ -66,7 +66,7 @@ function sortTable(id, column_number, type) {
             }
         }
         if (shouldSwitch) {
-            el = rows[i + 1]
+            var el = rows[i + 1]
             rows.splice(i + 1, 1)
             rows.splice(i, 0, el)
             el = values[i + 1]

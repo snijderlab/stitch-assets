@@ -429,7 +429,7 @@ td.bar::before {
 
 /* Collapsible regions */
 
-.report label,
+label[for^=collapsible],
 .graph .copy-data,
 .alignment .copy-data {
     display: block;
@@ -437,7 +437,6 @@ td.bar::before {
     color: var(--color-background);
     background-color: var(--color-primary);
     padding: .1em .25em;
-    display: block;
     border-radius: .2rem;
     margin-top: .5em;
     cursor: pointer;
@@ -448,7 +447,7 @@ td.bar::before {
     --color-label: var(--color-primary-s1);
 }
 
-.report label::after {
+label[for^=collapsible]::after {
     content: "+";
     border: 2px solid var(--color-background);
     color: var(--color-background);
@@ -479,7 +478,7 @@ input:checked+label {
     border-radius: .2rem .2rem 0 0;
 }
 
-.report input:checked+label::after {
+input:checked+label::after {
     content: "-";
 }
 
@@ -1858,6 +1857,11 @@ footer .version {
 
 .spectrum .wrapper.dragging * {
     pointer-events: none;
+}
+
+.spectrum label[for^=collapsible],
+.spectrum .collapsible {
+    grid-column: 1 / -1;
 }
 
 
