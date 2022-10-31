@@ -1879,6 +1879,23 @@ footer .version {
     grid-column: 1 / -1;
 }
 
+.spectrum .collapsible .background {
+    border: 2px solid var(--color-halfway);
+    border-radius: .2rem;
+    padding: .2rem;
+    margin: .2rem;
+    user-select: none;
+    display: inline-block;
+}
+
+.spectrum .collapsible .background:has(input:checked) {
+    border-color: var(--color-primary);
+}
+
+.spectrum .collapsible label:has(input:not(:checked))+table tr.unassigned {
+    display: none;
+}
+
 
 /* Ambiguity Overview */
 
