@@ -474,11 +474,11 @@ label[for^=collapsible]::after {
     color: var(--color-label);
 }
 
-input:checked+label {
+input:checked+label[for^=collapsible] {
     border-radius: .2rem .2rem 0 0;
 }
 
-input:checked+label::after {
+input:checked+label[for^=collapsible]::after {
     content: "-";
 }
 
