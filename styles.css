@@ -1466,7 +1466,8 @@ footer .version {
     cursor: pointer;
 }
 
-.spectrum .legend .label input[type=number] {
+.spectrum .legend .label input[type=number],
+.spectrum .manual-zoom input[type=number] {
     width: 5ch;
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -1477,6 +1478,20 @@ footer .version {
 .spectrum .legend>* {
     color: var(--color);
     cursor: default;
+}
+
+.spectrum .manual-zoom input[type=number] {
+    width: 5rem;
+}
+
+.spectrum .manual-zoom {
+    border: 2px solid var(--color-halfway);
+    border-radius: .2rem;
+    display: flex;
+    gap: .5rem;
+    padding: .5rem;
+    width: fit-content;
+    margin-bottom: .5rem;
 }
 
 .spectrum .wrapper {

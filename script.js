@@ -306,6 +306,10 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", SpectrumInputChange);
     }
+    var elements = document.querySelectorAll(".spectrum .manual-zoom input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", ManualZoom);
+    }
     var elements = document.querySelectorAll(".spectrum .wrapper");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousedown", spectrumDragStart)
@@ -417,6 +421,18 @@ function SpectrumInputChange(event) {
         ele.value = event.target.value;
         event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => SpectrumUpdateLabels(Number(event.target.value), canvas))
     }
+}
+
+/** Zoom the spectrum manually. 
+ * @param {Event} event 
+*/
+function ManualZoom(event) {
+    var spectrum = event.target.parentElement.parentElement;
+    var min = Number(spectrum.querySelector(".mz-min").value);
+    var max = Number(spectrum.querySelector(".mz-max").value);
+    var maxI = Number(spectrum.querySelector(".intensity-max").value);
+
+    spectrum.querySelectorAll(".canvas").forEach(canvas => Zoom(canvas, min, max, maxI));
 }
 
 /** Update the spectrum to only show the label for peaks within the given percentage group 
@@ -550,7 +566,7 @@ function spectrumDragEnd(event) {
         var max = max * Math.max(1, maxMz - minMz) + minMz;
         var offsetY = Math.min(Math.max(0, event.pageY - box.y), height);
         if (selection.classList.contains("second")) offsetY = height - offsetY;
-        var maxI = (1 - Math.max(0, offsetY / height));
+        var maxI = (1 - Math.max(0, offsetY / height)) * maxIntensity;
 
         Zoom(canvas, min, max, maxI);
         if (linked_selection != undefined) Zoom(linked_selection.parentElement, min, max, maxI);
@@ -563,16 +579,24 @@ function Zoom(canvas, min, max, maxI) {
     canvas.classList.add("zoomed");
     canvas.dataset.minMz = min;
     canvas.dataset.maxMz = max;
-    canvas.dataset.maxIntensity = maxI * canvas.dataset.maxIntensity;
+    canvas.dataset.maxIntensity = maxI;
     canvas.style.setProperty("--min-mz", min);
     canvas.style.setProperty("--max-mz", max);
     canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+
+    var spectrum = canvas.parentElement.parentElement.parentElement;
+    console.log(canvas, spectrum)
+    spectrum.querySelector(".mz-min").value = fancyRound(max, min, min);
+    spectrum.querySelector(".mz-max").value = fancyRound(max, min, max);
+    spectrum.querySelector(".intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
 
     UpdateSpectrumAxes(canvas)
 }
 
 function spectrumZoomOut(event) {
-    event.target.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => {
+    var spectrum = event.target.parentElement.parentElement.parentElement.parentElement;
+    var min, max, maxI = 0;
+    spectrum.querySelectorAll(".canvas").forEach(canvas => {
         var d = canvas.dataset;
         d.minMz = 0;
         d.maxMz = d.initialMaxMz;
@@ -583,7 +607,18 @@ function spectrumZoomOut(event) {
         canvas.classList.remove("zoomed");
 
         UpdateSpectrumAxes(canvas)
+        min = d.minMz;
+        max = d.maxMz;
+        maxI = d.maxIntensity;
     });
+    spectrum.querySelector(".mz-min").value = fancyRound(max, min, min);
+    spectrum.querySelector(".mz-max").value = fancyRound(max, min, max);
+    spectrum.querySelector(".intensity-max").value = fancyRound(maxI, 0, maxI);
+}
+
+function fancyRound(max, min, value) {
+    var factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1;
+    return Math.round(value * factor) / factor;
 }
 
 // Give the canvas element
@@ -593,9 +628,8 @@ function UpdateSpectrumAxes(canvas) {
     var ticks = axis.children;
     var min = Number(canvas.dataset.minMz);
     var max = Number(canvas.dataset.maxMz);
-    var factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1;
     for (let i = 0; i < ticks.length; i++) {
-        ticks[i].innerText = Math.round((min + i / 4 * (max - min)) * factor) / factor;
+        ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
     }
 
     // Update y-axis
