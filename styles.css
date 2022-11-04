@@ -612,7 +612,7 @@ summary {
     content: "→";
 }
 
-/* reads alignment */
+/* s alignment */
 
 .alignment {
     display: grid;
@@ -687,6 +687,10 @@ summary {
 .alignment .alignment-body>a:hover {
     color: var(--color-secondary);
     border-color: red;
+}
+
+.alignment .alignment-body>a>.changed {
+    color: var(--color-halfway);
 }
 
 .alignment .alignment-body .numbering {
