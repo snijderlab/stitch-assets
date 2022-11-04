@@ -769,6 +769,10 @@ summary {
     font-style: italic;
 }
 
+.seq .changed {
+    color: var(--color-primary);
+}
+
 
 /* footer */
 
