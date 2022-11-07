@@ -1514,31 +1514,31 @@ footer .version {
     --size: 50%;
 }
 
-.spectrum .A {
+.spectrum .a {
     --color: var(--color-primary);
 }
 
-.spectrum .B {
+.spectrum .b {
     --color: var(--color-secondary);
 }
 
-.spectrum .C {
+.spectrum .c {
     --color: var(--color-tertiary);
 }
 
-.spectrum .W {
+.spectrum .w {
     --color: var(--color-primary);
 }
 
-.spectrum .X {
+.spectrum .x {
     --color: var(--color-quaternary);
 }
 
-.spectrum .Y {
+.spectrum .y {
     --color: var(--color-quinary);
 }
 
-.spectrum .Z {
+.spectrum .z {
     --color: var(--color-primary-s1);
 }
 
@@ -1567,7 +1567,7 @@ footer .version {
     content: "";
     display: block;
     position: absolute;
-    top: 5px;
+    top: 10px;
     left: calc(50% - 2px);
     width: 4px;
     height: 4px;
@@ -1588,46 +1588,46 @@ footer .version {
     pointer-events: none;
 }
 
-.spectrum .corner.X,
-.spectrum .corner.Y,
-.spectrum .corner.Z {
+.spectrum .corner.x,
+.spectrum .corner.y,
+.spectrum .corner.z {
     border-right: none;
     border-bottom: none;
     top: 0px;
     left: 0px;
 }
 
-.spectrum .corner.Y {
+.spectrum .corner.y {
     top: var(--spacing);
     left: var(--spacing);
     height: calc(var(--size) - var(--spacing));
     width: calc(var(--size) - var(--spacing));
 }
 
-.spectrum .corner.Z {
+.spectrum .corner.z {
     top: calc(2 * var(--spacing));
     left: calc(2 * var(--spacing));
     height: calc(var(--size) - 2 * var(--spacing));
     width: calc(var(--size) - 2 * var(--spacing));
 }
 
-.spectrum .corner.A,
-.spectrum .corner.B,
-.spectrum .corner.C {
+.spectrum .corner.a,
+.spectrum .corner.b,
+.spectrum .corner.c {
     border-left: none;
     border-top: none;
     bottom: 0px;
     right: 0px;
 }
 
-.spectrum .corner.B {
+.spectrum .corner.b {
     bottom: var(--spacing);
     right: var(--spacing);
     height: calc(var(--size) - var(--spacing));
     width: calc(var(--size) - var(--spacing));
 }
 
-.spectrum .corner.C {
+.spectrum .corner.c {
     bottom: calc(2 * var(--spacing));
     right: calc(2 * var(--spacing));
     height: calc(var(--size) - 2 * var(--spacing));
