@@ -728,6 +728,10 @@ summary {
     background-color: var(--color-primary);
 }
 
+.alignment .alignment-body.comic>a>.changed {
+    background-color: var(--color-halfway);
+}
+
 /* Original sequence  */
 
 .original-sequence {
