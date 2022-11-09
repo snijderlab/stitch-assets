@@ -2101,6 +2101,7 @@ footer .version {
     padding: 1em;
     padding-top: 0;
     z-index: 1000;
+    pointer-events: none;
 }
 
 .alignment-details.active {
