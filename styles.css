@@ -1,4 +1,4 @@
-* {
+:root {
     --color-primary: #569CD6;
     --color-primary-s1: #1d4f78;
     --color-primary-s2: #9CDCFE;
@@ -19,7 +19,7 @@
 }
 
 @media screen and (prefers-color-scheme: dark) {
-    * {
+    :root {
         --color-primary: #569CD6;
         --color-primary-s1: #9CDCFE;
         --color-primary-s2: #1d4f78;
@@ -34,6 +34,27 @@
         --color-foreground: #D4D4D4;
         --color-halfway: #7E7E7E;
         --color-background: #1E1E1E;
+    }
+}
+
+@media (forced-colors: active) {
+    :root {
+        --color-primary: Highlight;
+        --color-primary-s1: #9CDCFE;
+        --color-primary-s2: #1d4f78;
+        --color-secondary: LinkText;
+        --color-tertiary: ActiveText;
+        --color-quaternary: AccentColorText;
+        --color-quinary: BottonText;
+        --color-primary-o: rgba(86, 156, 214, 30%);
+        --color-primary-shade-o: rgba(156, 220, 254, 20%);
+        --color-secondary-o: rgba(244, 135, 113, 20%);
+        --color-tertiary-o: rgba(220, 208, 143, 20%);
+        --color-foreground: CanvasText;
+        --color-halfway: GrayText;
+        --color-background: Canvas;
+        -ms-high-contrast-adjust: none;
+        forced-color-adjust: none;
     }
 }
 
@@ -2253,5 +2274,49 @@ footer .version {
     [id$="segment-joining"] .title,
     input[type=range] {
         display: none !important;
+    }
+}
+
+@media (prefers-contrast: more) {
+    .ambiguity-overview svg .node:hover {
+        fill: transparent;
+        outline: 2px solid var(--color-primary);
+    }
+
+    .ambiguity-overview svg .node.highlight {
+        fill: transparent;
+        outline: 2px solid var(--color-tertiary);
+    }
+
+    td.bar::before {
+        display: none;
+    }
+
+    td {
+        border-color: var(--color-foreground);
+    }
+
+    .alignment .alignment-wrapper,
+    .ambiguity-overview #ambiguity-wrapper {
+        border-color: var(--color-halfway);
+    }
+
+    .sequence-logo-position.highlight {
+        background-color: transparent;
+        outline: 2px solid var(--color-tertiary);
+    }
+
+    .spectrum:has(.wrapper.dragging) .canvas {
+        background-color: transparent;
+    }
+
+    .spectrum .legend>.ion:hover,
+    .spectrum .legend>.ion:focus {
+        background-color: transparent;
+        outline: 2px solid var(--color-primary);
+    }
+
+    .spectrum .legend>.ion.permanent {
+        outline-color: var(--color-secondary);
     }
 }
