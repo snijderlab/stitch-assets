@@ -710,8 +710,17 @@ summary {
     border-color: red;
 }
 
-.alignment .alignment-body>a>.changed {
+.alignment .alignment-body>a>span:not(.swap) {
+    width: calc(var(--w) * 1.001ch);
+    transform:
+        scaleX(calc(var(--w) / var(--i)));
+    display: inline-block;
     color: var(--color-halfway);
+    transform-origin: center left;
+}
+
+.alignment .alignment-body>a>span.swap {
+    text-decoration: underline var(--color-halfway);
 }
 
 .alignment .alignment-body .numbering {
