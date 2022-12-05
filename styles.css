@@ -2191,6 +2191,14 @@ footer .version {
     background-color: var(--color-foreground);
 }
 
+.sequence-match-graphic .swap {
+    background-color: var(--color-halfway);
+}
+
+.sequence-match-graphic .set {
+    background-color: var(--color-tertiary);
+}
+
 .hidden {
     display: none;
 }
