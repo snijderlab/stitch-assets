@@ -752,6 +752,7 @@ summary {
     max-height: 2px;
     margin-top: 2px;
     overflow: clip;
+    margin-right: 1ch;
 }
 
 .alignment .alignment-body.comic>a.unique {
