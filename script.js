@@ -274,7 +274,7 @@ function HighlightAmbiguous(position, alignment_position) {
         body.dataset.position = position;
         body.classList.add("highlight")
         document.querySelector(".higher-order-graphs").classList.add("highlight")
-        document.querySelectorAll("." + position).forEach(e => e.classList.add("highlight")); // Highlights all reads and the .node 
+        document.querySelectorAll("." + position).forEach(e => e.classList.add("highlight")); // Highlights all reads and the .node
     }
 }
 
@@ -389,8 +389,8 @@ function ToggleHighlight(event, permanent, start = null) {
     }
 }
 
-/** Toggle features on or off in the spectrum (eg background peaks, peak labels) 
- * @param {Event} event 
+/** Toggle features on or off in the spectrum (eg background peaks, peak labels)
+ * @param {Event} event
 */
 function SpectrumInputChange(event) {
     if (event.target.type == "checkbox") { // Background
@@ -423,8 +423,8 @@ function SpectrumInputChange(event) {
     }
 }
 
-/** Zoom the spectrum manually. 
- * @param {Event} event 
+/** Zoom the spectrum manually.
+ * @param {Event} event
 */
 function ManualZoom(event) {
     var spectrum = event.target.parentElement.parentElement;
@@ -435,8 +435,8 @@ function ManualZoom(event) {
     spectrum.querySelectorAll(".canvas").forEach(canvas => Zoom(canvas, min, max, maxI));
 }
 
-/** Update the spectrum to only show the label for peaks within the given percentage group 
- * @param {Number} value the percentage to include (0-100) 
+/** Update the spectrum to only show the label for peaks within the given percentage group
+ * @param {Number} value the percentage to include (0-100)
  * @param {Element} canvas the canvas to work on
 */
 function SpectrumUpdateLabels(value, canvas) {
