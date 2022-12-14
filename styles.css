@@ -715,12 +715,26 @@ summary {
     transform:
         scaleX(calc(var(--w) / var(--i)));
     display: inline-block;
-    color: var(--color-halfway);
     transform-origin: center left;
+    font-weight: max(100, calc(-80 * var(--w) / var(--i) + 500));
 }
 
 .alignment .alignment-body>a>span.swap {
     text-decoration: underline var(--color-halfway);
+    text-underline-offset: 0px;
+    text-decoration-thickness: 2px;
+    position: relative;
+}
+
+.alignment .alignment-body>a>span.swap::after {
+    content: "";
+    display: block;
+    top: 3px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    background: var(--color-halfway);
+    position: absolute;
 }
 
 .alignment .alignment-body .numbering {
