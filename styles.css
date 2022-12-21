@@ -372,6 +372,45 @@ td.bar::before {
     margin-bottom: 0;
 }
 
+/* Segment joining */
+
+.joining {
+    display: flex;
+    flex-direction: row;
+    height: 2ch;
+    font-size: 16px;
+    font-family: Roboto Mono;
+}
+
+.joining .bar {
+    flex-basis: 1ch;
+    height: calc(var(--doc) / var(--max) * 100%);
+    background-color: var(--color-primary);
+
+}
+
+.joining.a {
+    margin-left: 3ch;
+    align-items: end;
+
+}
+
+.joining.a .bar {
+    border-bottom: 1px solid var(--color-halfway);
+}
+
+.joining.b {
+    margin-left: 6ch;
+}
+
+.joining.b .bar {
+    border-top: 1px solid var(--color-halfway);
+}
+
+.joining+.seq {
+    margin: 0;
+}
+
 
 /* Annotated consensus Sequences */
 
