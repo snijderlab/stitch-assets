@@ -1743,6 +1743,14 @@ footer .version {
     width: calc(var(--size) - 2 * var(--spacing));
 }
 
+.spectrum .corner.w {
+    height: 0;
+    border-width: 1px;
+    left: calc(3 * var(--spacing));
+    right: calc(3 * var(--spacing));
+    width: auto;
+}
+
 .spectrum .canvas-wrapper {
     width: 100%;
     display: grid;
