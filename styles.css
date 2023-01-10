@@ -1661,6 +1661,7 @@ footer .version {
     display: block;
     cursor: crosshair;
     user-select: none;
+    font-family: 'Roboto Mono';
 }
 
 .spectrum .peptide>*:hover,
@@ -1748,6 +1749,7 @@ footer .version {
     border-width: 1px;
     left: calc(3 * var(--spacing));
     right: calc(3 * var(--spacing));
+    bottom: calc(3.5 * var(--spacing));
     width: auto;
 }
 
