@@ -2209,6 +2209,7 @@ footer .version {
     padding-top: 0;
     z-index: 1000;
     pointer-events: none;
+    max-width: calc(100% - 2.5rem);
 }
 
 .alignment-details.active {
