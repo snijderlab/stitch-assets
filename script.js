@@ -339,6 +339,7 @@ function ToggleHighlight(event, permanent, start = null) {
 
     highlight = t;
     var container = t.parentElement.parentElement;
+    if (container.classList.contains("ion-series")) container = container.parentElement.parentElement;
     function toggle(element) {
         if (element.dataset.n == undefined) element.dataset.n = 0;
         if (element.dataset.n < 0) element.dataset.n = 0;
