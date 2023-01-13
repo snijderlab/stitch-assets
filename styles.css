@@ -160,6 +160,10 @@ sup+sub {
     flex-basis: 30%;
 }
 
+.message {
+    font-style: italic;
+}
+
 /* Scrollbar */
 
 /* Works in any browser but Firefox */
@@ -638,6 +642,7 @@ summary {
     top: 1rem;
     left: -50%;
     user-select: text;
+    font-size: 1rem;
 }
 
 .user-help:hover .content,
@@ -890,6 +895,13 @@ footer .version {
     flex-wrap: nowrap;
 }
 
+.phylogenetic-tree .user-help {
+    margin-left: 0;
+    margin-right: 1rem;
+    font-size: 1em;
+    vertical-align: baseline;
+}
+
 .phylogenetic-tree .legend {
     --color: var(--color-secondary);
     margin: .8em 1em 0 0;
@@ -902,6 +914,7 @@ footer .version {
 
 .phylogenetic-tree label {
     margin-right: 1em;
+    padding: 0 .4rem;
 }
 
 .phylogenetic-tree .tree {
@@ -1108,6 +1121,7 @@ footer .version {
     font-weight: normal;
     color: var(--color-foreground);
     display: inline-block;
+    border-radius: .2rem;
 }
 
 .graph .copy-data,
