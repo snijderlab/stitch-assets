@@ -1620,6 +1620,7 @@ footer .version {
     flex-wrap: wrap;
     grid-column: 1/3;
     --spacing: 3px;
+    --side-spacing: 1px;
     --size: 50%;
 }
 
@@ -1633,6 +1634,10 @@ footer .version {
 
 .spectrum .c {
     --color: var(--color-tertiary);
+}
+
+.spectrum .d {
+    --color: var(--color-quaternary);
 }
 
 .spectrum .w {
@@ -1677,10 +1682,10 @@ footer .version {
     content: "";
     display: block;
     position: absolute;
-    top: 10px;
-    left: calc(50% - 2px);
-    width: 4px;
-    height: 4px;
+    top: calc(4 * var(--spacing));
+    left: calc(50% - 0.5 * var(--spacing));
+    width: var(--spacing);
+    height: var(--spacing);
     border-radius: 50%;
     background-color: var(--color-primary);
 }
@@ -1704,21 +1709,30 @@ footer .version {
     border-right: none;
     border-bottom: none;
     top: 0px;
-    left: 0px;
+    left: var(--side-spacing);
 }
 
 .spectrum .corner.y {
     top: var(--spacing);
-    left: var(--spacing);
+    left: calc(var(--spacing) + var(--side-spacing));
     height: calc(var(--size) - var(--spacing));
     width: calc(var(--size) - var(--spacing));
 }
 
 .spectrum .corner.z {
     top: calc(2 * var(--spacing));
-    left: calc(2 * var(--spacing));
+    left: calc(2 * var(--spacing) + var(--side-spacing));
     height: calc(var(--size) - 2 * var(--spacing));
     width: calc(var(--size) - 2 * var(--spacing));
+}
+
+.spectrum .corner.w {
+    height: 0;
+    border-width: 1px;
+    left: calc(3 * var(--spacing) + var(--side-spacing));
+    right: calc(3 * var(--spacing) + var(--side-spacing));
+    top: calc(3 * var(--spacing));
+    width: auto;
 }
 
 .spectrum .corner.a,
@@ -1727,29 +1741,29 @@ footer .version {
     border-left: none;
     border-top: none;
     bottom: 0px;
-    right: 0px;
+    right: var(--side-spacing);
 }
 
 .spectrum .corner.b {
     bottom: var(--spacing);
-    right: var(--spacing);
+    right: calc(var(--spacing) + var(--side-spacing));
     height: calc(var(--size) - var(--spacing));
     width: calc(var(--size) - var(--spacing));
 }
 
 .spectrum .corner.c {
     bottom: calc(2 * var(--spacing));
-    right: calc(2 * var(--spacing));
+    right: calc(2 * var(--spacing) + var(--side-spacing));
     height: calc(var(--size) - 2 * var(--spacing));
     width: calc(var(--size) - 2 * var(--spacing));
 }
 
-.spectrum .corner.w {
+span.corner.d {
     height: 0;
     border-width: 1px;
-    left: calc(3 * var(--spacing));
-    right: calc(3 * var(--spacing));
-    bottom: calc(3.5 * var(--spacing));
+    left: calc(3 * var(--spacing) + var(--side-spacing));
+    right: calc(3 * var(--spacing) + var(--side-spacing));
+    bottom: calc(3 * var(--spacing));
     width: auto;
 }
 
