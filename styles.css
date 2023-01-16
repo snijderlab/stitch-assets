@@ -493,6 +493,28 @@ td.bar::before {
 
 /* Collapsible regions */
 
+.collapsible {
+    display: none;
+    border-left: 2px solid var(--color-label);
+    padding-left: .5rem;
+    overflow: visible;
+}
+
+.clear-fix {
+    clear: both;
+    display: block;
+    height: 1px;
+}
+
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
 label[for^=collapsible],
 .graph .copy-data,
 .alignment .copy-data {
@@ -542,34 +564,29 @@ input:checked+label[for^=collapsible] {
     border-radius: .2rem .2rem 0 0;
 }
 
+label[for^=collapsible]:has(+.collapsible:target),
+label[for^=collapsible]:has(+.collapsible .collapsible:target) {
+    border-radius: .2rem .2rem 0 0;
+}
+
 input:checked+label[for^=collapsible]::after {
     content: "-";
 }
 
-.collapsible {
-    display: none;
-    border-left: 2px solid var(--color-label);
-    padding-left: .5rem;
-    overflow: visible;
+label[for^=collapsible]:has(+.collapsible:target)::after,
+label[for^=collapsible]:has(+.collapsible .collapsible:target)::after {
+    content: "-";
 }
 
-.clear-fix {
-    clear: both;
+input:checked+label+.collapsible {
     display: block;
-    height: 1px;
 }
 
-
-input[type="checkbox"] {
-    display: none;
-}
-
-input[type="radio"] {
-    display: none;
-}
-
-input:checked+label+.collapsible,
 .collapsible:target {
+    display: block;
+}
+
+.collapsible:has(.collapsible:target) {
     display: block;
 }
 
