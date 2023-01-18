@@ -2202,6 +2202,7 @@ span.corner.d {
     fill: var(--color-foreground);
     pointer-events: none;
     user-select: none;
+    font-family: 'Roboto Mono';
 }
 
 .ambiguity-overview svg .option.root {
