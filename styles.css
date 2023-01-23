@@ -771,13 +771,21 @@ summary {
     border-color: red;
 }
 
-.alignment .alignment-body>a>span:not(.swap) {
+.alignment .alignment-body>a>span:not(.swap):not(.insertion) {
     width: calc(var(--w) * 1.001ch);
     transform:
         scaleX(calc(var(--w) / var(--i)));
     display: inline-block;
     transform-origin: center left;
     font-weight: max(100, calc(-80 * var(--w) / var(--i) + 500));
+}
+
+.alignment .alignment-body>a>span.insertion {
+    color: var(--color-halfway);
+}
+
+.alignment .alignment-body>a:hover>span.insertion {
+    color: var(--color-tertiary);
 }
 
 .alignment .alignment-body>a>span.swap {
