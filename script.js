@@ -557,15 +557,17 @@ function spectrumDragEnd(event) {
         var wrapper_box = event.target.getBoundingClientRect();
         var width = box.width;
         var height = box.height;
-        startPoint = startPoint + wrapper_box.x - box.x;
-        var min = Math.max(0, Math.min(startPoint, event.pageX - box.x)) / width;
-        var max = Math.min(width, Math.max(startPoint, event.pageX - box.x)) / width;
+        var boxY = box.y + window.scrollY;
+        var boxX = box.x + window.scrollX;
+        startPoint = startPoint + wrapper_box.x - boxX;
+        var min = Math.max(0, Math.min(startPoint, event.pageX - boxX)) / width;
+        var max = Math.min(width, Math.max(startPoint, event.pageX - boxX)) / width;
         var minMz = Number(d.minMz);
         var maxMz = Number(d.maxMz);
         var maxIntensity = Number(d.maxIntensity);
         var min = min * Math.max(1, maxMz - minMz) + minMz;
         var max = max * Math.max(1, maxMz - minMz) + minMz;
-        var offsetY = Math.min(Math.max(0, event.pageY - box.y), height);
+        var offsetY = Math.min(Math.max(0, event.pageY - boxY), height);
         if (selection.classList.contains("second")) offsetY = height - offsetY;
         var maxI = (1 - Math.max(0, offsetY / height)) * maxIntensity;
 
@@ -586,7 +588,6 @@ function Zoom(canvas, min, max, maxI) {
     canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
 
     var spectrum = canvas.parentElement.parentElement.parentElement;
-    console.log(canvas, spectrum)
     spectrum.querySelector(".mz-min").value = fancyRound(max, min, min);
     spectrum.querySelector(".mz-max").value = fancyRound(max, min, max);
     spectrum.querySelector(".intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);

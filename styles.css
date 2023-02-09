@@ -755,7 +755,7 @@ summary {
 .alignment .alignment-body>* {
     grid-column: var(--start) / calc(var(--start) + var(--length));
     text-decoration: none;
-    font-size: .936rem;
+    font-size: .935rem;
     color: var(--color-foreground);
     font-family: "Roboto Mono", monospace;
     overflow-x: visible;
