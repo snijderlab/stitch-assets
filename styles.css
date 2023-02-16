@@ -2413,7 +2413,9 @@ span.corner.d {
         font-size: 0.8em;
     }
 
-    .graph {
+    .graph,
+    .spectrum,
+    .spectrum .canvas-wrapper {
         page-break-inside: avoid;
     }
 
