@@ -310,6 +310,10 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoom);
     }
+    var elements = document.querySelectorAll(".spectrum .render-setup input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", RenderSetup);
+    }
     var elements = document.querySelectorAll(".spectrum .wrapper");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousedown", spectrumDragStart)
@@ -434,6 +438,25 @@ function ManualZoom(event) {
     var maxI = Number(spectrum.querySelector(".intensity-max").value);
 
     spectrum.querySelectorAll(".canvas").forEach(canvas => Zoom(canvas, min, max, maxI));
+}
+
+/** Setup properties of the spectrum for publication
+ * @param {Event} event
+*/
+function RenderSetup(event) {
+    var cl = event.target.className;
+    var spectrum = event.target.parentElement.parentElement;
+    if (cl == "width") {
+        spectrum.style.setProperty("--width", event.target.value);
+    } else if (cl == "height") {
+        spectrum.style.setProperty("--height", event.target.value);
+    } else if (cl == "fs-peptide") {
+        spectrum.style.setProperty("--fs-peptide", event.target.value);
+    } else if (cl == "fs-spectrum") {
+        spectrum.style.setProperty("--fs-spectrum", event.target.value);
+    } else if (cl == "stroke") {
+        spectrum.style.setProperty("--stroke", event.target.value);
+    }
 }
 
 /** Update the spectrum to only show the label for peaks within the given percentage group
