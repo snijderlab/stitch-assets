@@ -1353,6 +1353,16 @@ footer .version {
     --graph-height-inc: calc(var(--graph-height) + 10px);
 }
 
+.point-graph .values {
+    position: relative;
+}
+
+.point-graph .values:hover,
+.point-graph .values:has(+.label:hover) {
+    background-color: var(--color-halfway-o);
+}
+
+.point-graph .label:hover a,
 .point-graph .values:hover+.label a {
     color: var(--color-tertiary);
 }
@@ -1411,10 +1421,6 @@ footer .version {
     background: var(--color-primary);
 }
 
-.point-graph .values {
-    position: relative;
-}
-
 .point-graph .point {
     width: 5px;
     height: 5px;
@@ -1423,7 +1429,7 @@ footer .version {
     background: var(--color);
     border: 2px solid var(--color);
     position: absolute;
-    left: 0;
+    left: calc(50% - 2.5px);
     top: calc((1 - var(--x)) * var(--graph-height));
 }
 
@@ -1491,16 +1497,14 @@ footer .version {
 }
 
 .point-graph .label>* {
-    overflow: hidden;
-    height: 10px;
-    width: 100px;
-    position: absolute;
+    position: relative;
     top: 10px;
-    left: 6px;
-    transform-origin: left;
-    font-size: 10px;
-    transform: rotate(90deg);
+    font-size: 0.7rem;
     color: var(--color-foreground);
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    left: calc(50% - .35rem);
 }
 
 .point-graph .group-label {
