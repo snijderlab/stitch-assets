@@ -615,6 +615,10 @@ code .comment {
     color: var(--color-tertiary);
 }
 
+code .directive {
+    color: var(--color-quaternary);
+}
+
 /* user help */
 .user-help {
     --color-used: var(--color-halfway);
