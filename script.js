@@ -456,6 +456,8 @@ function RenderSetup(event) {
         spectrum.style.setProperty("--fs-spectrum", event.target.value);
     } else if (cl == "stroke") {
         spectrum.style.setProperty("--stroke", event.target.value);
+    } else if (cl == "compact") {
+        spectrum.classList.toggle("compact");
     }
 }
 
