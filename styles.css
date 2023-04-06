@@ -1685,7 +1685,7 @@ footer .version {
     margin-right: .5rem;
 }
 
-.spectrum input[type=checkbox]+label {
+.spectrum input[type=checkbox]+label:not([for^=collapsible]) {
     margin: 0 .5rem;
     padding: .1em .25em;
     border: 2px solid var(--color-halfway);
@@ -1694,7 +1694,7 @@ footer .version {
     cursor: pointer;
 }
 
-.spectrum input[type=checkbox]:checked+label {
+.spectrum input[type=checkbox]:checked+label:not([for^=collapsible]) {
     border-color: var(--color-primary);
 }
 
