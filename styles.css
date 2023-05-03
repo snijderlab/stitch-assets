@@ -849,18 +849,21 @@ summary {
     position: absolute;
 }
 
+.alignment .alignment-body .template,
 .alignment .alignment-body .numbering {
     grid-column-start: 1;
-    color: var(--color-secondary);
-    grid-row: 1/1;
+    grid-column-end: -1;
     font-weight: 500;
 }
 
+.alignment .alignment-body .numbering {
+    color: var(--color-secondary);
+    grid-row: 1/1;
+}
+
 .alignment .alignment-body .template {
-    grid-column-start: 1;
     color: var(--color-primary-s1);
     grid-row: 2/2;
-    font-weight: 500;
 }
 
 .alignment .alignment-body.cdr>a,
