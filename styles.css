@@ -2119,6 +2119,7 @@ span.corner.v {
     width: var(--stroke);
     background-color: var(--color);
     transition: opacity 250ms;
+    z-index: 1;
 }
 
 .spectrum .second .peak {
@@ -2142,7 +2143,7 @@ span.corner.v {
 
 .spectrum .peak.unassigned {
     display: none;
-    z-index: -10;
+    z-index: 0;
 }
 
 .spectrum .unassigned .peak.unassigned {
