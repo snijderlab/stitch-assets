@@ -2064,8 +2064,6 @@ span.corner.v {
     border-left: var(--stroke) solid var(--color-foreground);
     border-bottom: var(--stroke) solid var(--color-foreground);
     user-select: none;
-    --min-mz: calc(var(--zoom-min) * var(--initial-max-mz));
-    --max-mz: calc(var(--zoom-max) * var(--initial-max-mz));
     overflow-x: clip;
     overflow-y: visible;
 }
@@ -2095,11 +2093,11 @@ span.corner.v {
     display: none;
 }
 
-.spectrum .canvas.zoomed .zoom-out {
+.spectrum .canvas-wrapper.zoomed .zoom-out {
     display: block;
 }
 
-.spectrum .second .canvas.zoomed .zoom-out {
+.spectrum .second .canvas-wrapper.zoomed .zoom-out {
     display: none;
 }
 

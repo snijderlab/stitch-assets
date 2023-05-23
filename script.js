@@ -329,7 +329,7 @@ function SpectrumSetUp() {
         elements[i].addEventListener("mouseup", spectrumDragEnd)
         elements[i].addEventListener("mouseout", spectrumDragOut)
     }
-    var elements = document.querySelectorAll(".spectrum .canvas");
+    var elements = document.querySelectorAll(".spectrum .canvas-wrapper");
     for (let i = 0; i < elements.length; i++) {
         var d = elements[i].dataset;
         d.minMz = 0;
@@ -620,7 +620,7 @@ function spectrumDragOut(event) {
 }
 
 function spectrumDragEnd(event) {
-    var canvas = event.target.querySelector(".canvas");
+    var canvas = event.target.querySelector(".canvas-wrapper");
     if (startPoint != undefined) {
         var d = canvas.dataset;
         var box = canvas.getBoundingClientRect();
@@ -695,7 +695,7 @@ function ZoomSpectrumGraph(canvas, min_x, max_x, min_y, max_y, absolute, mz) {
 function spectrumZoomOut(event) {
     var spectrum = event.target.parentElement.parentElement.parentElement.parentElement;
     var min, max, maxI = 0;
-    spectrum.querySelectorAll(".canvas").forEach(canvas => {
+    spectrum.querySelectorAll(".canvas-wrapper").forEach(canvas => {
         var d = canvas.dataset;
         d.minMz = 0;
         d.maxMz = d.initialMaxMz;
