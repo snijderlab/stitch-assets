@@ -408,7 +408,7 @@ function ToggleHighlight(event, permanent, start = null) {
 function SpectrumInputChange(event) {
     if (event.target.type == "checkbox") { // Background
         var wrapper = event.target.parentElement.parentElement;
-        var canvas = wrapper.querySelector(".canvas");
+        var canvas = wrapper.querySelector(".canvas-wrapper"); // comment
         var update_axes = !wrapper.classList.contains("first") && !wrapper.classList.contains("second");
         if (event.target.checked) { // Will be adding all background peaks
             wrapper.classList.add(event.target.className);
@@ -712,23 +712,23 @@ function fancyRound(max, min, value, additional = 0) {
 }
 
 // Give the canvas element
-function UpdateSpectrumAxes(canvas) {
+function UpdateSpectrumAxes(canvas_wrapper) {
     // Update x-axis
-    var axis = canvas.parentElement.getElementsByClassName("x-axis")[0];
+    var axis = canvas_wrapper.parentElement.getElementsByClassName("x-axis")[0];
     var ticks = axis.children;
-    var min = Number(canvas.dataset.minMz);
-    var max = Number(canvas.dataset.maxMz);
+    var min = Number(canvas_wrapper.dataset.minMz);
+    var max = Number(canvas_wrapper.dataset.maxMz);
     for (let i = 0; i < ticks.length; i++) {
         ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
     }
     // update spectrum graph axes
-    canvas.parentElement.querySelector('.spectrum-graph .x-axis .min').innerText = fancyRound(max, min, min);
-    canvas.parentElement.querySelector('.spectrum-graph .x-axis .max').innerText = fancyRound(max, min, max);
+    canvas_wrapper.parentElement.querySelector('.spectrum-graph .x-axis .min').innerText = fancyRound(max, min, min);
+    canvas_wrapper.parentElement.querySelector('.spectrum-graph .x-axis .max').innerText = fancyRound(max, min, max);
 
     // Update y-axis
-    var axis = canvas.parentElement.getElementsByClassName("y-axis")[0];
+    var axis = canvas_wrapper.parentElement.getElementsByClassName("y-axis")[0];
     var ticks = axis.children;
-    var max = Number(canvas.dataset.maxIntensity);
+    var max = Number(canvas_wrapper.dataset.maxIntensity);
     for (let i = 0; i < ticks.length; i++) {
         if (i == 0)
             ticks[i].innerText = "0";
@@ -736,7 +736,7 @@ function UpdateSpectrumAxes(canvas) {
             ticks[i].innerText = Math.round(i / 4 * (max)).toExponential(2);
     }
 
-    var peaks = canvas.children;
+    var peaks = canvas_wrapper.children;
     for (let i = 0; i < peaks.length; i++) {
         var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
         if (v > max) {
