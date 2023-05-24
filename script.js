@@ -467,7 +467,7 @@ function ManualZoom(event) {
     var max = Number(spectrum.querySelector(".mz-max").value);
     var maxI = Number(spectrum.querySelector(".intensity-max").value);
 
-    spectrum.querySelectorAll(".canvas").forEach(canvas => Zoom(canvas, min, max, maxI));
+    spectrum.querySelectorAll(".canvas-wrapper").forEach(canvas => Zoom(canvas, min, max, maxI));
 }
 
 /** Zoom the spectrum manually.
@@ -482,7 +482,7 @@ function ManualZoomSpectrumGraph(event) {
     var absolute = spectrum.querySelector("#absolute").checked;
     var mz = spectrum.querySelector("#mz").checked;
 
-    spectrum.querySelectorAll(".data").forEach(canvas => ZoomSpectrumGraph(canvas, min_x, max_x, min_y, max_y, absolute, mz));
+    spectrum.querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_x, max_x, min_y, max_y, absolute, mz));
 }
 
 /** Setup properties of the spectrum for publication
@@ -667,26 +667,19 @@ function Zoom(canvas, min, max, maxI) {
 
 function ZoomSpectrumGraph(canvas, min_x, max_x, min_y, max_y, absolute, mz) {
     canvas.classList.add("zoomed");
-    // canvas.dataset.minMz = min;
-    // canvas.dataset.maxMz = max;
-    // canvas.dataset.maxIntensity = maxI;
-    let x = mz ? "mz" : "mass";
     let y = absolute ? "abs" : "rel";
-    canvas.style.setProperty(`--${x}-min`, min_x);
-    canvas.style.setProperty(`--${x}-max`, max_x);
-    canvas.style.setProperty(`--${y}-min`, min_y);
-    canvas.style.setProperty(`--${y}-max`, max_y);
 
     var spectrum_graph = canvas.parentElement.parentElement;
+    console.log(canvas, spectrum_graph);
     spectrum_graph.querySelector(".x-min").value = fancyRound(max_x, min_x, min_x);
     spectrum_graph.querySelector(".x-max").value = fancyRound(max_x, min_x, max_x);
     spectrum_graph.querySelector(".y-min").value = fancyRound(max_y, min_y, min_y);
     spectrum_graph.querySelector(".y-max").value = fancyRound(max_y, min_y, max_y);
 
-    spectrum_graph.querySelector(`.min.${x}`).innerText = fancyRound(max_x, min_x, min_x);
-    spectrum_graph.querySelector(`.max.${x}`).innerText = fancyRound(max_x, min_x, max_x);
-    spectrum_graph.querySelector(`.min.${y}`).innerText = fancyRound(max_y, min_y, min_y);
-    spectrum_graph.querySelector(`.max.${y}`).innerText = fancyRound(max_y, min_y, max_y);
+    spectrum_graph.querySelector('.x-axis .min').innerText = fancyRound(max_x, min_x, min_x);
+    spectrum_graph.querySelector('.x-axis .max').innerText = fancyRound(max_x, min_x, max_x);
+    spectrum_graph.parentElement.querySelector('.spectrum-graph-y-axis .min').innerText = fancyRound(max_y, min_y, min_y);
+    spectrum_graph.parentElement.querySelector('.spectrum-graph-y-axis .max').innerText = fancyRound(max_y, min_y, max_y);
 
     if (max_y > 0 && min_y > 0) spectrum_graph.querySelector(".x-axis").classList.add("hug-bottom");
     else spectrum_graph.querySelector(".x-axis").classList.remove("hug-bottom");
@@ -730,6 +723,9 @@ function UpdateSpectrumAxes(canvas) {
     for (let i = 0; i < ticks.length; i++) {
         ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
     }
+    // update spectrum graph axes
+    canvas.parentElement.querySelector('.spectrum-graph .x-axis .min').innerText = fancyRound(max, min, min);
+    canvas.parentElement.querySelector('.spectrum-graph .x-axis .max').innerText = fancyRound(max, min, max);
 
     // Update y-axis
     var axis = canvas.parentElement.getElementsByClassName("y-axis")[0];
