@@ -310,11 +310,11 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoom);
     }
-    var elements = document.querySelectorAll(".spectrum-graph .manual-zoom input");
+    var elements = document.querySelectorAll(".spectrum-graph-setup .manual-zoom input");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoomSpectrumGraph);
     }
-    var elements = document.querySelectorAll(".spectrum-graph .plot");
+    var elements = document.querySelectorAll(".spectrum-graph");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousemove", SpectrumGraphMouseMove)
     }
@@ -442,7 +442,7 @@ function SpectrumInputChange(event) {
 function SpectrumGraphMouseMove(event) {
     var data = event.target;
     if (data.classList.contains("point")) data = data.parentElement;
-    var spectrum = data.parentElement.parentElement;
+    var spectrum = data.parentElement;
 
     var baseline = data.getBoundingClientRect().top;
     var offset = event.clientY - baseline;
@@ -451,14 +451,13 @@ function SpectrumGraphMouseMove(event) {
     el.style.top = offset + "px";
     var el = spectrum.querySelector("#ruler-value");
 
-    var absolute = spectrum.querySelector("#absolute").checked;
+    var absolute = spectrum.parentElement.parentElement.querySelector("#absolute").checked;
     let y = absolute ? "abs" : "rel";
 
     let style = getComputedStyle(data)
     let min = Number(style.getPropertyValue(`--${y}-min`));
     let max = Number(style.getPropertyValue(`--${y}-max`));
-    // TODO: on a point the offsetY is wrong (from itself instead of data)
-    el.innerText = fancyRound(max, min, offset / data.clientHeight * - 1 * (max - min) + max);
+    el.innerText = fancyRound(max, min, offset / data.clientHeight * - 1 * (max - min) + max, 1);
 }
 
 /** Zoom the spectrum manually.
@@ -477,15 +476,13 @@ function ManualZoom(event) {
  * @param {Event} event
 */
 function ManualZoomSpectrumGraph(event) {
-    var spectrum = event.target.parentElement.parentElement;
-    var min_x = Number(spectrum.querySelector(".x-min").value);
-    var max_x = Number(spectrum.querySelector(".x-max").value);
+    var spectrum = event.target.parentElement.parentElement.parentElement;//.querySelector(".spectrum-graph");
+    console.log(spectrum);
     var min_y = Number(spectrum.querySelector(".y-min").value);
     var max_y = Number(spectrum.querySelector(".y-max").value);
     var absolute = spectrum.querySelector("#absolute").checked;
-    var mz = spectrum.querySelector("#mz").checked;
 
-    spectrum.querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_x, max_x, min_y, max_y, absolute, mz));
+    spectrum.querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_y, max_y, absolute));
 }
 
 /** Setup properties of the spectrum for publication
@@ -668,19 +665,16 @@ function Zoom(canvas, min, max, maxI) {
     UpdateSpectrumAxes(canvas)
 }
 
-function ZoomSpectrumGraph(canvas, min_x, max_x, min_y, max_y, absolute, mz) {
+function ZoomSpectrumGraph(canvas, min_y, max_y, absolute) {
     canvas.classList.add("zoomed");
     let y = absolute ? "abs" : "rel";
 
-    var spectrum_graph = canvas.parentElement.parentElement;
-    console.log(canvas, spectrum_graph);
-    spectrum_graph.querySelector(".x-min").value = fancyRound(max_x, min_x, min_x);
-    spectrum_graph.querySelector(".x-max").value = fancyRound(max_x, min_x, max_x);
+    var spectrum_graph = canvas.parentElement.parentElement.parentElement;
+    canvas.style.setProperty(`--${y}-min`, fancyRound(max_y, min_y, min_y));
+    canvas.style.setProperty(`--${y}-max`, fancyRound(max_y, min_y, max_y));
     spectrum_graph.querySelector(".y-min").value = fancyRound(max_y, min_y, min_y);
     spectrum_graph.querySelector(".y-max").value = fancyRound(max_y, min_y, max_y);
 
-    spectrum_graph.querySelector('.x-axis .min').innerText = fancyRound(max_x, min_x, min_x);
-    spectrum_graph.querySelector('.x-axis .max').innerText = fancyRound(max_x, min_x, max_x);
     spectrum_graph.parentElement.querySelector('.spectrum-graph-y-axis .min').innerText = fancyRound(max_y, min_y, min_y);
     spectrum_graph.parentElement.querySelector('.spectrum-graph-y-axis .max').innerText = fancyRound(max_y, min_y, max_y);
 
@@ -711,8 +705,9 @@ function spectrumZoomOut(event) {
     spectrum.querySelector(".intensity-max").value = fancyRound(maxI, 0, maxI);
 }
 
-function fancyRound(max, min, value) {
+function fancyRound(max, min, value, additional = 0) {
     var factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1;
+    factor *= Math.pow(10, additional);
     return Math.round(value * factor) / factor;
 }
 
