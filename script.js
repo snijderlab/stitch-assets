@@ -444,8 +444,11 @@ function SpectrumGraphMouseMove(event) {
     if (data.classList.contains("point")) data = data.parentElement;
     var spectrum = data.parentElement.parentElement;
 
+    var baseline = data.getBoundingClientRect().top;
+    var offset = event.clientY - baseline;
+
     var el = spectrum.querySelector(".ruler");
-    el.style.top = event.offsetY + "px";
+    el.style.top = offset + "px";
     var el = spectrum.querySelector("#ruler-value");
 
     var absolute = spectrum.querySelector("#absolute").checked;
@@ -455,7 +458,7 @@ function SpectrumGraphMouseMove(event) {
     let min = Number(style.getPropertyValue(`--${y}-min`));
     let max = Number(style.getPropertyValue(`--${y}-max`));
     // TODO: on a point the offsetY is wrong (from itself instead of data)
-    el.innerText = fancyRound(max, min, event.offsetY / data.clientHeight * - 1 * (max - min) + max);
+    el.innerText = fancyRound(max, min, offset / data.clientHeight * - 1 * (max - min) + max);
 }
 
 /** Zoom the spectrum manually.
