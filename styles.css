@@ -1625,41 +1625,46 @@ footer .version {
 
 .spectrum .ion-series>* {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: max-content 1fr 1fr max-content;
     grid-template-rows: repeat(2, 1fr);
 }
 
 .spectrum .ion-series .bottom {
-    padding-left: .5rem;
+    padding-right: 6ch;
 }
 
 .spectrum .ion-series .top {
-    padding-right: .5rem;
+    padding-left: 6ch;
 }
 
-.spectrum .ion-series .a {
+.spectrum .ion-series .n-term {
     grid-row: 1;
     grid-column: 1;
 }
 
-.spectrum .ion-series .b {
+.spectrum .ion-series .a {
     grid-row: 1;
     grid-column: 2;
+}
+
+.spectrum .ion-series .b {
+    grid-row: 1;
+    grid-column: 3;
 }
 
 .spectrum .ion-series .c {
     grid-row: 1;
-    grid-column: 3;
+    grid-column: 4;
 }
 
 .spectrum .ion-series .d {
     grid-row: 2;
-    grid-column: 2;
+    grid-column: 3;
 }
 
 .spectrum .ion-series .v {
     grid-row: 2;
-    grid-column: 3;
+    grid-column: 4;
 }
 
 .spectrum .ion-series .w {
@@ -1680,6 +1685,11 @@ footer .version {
 .spectrum .ion-series .z {
     grid-row: 2;
     grid-column: 3;
+}
+
+.spectrum .ion-series .c-term {
+    grid-row: 2;
+    grid-column: 4;
 }
 
 .spectrum .legend .ion {
@@ -1838,6 +1848,11 @@ footer .version {
 
 .spectrum .unassigned {
     --color: var(--color-halfway);
+}
+
+.spectrum .n-term,
+.spectrum .c-term {
+    --color: var(--color-foreground);
 }
 
 .spectrum .peptide>* {

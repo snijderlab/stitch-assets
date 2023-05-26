@@ -375,7 +375,17 @@ function ToggleHighlight(event, permanent, start = null) {
         }
     }
     container.querySelectorAll(".canvas").forEach(canvas => {
-        if (t.classList.contains("ion")) {
+        if (t.classList.contains("n-term")) {
+            var elements = canvas.querySelectorAll(":is(.a, .b, .c, .d, .v)");
+            for (let i = 0; i < elements.length; i++) {
+                toggle(elements[i]);
+            }
+        } else if (t.classList.contains("c-term")) {
+            var elements = canvas.querySelectorAll(":is(.w, .x, .y, .z)");
+            for (let i = 0; i < elements.length; i++) {
+                toggle(elements[i]);
+            }
+        } else if (t.classList.contains("ion")) {
             var cl = t.classList[1];
             var elements = canvas.querySelectorAll("." + cl);
             for (let i = 0; i < elements.length; i++) {
