@@ -1957,7 +1957,6 @@ span.corner.d {
     flex-direction: column-reverse;
     align-items: flex-end;
     position: relative;
-    padding-right: 2px;
     user-select: none;
 }
 
@@ -1984,13 +1983,26 @@ span.corner.d {
     flex-direction: column;
 }
 
-.spectrum .first .y-axis .n0 {
-    position: relative;
-    top: .6em;
+.spectrum .y-axis .tick {
+    width: 0px;
+    height: 2px;
+    border-right: 2px solid var(--color-foreground);
+    overflow: visible;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
 }
 
-.spectrum .second .y-axis .n0 {
-    opacity: 0;
+.spectrum .y-axis .tick span {
+    padding-right: 2px;
+}
+
+.spectrum .y-axis .tick:first-child {
+    align-items: end;
+}
+
+.spectrum .y-axis .tick:last-child {
+    align-items: start;
 }
 
 .spectrum .x-axis {
@@ -2000,6 +2012,28 @@ span.corner.d {
     flex-direction: row;
     justify-content: space-between;
     user-select: none;
+}
+
+.spectrum .x-axis .tick {
+    width: 0px;
+    height: 2px;
+    border-right: 2px solid var(--color-foreground);
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+}
+
+.spectrum .x-axis .tick span {
+    width: max-content;
+    padding-top: 2px;
+}
+
+.spectrum .x-axis .tick:first-child {
+    justify-content: start;
+}
+
+.spectrum .x-axis .tick:last-child {
+    justify-content: end;
 }
 
 .spectrum .x-axis::after {
