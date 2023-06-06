@@ -1606,8 +1606,9 @@ footer .version {
     grid-template-columns: 1fr max-content;
     grid-template-rows: max-content max-content max-content max-content;
     --fs-peptide: 1.25rem;
+    --stroke-peptide: 2px;
     --fs-spectrum: 1rem;
-    --stroke: 2px;
+    --stroke-spectrum: 2px;
     --width: 100%;
     --height: 250px;
 }
@@ -1748,8 +1749,9 @@ footer .version {
 }
 
 .spectrum .legend .label input[type=number],
-.spectrum .settings input {
-    width: 5ch;
+.spectrum .manual-zoom input[type=number],
+.spectrum .render-setup input {
+    width: 6ch;
     background-color: var(--color-background);
     color: var(--color-foreground);
     border: 2px solid var(--color-halfway);
@@ -1798,8 +1800,8 @@ footer .version {
     display: flex;
     flex-wrap: wrap;
     grid-column: 1/3;
-    --spacing: calc(var(--stroke) * 1.5);
-    --side-spacing: calc(var(--stroke) * 0.5);
+    --spacing: calc(var(--stroke-peptide) * 1.5);
+    --side-spacing: calc(var(--stroke-peptide) * 0.5);
     --width: 50%;
     --height: 50%;
 }
@@ -1894,13 +1896,13 @@ footer .version {
 }
 
 .spectrum .peptide>*.modification.term::before {
-    top: calc(50% - var(--stroke));
+    top: calc(50% - var(--stroke-peptide));
 }
 
 .spectrum .corner {
     position: absolute;
     display: block;
-    border: var(--stroke) solid var(--color);
+    border: var(--stroke-peptide) solid var(--color);
     width: var(--width);
     height: var(--height);
     pointer-events: none;
@@ -1933,7 +1935,7 @@ footer .version {
 
 .spectrum .corner.w {
     height: 0;
-    border-width: calc(var(--stroke) * 0.5);
+    border-width: calc(var(--stroke-peptide) * 0.5);
     left: calc(3 * var(--spacing) + var(--side-spacing));
     right: calc(3 * var(--spacing) + var(--side-spacing));
     top: calc(3 * var(--spacing));
@@ -1965,7 +1967,7 @@ footer .version {
 
 span.corner.d {
     height: 0;
-    border-width: calc(var(--stroke) * 0.5);
+    border-width: calc(var(--stroke-peptide) * 0.5);
     left: calc(3 * var(--spacing) + var(--side-spacing));
     right: calc(3 * var(--spacing) + var(--side-spacing));
     bottom: calc(3 * var(--spacing));
@@ -1974,7 +1976,7 @@ span.corner.d {
 
 span.corner.v {
     height: 0;
-    border-width: calc(var(--stroke) * 0.5);
+    border-width: calc(var(--stroke-peptide) * 0.5);
     left: calc(3 * var(--spacing) + var(--side-spacing));
     right: calc(3 * var(--spacing) + var(--side-spacing));
     bottom: calc(4 * var(--spacing));
@@ -2017,7 +2019,6 @@ span.corner.v {
     flex-direction: column-reverse;
     align-items: flex-end;
     position: relative;
-    padding-right: 2px;
     user-select: none;
 }
 
@@ -2044,13 +2045,26 @@ span.corner.v {
     flex-direction: column;
 }
 
-.spectrum .first .y-axis .n0 {
-    position: relative;
-    top: .6em;
+.spectrum .y-axis .tick {
+    width: 0px;
+    height: var(--stroke-spectrum);
+    border-right: var(--stroke-spectrum) solid var(--color-foreground);
+    overflow: visible;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
 }
 
-.spectrum .second .y-axis .n0 {
-    opacity: 0;
+.spectrum .y-axis .tick span {
+    padding-right: var(--stroke-spectrum);
+}
+
+.spectrum .y-axis .tick:first-child {
+    align-items: end;
+}
+
+.spectrum .y-axis .tick:last-child {
+    align-items: start;
 }
 
 .spectrum .x-axis {
@@ -2060,6 +2074,28 @@ span.corner.v {
     flex-direction: row;
     justify-content: space-between;
     user-select: none;
+}
+
+.spectrum .x-axis .tick {
+    width: 0px;
+    height: var(--stroke-spectrum);
+    border-right: var(--stroke-spectrum) solid var(--color-foreground);
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+}
+
+.spectrum .x-axis .tick span {
+    width: max-content;
+    padding-top: calc(2 * var(--stroke-spectrum));
+}
+
+.spectrum .x-axis .tick:first-child {
+    justify-content: start;
+}
+
+.spectrum .x-axis .tick:last-child {
+    justify-content: end;
 }
 
 .spectrum .x-axis::after {
@@ -2079,8 +2115,8 @@ span.corner.v {
 .spectrum .canvas {
     grid-area: canvas;
     position: relative;
-    border-left: var(--stroke) solid var(--color-foreground);
-    border-bottom: var(--stroke) solid var(--color-foreground);
+    border-left: var(--stroke-spectrum) solid var(--color-foreground);
+    border-bottom: var(--stroke-spectrum) solid var(--color-foreground);
     user-select: none;
     overflow-x: clip;
     overflow-y: visible;
@@ -2104,7 +2140,7 @@ span.corner.v {
     right: 0px;
     color: var(--color-halfway);
     padding: .2rem;
-    border: var(--stroke) solid var(--color-halfway);
+    border: var(--stroke-spectrum) solid var(--color-halfway);
     background-color: transparent;
     border-radius: .2rem;
     font-size: 0.8em;
@@ -2135,7 +2171,7 @@ span.corner.v {
     height: min(calc(var(--intensity) / var(--max-intensity) * 100%), 100%);
     top: clamp(0%, calc(100% - var(--intensity) / var(--max-intensity) * 100%), 100%);
     left: calc(100% * (var(--mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
-    width: var(--stroke);
+    width: var(--stroke-spectrum);
     background-color: var(--color);
     transition: opacity 250ms;
     z-index: 1;
@@ -2524,6 +2560,16 @@ span.corner.v {
         font-size: 0.8em;
     }
 
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
     .graph,
     .spectrum,
     .spectrum .canvas-wrapper {
@@ -2609,6 +2655,10 @@ span.corner.v {
     [id$="segment-joining"] .title,
     input[type=range] {
         display: none !important;
+    }
+
+    .spectrum .legend .label input[type=number] {
+        width: 3ch;
     }
 }
 

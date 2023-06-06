@@ -506,10 +506,12 @@ function RenderSetup(event) {
         spectrum.style.setProperty("--height", event.target.value);
     } else if (cl == "fs-peptide") {
         spectrum.style.setProperty("--fs-peptide", event.target.value);
+    } else if (cl == "stroke-peptide") {
+        spectrum.style.setProperty("--stroke-peptide", event.target.value);
     } else if (cl == "fs-spectrum") {
         spectrum.style.setProperty("--fs-spectrum", event.target.value);
-    } else if (cl == "stroke") {
-        spectrum.style.setProperty("--stroke", event.target.value);
+    } else if (cl == "stroke-spectrum") {
+        spectrum.style.setProperty("--stroke-spectrum", event.target.value);
     } else if (cl == "compact") {
         spectrum.classList.toggle("compact");
     }
