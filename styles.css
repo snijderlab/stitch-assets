@@ -849,6 +849,10 @@ summary {
     position: absolute;
 }
 
+.alignment .alignment-body>a>span.template-gap {
+    color: var(--color-halfway);
+}
+
 .alignment .alignment-body .template,
 .alignment .alignment-body .numbering {
     grid-column-start: 1;
