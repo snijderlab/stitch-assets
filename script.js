@@ -461,12 +461,9 @@ function SpectrumGraphMouseMove(event) {
     el.style.top = offset + "px";
     var el = spectrum.querySelector("#ruler-value");
 
-    var absolute = spectrum.parentElement.parentElement.querySelector("#absolute").checked;
-    let y = absolute ? "abs" : "rel";
-
-    let style = getComputedStyle(data)
-    let min = Number(style.getPropertyValue(`--${y}-min`));
-    let max = Number(style.getPropertyValue(`--${y}-max`));
+    let style = getComputedStyle(spectrum);
+    let min = Number(style.getPropertyValue(`--y-min`));
+    let max = Number(style.getPropertyValue(`--y-max`));
     el.innerText = fancyRound(max, min, offset / data.clientHeight * - 1 * (max - min) + max, 1);
 }
 
