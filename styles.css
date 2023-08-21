@@ -1852,6 +1852,12 @@ footer .version {
     --color: var(--color-halfway);
 }
 
+.spectrum .peak:hover::after {
+    content: attr(data-label);
+    color: var(--color-halfway);
+    padding-left: calc(var(--stroke-spectrum) * 2);
+}
+
 .spectrum .n-term,
 .spectrum .c-term {
     --color: var(--color-foreground);
