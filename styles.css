@@ -1852,7 +1852,8 @@ footer .version {
     --color: var(--color-halfway);
 }
 
-.spectrum .peak:hover::after {
+.spectrum .peak:hover::after,
+.spectrum:has(.mass-label:checked) .peak.label::after {
     content: attr(data-label);
     color: var(--color-halfway);
     padding-left: calc(var(--stroke-spectrum) * 2);
