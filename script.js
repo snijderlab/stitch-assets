@@ -631,7 +631,7 @@ function spectrumDragEnd(event) {
     var canvas = event.target.querySelector(".canvas-wrapper");
     if (startPoint != undefined) {
         var d = canvas.dataset;
-        var box = canvas.getBoundingClientRect();
+        var box = canvas.querySelector(".canvas").getBoundingClientRect();
         var wrapper_box = event.target.getBoundingClientRect();
         var width = box.width;
         var height = box.height;
@@ -640,6 +640,11 @@ function spectrumDragEnd(event) {
         startPoint = startPoint + wrapper_box.x - boxX;
         var min = Math.max(0, Math.min(startPoint, event.pageX - boxX)) / width;
         var max = Math.min(width, Math.max(startPoint, event.pageX - boxX)) / width;
+        if (max - min < 0.005) {
+            // Do not zoom if the user only clicked once and did not move considerably in the drag event
+            spectrumDragOut(event);
+            return;
+        }
         var minMz = Number(d.minMz);
         var maxMz = Number(d.maxMz);
         var maxIntensity = Number(d.maxIntensity);
