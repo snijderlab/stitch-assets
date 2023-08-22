@@ -2295,6 +2295,10 @@ span.corner.v {
     display: none;
 }
 
+.spectrum .general-stats {
+    margin-top: 1em;
+}
+
 
 /* Ambiguity Overview */
 
