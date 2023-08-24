@@ -1873,6 +1873,10 @@ footer .version {
     font-family: 'Roboto Mono';
 }
 
+.peptide>span.modification {
+    color: var(--color-primary);
+}
+
 .spectrum.compact .peptide>* {
     padding: .5em 0;
 }
