@@ -343,6 +343,12 @@ function SpectrumSetUp() {
     }
 }
 
+function SetUpSpectrumInterface() {
+    SpectrumSetUp();
+    var event = new Event('change');
+    document.getElementById("y-max").dispatchEvent(event);
+}
+
 var highlight;
 function ToggleHighlight(event, permanent, start = null) {
     var t = event.target; // <span> with the sequence
