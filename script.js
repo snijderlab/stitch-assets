@@ -306,7 +306,7 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", SpectrumInputChange);
     }
-    var elements = document.querySelectorAll(".spectrum>.manual-zoom input");
+    var elements = document.querySelectorAll(".spectrum>.wrapper>.manual-zoom input");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoom);
     }
@@ -755,7 +755,8 @@ function UpdateSpectrumAxes(canvas_wrapper) {
             ticks[i].innerText = Math.round(i / 4 * (max)).toExponential(2);
     }
 
-    var peaks = canvas_wrapper.children;
+    var peaks = canvas_wrapper.querySelector('.canvas').children;
+    console.log(peaks);
     for (let i = 0; i < peaks.length; i++) {
         var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
         if (v > max) {
