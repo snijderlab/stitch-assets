@@ -1852,6 +1852,10 @@ footer .version {
     --color: var(--color-halfway);
 }
 
+.spectrum .multi {
+    --color: red;
+}
+
 .spectrum .peak:hover::after,
 .spectrum:has(.mass-label:checked) .peak.label::after {
     content: attr(data-label);
@@ -2216,7 +2220,7 @@ span.corner.v {
     display: block;
 }
 
-.spectrum .peak span {
+.spectrum .peak>span {
     position: absolute;
     top: -1.6em;
     left: -.5em;
@@ -2240,6 +2244,24 @@ span.corner.v {
     z-index: 1000;
     font-weight: 500;
     opacity: 1;
+}
+
+.spectrum .peak>span.multi {
+    top: .5em;
+    opacity: 0;
+    border: 2px solid var(--color-halfway);
+    background: var(--color-background);
+    padding: 5px 10px 10px 5px;
+    margin: 2px;
+    margin-top: -10px;
+}
+
+.spectrum .peak:hover>span.multi {
+    opacity: 1;
+}
+
+.spectrum .peak>span.multi>span {
+    display: block;
 }
 
 .spectrum .peak:hover span.special::after {
