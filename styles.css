@@ -1848,7 +1848,8 @@ footer .version {
     --color: var(--color-primary-s1);
 }
 
-.spectrum .unassigned {
+.spectrum .unassigned,
+.spectrum .mass-label {
     --color: var(--color-halfway);
 }
 
@@ -1868,6 +1869,11 @@ footer .version {
     --color: var(--color-foreground);
 }
 
+.spectrum .complex-peptide {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .spectrum .peptide>* {
     position: relative;
     padding: .5em;
@@ -1875,6 +1881,15 @@ footer .version {
     cursor: crosshair;
     user-select: none;
     font-family: 'Roboto Mono';
+}
+
+.peptide>.name {
+    border: 2px solid var(--color-foreground);
+    border-radius: 50%;
+    text-align: center;
+    margin: auto .5em auto 0;
+    padding: 0 .25em !important;
+    vertical-align: middle;
 }
 
 .peptide>span.modification {
@@ -2192,6 +2207,10 @@ span.corner.v {
     z-index: 1;
 }
 
+.spectrum .peak:hover {
+    z-index: 2;
+}
+
 .spectrum .second .peak {
     top: 0;
 }
@@ -2216,7 +2235,7 @@ span.corner.v {
     z-index: 0;
 }
 
-.spectrum .unassigned .peak.unassigned {
+.spectrum .show-unassigned .peak.unassigned {
     display: block;
 }
 
@@ -2239,9 +2258,8 @@ span.corner.v {
     opacity: 1;
 }
 
-.spectrum .peak:hover span {
+.spectrum .peak:hover>span {
     color: var(--color-primary);
-    z-index: 1000;
     font-weight: 500;
     opacity: 1;
 }
@@ -2251,6 +2269,7 @@ span.corner.v {
     opacity: 0;
     border: 2px solid var(--color-halfway);
     background: var(--color-background);
+    color: var(--color-foreground);
     padding: 5px 10px 10px 5px;
     margin: 2px;
     margin-top: -10px;
@@ -2275,7 +2294,7 @@ span.corner.v {
 }
 
 .spectrum .highlight .peak.highlight,
-.spectrum .highlight .peak.highlight span {
+.spectrum .highlight .peak.highlight span:not(.multi) {
     opacity: 1;
 }
 

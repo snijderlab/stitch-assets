@@ -357,7 +357,7 @@ function ToggleHighlight(event, permanent, start = null) {
 
     highlight = t;
     var container = t.parentElement.parentElement;
-    if (container.classList.contains("ion-series")) container = container.parentElement.parentElement;
+    if (container.classList.contains("ion-series") || container.classList.contains("complex-peptide")) container = container.parentElement.parentElement;
     function toggle(element) {
         if (element.dataset.n == undefined) element.dataset.n = 0;
         if (element.dataset.n < 0) element.dataset.n = 0;
@@ -397,12 +397,16 @@ function ToggleHighlight(event, permanent, start = null) {
             for (let i = 0; i < elements.length; i++) {
                 toggle(elements[i]);
             }
+        } else if (t.classList.contains("name")) {
+            var cl = t.innerText;
+            var elements = canvas.querySelectorAll(".p" + cl);
+            for (let i = 0; i < elements.length; i++) {
+                toggle(elements[i]);
+            }
         } else {
-            var peaks = canvas.children;
-            for (let i = 0; i < peaks.length; i++) {
-                if (peaks[i].dataset.pos == t.dataset.pos) {
-                    toggle(peaks[i]);
-                }
+            var elements = canvas.querySelectorAll(".p" + t.dataset.pos);
+            for (let i = 0; i < elements.length; i++) {
+                toggle(elements[i]);
             }
         }
     })
@@ -427,14 +431,14 @@ function SpectrumInputChange(event) {
         var canvas = wrapper.querySelector(".canvas-wrapper"); // comment
         var update_axes = !wrapper.classList.contains("first") && !wrapper.classList.contains("second");
         if (event.target.checked) { // Will be adding all background peaks
-            wrapper.classList.add(event.target.className);
+            wrapper.classList.add('show-unassigned');
             if (update_axes && canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensityAssigned) {
                 canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
                 canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
                 UpdateSpectrumAxes(canvas)
             }
         } else { // Will be removing all background peaks
-            wrapper.classList.remove(event.target.className);
+            wrapper.classList.remove('show-unassigned');
             if (update_axes && canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
                 canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
                 canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
@@ -489,8 +493,7 @@ function ManualZoom(event) {
  * @param {Event} event
 */
 function ManualZoomSpectrumGraph(event) {
-    var spectrum = event.target.parentElement.parentElement.parentElement;//.querySelector(".spectrum-graph");
-    console.log(spectrum);
+    var spectrum = event.target.parentElement.parentElement.parentElement;
     var min_y = Number(spectrum.querySelector(".y-min").value);
     var max_y = Number(spectrum.querySelector(".y-max").value);
 
@@ -688,7 +691,6 @@ function ZoomSpectrumGraph(canvas, min_y, max_y) {
     canvas.classList.add("zoomed");
 
     var spectrum_graph = canvas.parentElement.parentElement.parentElement;
-    console.log(canvas, spectrum_graph);
     canvas.parentElement.style.setProperty("--y-min", fancyRound(max_y, min_y, min_y));
     canvas.parentElement.style.setProperty("--y-max", fancyRound(max_y, min_y, max_y));
     spectrum_graph.querySelector(".y-min").value = fancyRound(max_y, min_y, min_y);
@@ -756,7 +758,6 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     }
 
     var peaks = canvas_wrapper.querySelector('.canvas').children;
-    console.log(peaks);
     for (let i = 0; i < peaks.length; i++) {
         var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
         if (v > max) {
