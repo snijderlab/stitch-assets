@@ -1900,6 +1900,10 @@ footer .version {
     color: var(--color-primary);
 }
 
+.peptide>span.possible-modification {
+    color: var(--color-secondary);
+}
+
 .spectrum.compact .peptide>* {
     padding: .5em 0;
 }
