@@ -23,13 +23,8 @@
 
 @media screen and (prefers-color-scheme: dark) {
     :root {
-        --color-primary: #569CD6;
         --color-primary-s1: #9CDCFE;
         --color-primary-s2: #1d4f78;
-        --color-secondary: #F48771;
-        --color-tertiary: #DCD08F;
-        --color-quaternary: #4EC9B0;
-        --color-quinary: #b57fd7;
         --color-primary-o: rgba(86, 156, 214, 30%);
         --color-primary-shade-o: rgba(156, 220, 254, 20%);
         --color-secondary-o: rgba(244, 135, 113, 20%);
@@ -1822,7 +1817,8 @@ footer .version {
     --color: var(--color-primary);
 }
 
-.spectrum .b {
+.spectrum .b,
+.spectrum .glycan {
     --color: var(--color-secondary);
 }
 
