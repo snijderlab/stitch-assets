@@ -1860,11 +1860,12 @@ footer .version {
     --color: red;
 }
 
-.spectrum .peak:hover::after,
+.spectrum .peak:not(.cut):hover::after,
 .spectrum:has(.mass-label:checked) .peak.label::after {
     content: attr(data-label);
     color: var(--color-halfway);
     padding-left: calc(var(--stroke-spectrum) * 2);
+    bottom: min(100%, var(--height));
 }
 
 .spectrum .n-term,
@@ -2254,6 +2255,7 @@ span.corner.v {
     z-index: 10;
     cursor: default;
     opacity: 0;
+    width: max-content;
 }
 
 .spectrum .second .peak span {

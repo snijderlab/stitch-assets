@@ -398,7 +398,7 @@ function ToggleHighlight(event, permanent, start = null) {
                 toggle(elements[i]);
             }
         } else if (t.classList.contains("name")) {
-            var cl = t.innerText;
+            var cl = Number(t.innerText) - 1;
             var elements = canvas.querySelectorAll(".p" + cl);
             for (let i = 0; i < elements.length; i++) {
                 toggle(elements[i]);
