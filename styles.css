@@ -917,7 +917,7 @@ summary {
 
 .original-sequence .modification {
     font-size: .5em;
-    margin: 0;
+    margin: 0 -.5rem;
     margin-top: -2em;
     padding: 0;
     writing-mode: vertical-rl;
