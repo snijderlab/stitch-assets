@@ -1,53 +1,114 @@
 :root {
-    --color-primary: #569CD6;
-    --color-primary-s1: #1d4f78;
-    --color-primary-s2: #9CDCFE;
-    --color-secondary: #4EC9B0;
-    --color-tertiary: #F48771;
-    --color-quaternary: #DCD08F;
-    --color-quinary: #b57fd7;
+    --color-blue: #569CD6;
+    --color-white: #fff;
+    --color-light-grey: #D4D4D4;
+    /* --color-grey: #7E7E7E; */
+    --color-black: #1E1E1E;
+    /* Standard colours */
+    --color-foreground: var(--color-black);
+    --color-background: var(--color-white);
+    --color-halfway: color-mix(in oklab, var(--color-background) 50%, var(--color-foreground) 50%);
+    /* Colour calculation parameters */
+    --color-shade-distance: 20;
+    --color-shade-1: calc(var(--color-shade-distance) * 2);
+    --color-shade-2: calc(var(--color-shade-distance) * 1);
+    --color-shade-3: calc(var(--color-shade-distance) * 0);
+    --color-shade-4: calc(var(--color-shade-distance) * -1);
+    --color-shade-5: calc(var(--color-shade-distance) * -2);
+    --color-hue-distance: 67;
+    --color-hue-yellow: calc(var(--color-hue-distance) * -2.2);
+    --color-hue-green: calc(var(--color-hue-distance) * -1);
+    --color-hue-purple: calc(var(--color-hue-distance) * 1);
+    --color-hue-red: calc(var(--color-hue-distance) * 2.2);
+    --color-opacity: 0.1;
+    /* Calculated colours */
+    --color-blue-s1: oklch(from var(--color-blue) calc(l + var(--color-shade-1)) c h / 1);
+    --color-blue-s2: oklch(from var(--color-blue) calc(l + var(--color-shade-2)) c h / 1);
+    --color-blue-s3: oklch(from var(--color-blue) calc(l + var(--color-shade-3)) c h / 1);
+    --color-blue-s4: oklch(from var(--color-blue) calc(l + var(--color-shade-4)) c h / 1);
+    --color-blue-s5: oklch(from var(--color-blue) calc(l + var(--color-shade-5)) c h / 1);
+    --color-green: oklch(from var(--color-blue) l c calc(h + var(--color-hue-green)) / 1);
+    --color-green-s1: oklch(from var(--color-green) calc(l + var(--color-shade-1)) c h / 1);
+    --color-green-s2: oklch(from var(--color-green) calc(l + var(--color-shade-2)) c h / 1);
+    --color-green-s3: oklch(from var(--color-green) calc(l + var(--color-shade-3)) c h / 1);
+    --color-green-s4: oklch(from var(--color-green) calc(l + var(--color-shade-4)) c h / 1);
+    --color-green-s5: oklch(from var(--color-green) calc(l + var(--color-shade-5)) c h / 1);
+    --color-red: oklch(from var(--color-blue) l c calc(h + var(--color-hue-red)) / 1);
+    --color-red-s1: oklch(from var(--color-red) calc(l + var(--color-shade-1)) c h / 1);
+    --color-red-s2: oklch(from var(--color-red) calc(l + var(--color-shade-2)) c h / 1);
+    --color-red-s3: oklch(from var(--color-red) calc(l + var(--color-shade-3)) c h / 1);
+    --color-red-s4: oklch(from var(--color-red) calc(l + var(--color-shade-4)) c h / 1);
+    --color-red-s5: oklch(from var(--color-red) calc(l + var(--color-shade-5)) c h / 1);
+    --color-yellow: oklch(from var(--color-blue) l c calc(h + var(--color-hue-yellow)) / 1);
+    --color-yellow-s1: oklch(from var(--color-yellow) calc(l + var(--color-shade-1)) c h / 1);
+    --color-yellow-s2: oklch(from var(--color-yellow) calc(l + var(--color-shade-2)) c h / 1);
+    --color-yellow-s3: oklch(from var(--color-yellow) calc(l + var(--color-shade-3)) c h / 1);
+    --color-yellow-s4: oklch(from var(--color-yellow) calc(l + var(--color-shade-4)) c h / 1);
+    --color-yellow-s5: oklch(from var(--color-yellow) calc(l + var(--color-shade-5)) c h / 1);
+    --color-purple: oklch(from var(--color-blue) l c calc(h + var(--color-hue-purple)) / 1);
+    --color-purple-s1: oklch(from var(--color-purple) calc(l + var(--color-shade-1)) c h / 1);
+    --color-purple-s2: oklch(from var(--color-purple) calc(l + var(--color-shade-2)) c h / 1);
+    --color-purple-s3: oklch(from var(--color-purple) calc(l + var(--color-shade-3)) c h / 1);
+    --color-purple-s4: oklch(from var(--color-purple) calc(l + var(--color-shade-4)) c h / 1);
+    --color-purple-s5: oklch(from var(--color-purple) calc(l + var(--color-shade-5)) c h / 1);
+    /* Opacity variants */
+    --color-blue-o: oklch(from var(--color-blue) l c h / var(--color-opacity));
+    --color-blue-s1-o: oklch(from var(--color-blue-s1) l c h / var(--color-opacity));
+    --color-blue-s2-o: oklch(from var(--color-blue-s2) l c h / var(--color-opacity));
+    --color-blue-s3-o: oklch(from var(--color-blue-s3) l c h / var(--color-opacity));
+    --color-blue-s4-o: oklch(from var(--color-blue-s4) l c h / var(--color-opacity));
+    --color-blue-s5-o: oklch(from var(--color-blue-s5) l c h / var(--color-opacity));
+    --color-green-o: oklch(from var(--color-green) l c h / var(--color-opacity));
+    --color-green-s1-o: oklch(from var(--color-green-s1) l c h / var(--color-opacity));
+    --color-green-s2-o: oklch(from var(--color-green-s2) l c h / var(--color-opacity));
+    --color-green-s3-o: oklch(from var(--color-green-s3) l c h / var(--color-opacity));
+    --color-green-s4-o: oklch(from var(--color-green-s4) l c h / var(--color-opacity));
+    --color-green-s5-o: oklch(from var(--color-green-s5) l c h / var(--color-opacity));
+    --color-red-o: oklch(from var(--color-red) l c h / var(--color-opacity));
+    --color-red-s1-o: oklch(from var(--color-red-s1) l c h / var(--color-opacity));
+    --color-red-s2-o: oklch(from var(--color-red-s2) l c h / var(--color-opacity));
+    --color-red-s3-o: oklch(from var(--color-red-s3) l c h / var(--color-opacity));
+    --color-red-s4-o: oklch(from var(--color-red-s4) l c h / var(--color-opacity));
+    --color-red-s5-o: oklch(from var(--color-red-s5) l c h / var(--color-opacity));
+    --color-yellow-o: oklch(from var(--color-yellow) l c h / var(--color-opacity));
+    --color-yellow-s1-o: oklch(from var(--color-yellow-s1) l c h / var(--color-opacity));
+    --color-yellow-s2-o: oklch(from var(--color-yellow-s2) l c h / var(--color-opacity));
+    --color-yellow-s3-o: oklch(from var(--color-yellow-s3) l c h / var(--color-opacity));
+    --color-yellow-s4-o: oklch(from var(--color-yellow-s4) l c h / var(--color-opacity));
+    --color-yellow-s5-o: oklch(from var(--color-yellow-s5) l c h / var(--color-opacity));
+    --color-purple-o: oklch(from var(--color-purple) l c h / var(--color-opacity));
+    --color-purple-s1-o: oklch(from var(--color-purple-s1) l c h / var(--color-opacity));
+    --color-purple-s2-o: oklch(from var(--color-purple-s2) l c h / var(--color-opacity));
+    --color-purple-s3-o: oklch(from var(--color-purple-s3) l c h / var(--color-opacity));
+    --color-purple-s4-o: oklch(from var(--color-purple-s4) l c h / var(--color-opacity));
+    --color-purple-s5-o: oklch(from var(--color-purple-s5) l c h / var(--color-opacity));
+    /*  original colours
+    --color-green: oklch(from var(--color-blue) calc(l + 9) c calc(h - 68) / 1);
+    --color-red: oklch(from var(--color-blue) calc(l + 6) calc(c + 0.02) calc(h + 150) / 1);
+    --color-yellow: oklch(from var(--color-blue) calc(l + 18) calc(c - 0.03) calc(h - 145.5) / 1);
+    --color-purple: oklch(from var(--color-blue) calc(l + 1) calc(c + 0.02) calc(h + 66) / 1); 
     --color-yellow: #DCD08F;
     --color-green: #4EC9B0;
     --color-red: #F48771;
-    --color-purple: #b57fd7;
-    --color-primary-o: rgba(86, 156, 214, 20%);
-    --color-primary-shade-o: rgb(29, 79, 120, 20%);
-    --color-secondary-o: rgba(78, 201, 176, 20%);
-    --color-tertiary-o: rgba(244, 135, 113, 20%);
-    --color-foreground: #1E1E1E;
-    --color-halfway: #7E7E7E;
-    --color-halfway-o: rgb(126, 126, 126, 20%);
-    --color-background: #fff;
-    --color-label: var(--color-primary);
+    --color-purple: #b57fd7;*/
+    /* --color-label: var(--color-blue); */
 }
 
 @media screen and (prefers-color-scheme: dark) {
     :root {
-        --color-primary-s1: #9CDCFE;
-        --color-primary-s2: #1d4f78;
-        --color-primary-o: rgba(86, 156, 214, 30%);
-        --color-primary-shade-o: rgba(156, 220, 254, 20%);
-        --color-secondary-o: rgba(244, 135, 113, 20%);
-        --color-tertiary-o: rgba(220, 208, 143, 20%);
-        --color-foreground: #D4D4D4;
-        --color-halfway: #7E7E7E;
-        --color-background: #1E1E1E;
+        --color-shade-distance: -20;
+        --color-foreground: var(--color-light-grey);
+        --color-background: var(--color-black);
     }
 }
 
 @media (forced-colors: active) {
     :root {
-        --color-primary: Highlight;
-        --color-primary-s1: #9CDCFE;
-        --color-primary-s2: #1d4f78;
-        --color-secondary: LinkText;
-        --color-tertiary: ActiveText;
-        --color-quaternary: AccentColorText;
-        --color-quinary: BottonText;
-        --color-primary-o: rgba(86, 156, 214, 30%);
-        --color-primary-shade-o: rgba(156, 220, 254, 20%);
-        --color-secondary-o: rgba(244, 135, 113, 20%);
-        --color-tertiary-o: rgba(220, 208, 143, 20%);
+        --color-blue: Highlight;
+        --color-green: LinkText;
+        --color-red: ActiveText;
+        --color-yellow: AccentColorText;
+        --color-purple: BottonText;
         --color-foreground: CanvasText;
         --color-halfway: GrayText;
         --color-background: Canvas;
@@ -82,7 +143,7 @@ h4 {
 }
 
 h1 {
-    color: var(--color-primary);
+    color: var(--color-blue);
     font-size: 2rem;
     padding-top: 1rem;
 }
@@ -92,15 +153,15 @@ img {
 }
 
 a {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 
 a:hover {
-    color: var(--color-secondary);
+    color: var(--color-green);
 }
 
 a:active {
-    color: var(--color-tertiary);
+    color: var(--color-red);
 }
 
 sup,
@@ -127,7 +188,7 @@ sup+sub {
 }
 
 .aside-seq .highlight {
-    color: var(--color-tertiary);
+    color: var(--color-red);
     font-weight: 500;
 }
 
@@ -137,7 +198,7 @@ sup+sub {
 }
 
 .overview-link {
-    background: var(--color-primary);
+    background: var(--color-blue);
     color: var(--color-background);
     text-decoration: none;
     display: inline-block;
@@ -170,12 +231,12 @@ sup+sub {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
 }
 
 /* Only works in Firefox, but it is the proper standard */
 * {
-    scrollbar-color: var(--color-primary) var(--color-halfway);
+    scrollbar-color: var(--color-blue) var(--color-halfway);
 }
 
 @media print {
@@ -257,9 +318,9 @@ td.center {
 }
 
 th {
-    color: var(--color-primary);
+    color: var(--color-blue);
     background: var(--color-background);
-    border: 2px solid var(--color-primary);
+    border: 2px solid var(--color-blue);
     white-space: normal;
     overflow: visible;
     text-overflow: ellipsis;
@@ -293,7 +354,7 @@ th[onclick]::before {
 
 th[data-sort-order="asc"]::after,
 th[data-sort-order="desc"]::before {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 
 td.seq {
@@ -306,28 +367,28 @@ td.seq {
 .report tr:hover,
 .report tr.selected,
 .report tr.highlight {
-    color: var(--color-tertiary);
-    --color-primary: var(--color-tertiary);
+    color: var(--color-red);
+    --color-blue: var(--color-red);
 }
 
 .report tr:target .info-link,
 .report tr:hover .info-link,
 .report tr.selected .info-link {
-    border-color: var(--color-tertiary);
-    color: var(--color-tertiary);
+    border-color: var(--color-red);
+    color: var(--color-red);
 }
 
 .report tr:target td.bar::before,
 .report tr:hover td.bar::before,
 .report tr.selected td.bar::before {
-    background: var(--color-tertiary-o);
+    background: var(--color-red-o);
 }
 
 .info-link {
     display: inline-block;
-    color: var(--color-primary);
+    color: var(--color-blue);
     text-decoration: none;
-    border: 1px solid var(--color-primary);
+    border: 1px solid var(--color-blue);
     padding: .05em .1em;
     margin: .1em;
     border-radius: .2rem;
@@ -335,19 +396,19 @@ td.seq {
 }
 
 .info-link.highlight {
-    color: var(--color-tertiary);
-    border: 1px solid var(--color-tertiary);
-    --color-used: var(--color-tertiary);
+    color: var(--color-red);
+    border: 1px solid var(--color-red);
+    --color-used: var(--color-red);
 }
 
 .info-link:hover {
-    color: var(--color-secondary);
-    border-color: var(--color-secondary);
+    color: var(--color-green);
+    border-color: var(--color-green);
 }
 
 .info-link:active {
-    color: var(--color-tertiary);
-    border-color: var(--color-tertiary);
+    color: var(--color-red);
+    border-color: var(--color-red);
 }
 
 td.bar {
@@ -362,7 +423,7 @@ td.bar::before {
     width: calc(var(--relative-value) * 100%);
     height: 100%;
     z-index: -1;
-    background: var(--color-primary-o);
+    background: var(--color-blue-o);
 }
 
 
@@ -405,7 +466,7 @@ td.bar::before {
 .joining .bar {
     flex-basis: 1ch;
     height: calc(var(--doc) / var(--max) * 100%);
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
 
 }
 
@@ -475,7 +536,7 @@ td.bar::before {
 .annotated .CDR2,
 .annotated .CDR3,
 .annotated .CDR {
-    color: var(--color-secondary);
+    color: var(--color-green);
 }
 
 
@@ -483,23 +544,23 @@ td.bar::before {
 .histogram .b.CDR2,
 .histogram .b.CDR3,
 .histogram .b.CDR {
-    background-color: var(--color-secondary);
+    background-color: var(--color-green);
 }
 
 .annotated .Conserved {
-    color: var(--color-tertiary);
+    color: var(--color-red);
 }
 
 .histogram .b.Conserved {
-    background-color: var(--color-tertiary);
+    background-color: var(--color-red);
 }
 
 .annotated .Glycosylationsite {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 
 .histogram .b.Glycosylationsite {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
 }
 
 .annotated.legend {
@@ -512,12 +573,12 @@ td.bar::before {
 }
 
 .density .line {
-    stroke: var(--color-primary);
+    stroke: var(--color-blue);
     fill: transparent;
 }
 
 .density .volume {
-    fill: var(--color-primary-o);
+    fill: var(--color-blue-o);
 }
 
 .density .x-axis {
@@ -558,7 +619,7 @@ label[for^=collapsible],
     display: block;
     font-size: 2em;
     color: var(--color-background);
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     padding: .1em .25em;
     border-radius: .2rem;
     margin-top: .5em;
@@ -567,7 +628,7 @@ label[for^=collapsible],
 }
 
 .report>.collapsible>* {
-    --color-label: var(--color-primary-s1);
+    --color-label: var(--color-blue-s1);
 }
 
 label[for^=collapsible]::after {
@@ -641,19 +702,19 @@ code .op {
 }
 
 code .id {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 
 code .value {
-    color: var(--color-secondary);
+    color: var(--color-green);
 }
 
 code .comment {
-    color: var(--color-tertiary);
+    color: var(--color-red);
 }
 
 code .directive {
-    color: var(--color-quaternary);
+    color: var(--color-yellow);
 }
 
 /* user help */
@@ -681,13 +742,13 @@ summary {
 .user-help:hover,
 .user-help:focus,
 .user-help:focus-visible {
-    --color-used: var(--color-primary);
+    --color-used: var(--color-blue);
 }
 
 .user-help .content {
     display: none;
     position: absolute;
-    border: 2px solid var(--color-primary);
+    border: 2px solid var(--color-blue);
     padding: 1rem;
     background-color: var(--color-background);
     min-width: 300px;
@@ -752,8 +813,8 @@ summary {
 
 .alignment .buttons button {
     font-size: 1rem;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
+    color: var(--color-blue);
+    border: 2px solid var(--color-blue);
     background-color: transparent;
     padding: .1em .25em;
     display: block;
@@ -765,13 +826,13 @@ summary {
 .alignment .buttons button:hover,
 .alignment .buttons button:focus,
 .alignment .buttons button:focus-visible {
-    color: var(--color-secondary);
-    border-color: var(--color-secondary);
+    color: var(--color-green);
+    border-color: var(--color-green);
 }
 
 .alignment .buttons button:active {
-    color: var(--color-tertiary);
-    border-color: var(--color-tertiary);
+    color: var(--color-red);
+    border-color: var(--color-red);
 }
 
 .alignment .alignment-wrapper {
@@ -808,7 +869,7 @@ summary {
 }
 
 .alignment .alignment-body>a:hover {
-    color: var(--color-secondary);
+    color: var(--color-green);
     border-color: red;
 }
 
@@ -826,7 +887,7 @@ summary {
 }
 
 .alignment .alignment-body>a:hover>span.insertion {
-    color: var(--color-tertiary);
+    color: var(--color-red);
 }
 
 .alignment .alignment-body>a>span.swap {
@@ -859,12 +920,12 @@ summary {
 }
 
 .alignment .alignment-body .numbering {
-    color: var(--color-secondary);
+    color: var(--color-green);
     grid-row: 1/1;
 }
 
 .alignment .alignment-body .template {
-    color: var(--color-primary-s1);
+    color: var(--color-blue-s1);
     grid-row: 2/2;
 }
 
@@ -887,7 +948,7 @@ summary {
 }
 
 .alignment .alignment-body.comic>a.unique {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
 }
 
 .alignment .alignment-body.comic>a>.changed {
@@ -910,7 +971,7 @@ summary {
     content: "";
     left: 1px;
     right: 1px;
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     height: calc(var(--value) / var(--max-value) * 1.1em);
     top: calc((1 - var(--value) / var(--max-value)) * 1.1em)
 }
@@ -940,7 +1001,7 @@ summary {
 }
 
 .seq .changed {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 
 
@@ -976,13 +1037,13 @@ footer .version {
 }
 
 .phylogenetic-tree .legend {
-    --color: var(--color-secondary);
+    --color: var(--color-green);
     margin: .8em 1em 0 0;
     display: inline-block;
 }
 
 .phylogenetic-tree .legend.unique {
-    --color: var(--color-tertiary);
+    --color: var(--color-red);
 }
 
 .phylogenetic-tree label {
@@ -1006,14 +1067,14 @@ footer .version {
 }
 
 .phylogenetic-tree .value {
-    fill: var(--color-secondary);
+    fill: var(--color-green);
     fill-opacity: 1;
     pointer-events: all;
     cursor: pointer;
 }
 
 .phylogenetic-tree .value.unique {
-    fill: var(--color-tertiary);
+    fill: var(--color-red);
 }
 
 .phylogenetic-tree .show-data-0:checked~* .value {
@@ -1043,19 +1104,19 @@ footer .version {
 }
 
 .phylogenetic-tree .info-link {
-    --color-used: var(--color-primary);
+    --color-used: var(--color-blue);
 }
 
 .phylogenetic-tree .info-link:hover {
-    --color-used: var(--color-secondary);
+    --color-used: var(--color-green);
 }
 
 .phylogenetic-tree .info-link:active {
-    --color-used: var(--color-tertiary);
+    --color-used: var(--color-red);
 }
 
 .phylogenetic-tree .info-link.highlight {
-    --color-used: var(--color-secondary);
+    --color-used: var(--color-green);
 }
 
 .phylogenetic-tree .info-link text {
@@ -1095,7 +1156,7 @@ footer .version {
     font-size: var(--sequence-logo-font-size);
     font-family: "Roboto Mono", monospace;
     margin-top: -0.4em;
-    --color: var(--color-primary);
+    --color: var(--color-blue);
     align-items: end;
 }
 
@@ -1119,15 +1180,15 @@ footer .version {
 .sequence-logo-position.CDR2,
 .sequence-logo-position.CDR3,
 .sequence-logo-position.CDR {
-    --color: var(--color-secondary);
+    --color: var(--color-green);
 }
 
 .sequence-logo-position.Glycosylationsite {
-    --color: var(--color-primary);
+    --color: var(--color-blue);
 }
 
 .sequence-logo-position.Conserved {
-    --color: var(--color-tertiary);
+    --color: var(--color-red);
 }
 
 .sequence-logo-position.ambiguous::before {
@@ -1142,12 +1203,12 @@ footer .version {
 }
 
 .sequence-logo-position.ambiguous:hover {
-    background-color: var(--color-primary-o);
+    background-color: var(--color-blue-o);
     cursor: pointer;
 }
 
 .sequence-logo-position.highlight {
-    background-color: var(--color-tertiary-o);
+    background-color: var(--color-red-o);
 }
 
 /* Graph - title and button */
@@ -1210,14 +1271,14 @@ footer .version {
 .alignment .copy-data:hover,
 .alignment .copy-data:focus,
 .alignment .copy-data:focus-visible {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    border-color: var(--color-blue);
+    color: var(--color-blue);
 }
 
 .graph .copy-data:active,
 .alignment .copy-data:hover {
-    border-color: var(--color-secondary);
-    color: var(--color-secondary);
+    border-color: var(--color-green);
+    color: var(--color-green);
 }
 
 
@@ -1265,7 +1326,7 @@ footer .version {
 }
 
 .histogram .b {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     align-self: end;
     display: flex;
     flex-direction: column;
@@ -1328,9 +1389,9 @@ footer .version {
     position: absolute;
     z-index: 1;
     padding: .5em;
-    border: 1px solid var(--color-primary);
+    border: 1px solid var(--color-blue);
     background-color: var(--color-background);
-    color: var(--color-primary);
+    color: var(--color-blue);
     border-radius: .2rem;
     font-size: .8em;
 }
@@ -1361,36 +1422,36 @@ footer .version {
 }
 
 .histogram-header span {
-    color: var(--color-primary);
+    color: var(--color-blue);
     margin: .5em;
     font-size: .8em;
 }
 
 .tooltip .dim:nth-child(4n+1),
 .histogram-header span:nth-child(4n+1) {
-    color: var(--color-primary-s1);
+    color: var(--color-blue-s1);
 }
 
 .tooltip .dim:nth-child(4n+2),
 .histogram-header span:nth-child(4n+2) {
-    color: var(--color-secondary);
+    color: var(--color-green);
 }
 
 .tooltip .dim:nth-child(4n+3),
 .histogram-header span:nth-child(4n+3) {
-    color: var(--color-tertiary);
+    color: var(--color-red);
 }
 
 .group .bar:nth-child(4n+1) {
-    background-color: var(--color-primary-s1);
+    background-color: var(--color-blue-s1);
 }
 
 .group .bar:nth-child(4n+2) {
-    background-color: var(--color-secondary);
+    background-color: var(--color-green);
 }
 
 .group .bar:nth-child(4n+3) {
-    background-color: var(--color-tertiary);
+    background-color: var(--color-red);
 }
 
 
@@ -1412,12 +1473,12 @@ footer .version {
 
 .point-graph .label:hover a,
 .point-graph .values:hover+.label a {
-    color: var(--color-tertiary);
+    color: var(--color-red);
 }
 
 .point-graph input:checked+label,
 .phylogenetic-tree input:checked+label {
-    border-color: var(--color-primary);
+    border-color: var(--color-blue);
     border-radius: .2rem;
 }
 
@@ -1466,7 +1527,7 @@ footer .version {
     height: 100%;
     opacity: 0.25;
     z-index: -1;
-    background: var(--color-primary);
+    background: var(--color-blue);
 }
 
 .point-graph .point {
@@ -1483,12 +1544,12 @@ footer .version {
 
 .point-graph .point:nth-child(3n+1),
 .point-graph label:nth-of-type(3n+1) {
-    --color: var(--color-primary);
+    --color: var(--color-blue);
 }
 
 .point-graph .point:nth-child(3n+2),
 .point-graph label:nth-of-type(3n+2) {
-    --color: var(--color-secondary);
+    --color: var(--color-green);
 }
 
 .point-graph .point:nth-child(3n+2),
@@ -1498,7 +1559,7 @@ footer .version {
 
 .point-graph .point:nth-child(3n),
 .point-graph label:nth-of-type(3n) {
-    --color: var(--color-tertiary);
+    --color: var(--color-red);
 }
 
 .point-graph .point:nth-child(3n),
@@ -1705,11 +1766,11 @@ footer .version {
 
 .spectrum .legend .ion:hover,
 .spectrum .legend .ion:focus {
-    background-color: var(--color-primary-o);
+    background-color: var(--color-blue-o);
 }
 
 .spectrum .legend .ion.permanent {
-    background-color: var(--color-secondary-o);
+    background-color: var(--color-green-o);
 }
 
 .spectrum .legend .other {
@@ -1736,7 +1797,7 @@ footer .version {
 
 .spectrum input[type=radio]:checked+label:not([for^=collapsible]),
 .spectrum input[type=checkbox]:checked+label:not([for^=collapsible]) {
-    border-color: var(--color-primary);
+    border-color: var(--color-blue);
 }
 
 .spectrum .legend .label {
@@ -1814,41 +1875,41 @@ footer .version {
 }
 
 .spectrum .a {
-    --color: var(--color-primary);
+    --color: var(--color-blue);
 }
 
 .spectrum .b,
 .spectrum .glycan {
-    --color: var(--color-secondary);
+    --color: var(--color-green);
 }
 
 .spectrum .c {
-    --color: var(--color-tertiary);
+    --color: var(--color-red);
 }
 
 .spectrum .d {
-    --color: var(--color-quaternary);
+    --color: var(--color-yellow);
 }
 
 .spectrum .v {
-    --color: var(--color-quinary);
+    --color: var(--color-purple);
 }
 
 .spectrum .w {
-    --color: var(--color-primary);
+    --color: var(--color-blue);
 }
 
 .spectrum .x {
-    --color: var(--color-quaternary);
+    --color: var(--color-yellow);
 }
 
 .spectrum .y {
-    --color: var(--color-quinary);
+    --color: var(--color-purple);
 }
 
 .spectrum .z,
 .spectrum .z· {
-    --color: var(--color-primary-s1);
+    --color: var(--color-blue-s1);
 }
 
 .spectrum .unassigned,
@@ -1897,11 +1958,11 @@ footer .version {
 }
 
 .peptide>span.modification {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 
 .peptide>span.possible-modification {
-    color: var(--color-secondary);
+    color: var(--color-green);
 }
 
 .spectrum.compact .peptide>* {
@@ -1910,11 +1971,11 @@ footer .version {
 
 .spectrum .peptide>*:hover,
 .spectrum .peptide>*:focus {
-    background-color: var(--color-primary-o);
+    background-color: var(--color-blue-o);
 }
 
 .spectrum .peptide>*.permanent {
-    background-color: var(--color-secondary-o);
+    background-color: var(--color-green-o);
 }
 
 .spectrum .peptide>*.modification.term {
@@ -1930,7 +1991,7 @@ footer .version {
     width: var(--spacing);
     height: var(--spacing);
     border-radius: 50%;
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
 }
 
 .spectrum .peptide>*.modification.term::before {
@@ -2195,13 +2256,13 @@ span.corner.v {
 
 .spectrum .canvas .zoom-out:hover,
 .spectrum .canvas .zoom-out:focus {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+    color: var(--color-blue);
+    border-color: var(--color-blue);
 }
 
 .spectrum .canvas .zoom-out:active {
-    color: var(--color-secondary);
-    border-color: var(--color-secondary);
+    color: var(--color-green);
+    border-color: var(--color-green);
 }
 
 .spectrum .peak {
@@ -2268,7 +2329,7 @@ span.corner.v {
 }
 
 .spectrum .peak:hover>span {
-    color: var(--color-primary);
+    color: var(--color-blue);
     font-weight: 500;
     opacity: 1;
 }
@@ -2309,7 +2370,7 @@ span.corner.v {
 }
 
 .spectrum .selection {
-    border: 2px dashed var(--color-primary);
+    border: 2px dashed var(--color-blue);
     height: 100%;
     box-sizing: border-box;
     position: absolute;
@@ -2343,7 +2404,7 @@ span.corner.v {
 }
 
 .spectrum .collapsible .background:has(input:checked) {
-    border-color: var(--color-primary);
+    border-color: var(--color-blue);
 }
 
 .spectrum .collapsible label:has(input:not(:checked))+table tr.unassigned {
@@ -2370,7 +2431,7 @@ span.corner.v {
 }
 
 .ambiguity-overview [for=ambiguity-stroke-selector] {
-    border: 2px solid var(--color-primary);
+    border: 2px solid var(--color-blue);
     border-radius: 1rem;
     display: inline;
     margin-left: .25rem;
@@ -2386,7 +2447,7 @@ span.corner.v {
 }
 
 .ambiguity-overview input:not(:checked)+label {
-    background: linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) 50%, transparent 50%, transparent 100%);
+    background: linear-gradient(to right, var(--color-blue) 0%, var(--color-blue) 50%, transparent 50%, transparent 100%);
 }
 
 .ambiguity-overview input:not(:checked)+label>span:nth-child(1) {
@@ -2394,7 +2455,7 @@ span.corner.v {
 }
 
 .ambiguity-overview input:checked+label {
-    background: linear-gradient(to right, transparent 0%, transparent 50%, var(--color-primary) 50%, var(--color-primary) 100%);
+    background: linear-gradient(to right, transparent 0%, transparent 50%, var(--color-blue) 50%, var(--color-blue) 100%);
 }
 
 .ambiguity-overview input:checked+label>span:nth-child(2) {
@@ -2412,11 +2473,11 @@ span.corner.v {
 }
 
 .ambiguity-overview svg .node:hover {
-    fill: var(--color-primary-o);
+    fill: var(--color-blue-o);
 }
 
 .ambiguity-overview svg .node.highlight {
-    fill: var(--color-tertiary-o);
+    fill: var(--color-red-o);
 }
 
 .ambiguity-overview svg .position {
@@ -2439,19 +2500,19 @@ span.corner.v {
 }
 
 .ambiguity-overview svg .option.root {
-    fill: var(--color-tertiary);
+    fill: var(--color-red);
     font-weight: 500;
 }
 
 .ambiguity-overview svg rect.root {
-    stroke: var(--color-tertiary);
+    stroke: var(--color-red);
     stroke-width: 2px;
     fill: transparent;
 }
 
 .ambiguity-overview svg .support-arrow {
     stroke-width: calc(10px * var(--support-local));
-    stroke: var(--color-primary);
+    stroke: var(--color-blue);
     pointer-events: none;
 }
 
@@ -2461,7 +2522,7 @@ span.corner.v {
 
 .ambiguity-overview svg .support-bar {
     pointer-events: none;
-    fill: var(--color-secondary);
+    fill: var(--color-green);
     height: calc(16px * var(--support) / var(--max-support));
     transform: translateY(calc(-16px * var(--support) / var(--max-support)))
 }
@@ -2471,7 +2532,7 @@ span.corner.v {
 }
 
 .ambiguity-overview .higher-order-graphs .bar {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     height: 100%;
     border-left: 2px solid var(--color-foreground)
 }
@@ -2501,11 +2562,11 @@ span.corner.v {
 }
 
 .ambiguity-overview .higher-order-graphs svg:nth-child(4n+2) .support-arrow {
-    stroke: var(--color-secondary);
+    stroke: var(--color-green);
 }
 
 .ambiguity-overview .higher-order-graphs .bar:nth-child(4n+1) {
-    background: var(--color-secondary);
+    background: var(--color-green);
 }
 
 .ambiguity-overview .higher-order-graphs svg {
@@ -2542,7 +2603,7 @@ span.corner.v {
     bottom: 0;
     right: 0;
     background: var(--color-background);
-    border: 2px solid var(--color-primary);
+    border: 2px solid var(--color-blue);
     border-bottom: none;
     border-right: none;
     padding: 1em;
@@ -2598,11 +2659,11 @@ span.corner.v {
 }
 
 .sequence-match-graphic .match {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
 }
 
 .sequence-match-graphic .gap-in-template {
-    background-color: var(--color-secondary);
+    background-color: var(--color-green);
 }
 
 .sequence-match-graphic .gap-in-query {
@@ -2614,7 +2675,7 @@ span.corner.v {
 }
 
 .sequence-match-graphic .set {
-    background-color: var(--color-tertiary);
+    background-color: var(--color-red);
 }
 
 .hidden {
@@ -2731,12 +2792,12 @@ span.corner.v {
 @media (prefers-contrast: more) {
     .ambiguity-overview svg .node:hover {
         fill: transparent;
-        outline: 2px solid var(--color-primary);
+        outline: 2px solid var(--color-blue);
     }
 
     .ambiguity-overview svg .node.highlight {
         fill: transparent;
-        outline: 2px solid var(--color-tertiary);
+        outline: 2px solid var(--color-red);
     }
 
     td.bar::before {
@@ -2754,7 +2815,7 @@ span.corner.v {
 
     .sequence-logo-position.highlight {
         background-color: transparent;
-        outline: 2px solid var(--color-tertiary);
+        outline: 2px solid var(--color-red);
     }
 
     .spectrum:has(.wrapper.dragging) .canvas {
@@ -2764,10 +2825,10 @@ span.corner.v {
     .spectrum .legend>.ion:hover,
     .spectrum .legend>.ion:focus {
         background-color: transparent;
-        outline: 2px solid var(--color-primary);
+        outline: 2px solid var(--color-blue);
     }
 
     .spectrum .legend>.ion.permanent {
-        outline-color: var(--color-secondary);
+        outline-color: var(--color-green);
     }
 }
