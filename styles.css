@@ -1904,6 +1904,10 @@ footer .version {
     color: var(--color-secondary);
 }
 
+.peptide>span.charge-carriers {
+    pointer-events: none;
+}
+
 .spectrum.compact .peptide>* {
     padding: .5em 0;
 }
