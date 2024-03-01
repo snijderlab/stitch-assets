@@ -1868,6 +1868,17 @@ footer .version {
     bottom: min(100%, var(--height));
 }
 
+.spectrum .peak.fragment,
+.spectrum .peak.fragment:not(:hover) span {
+    display: none;
+}
+
+.spectrum.show-theoretical .peak.fragment {
+    height: 2%;
+    bottom: -2%;
+    display: block;
+}
+
 .spectrum .n-term,
 .spectrum .c-term {
     --color: var(--color-foreground);

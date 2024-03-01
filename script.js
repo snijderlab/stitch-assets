@@ -520,6 +520,8 @@ function RenderSetup(event) {
         spectrum.style.setProperty("--stroke-spectrum", event.target.value);
     } else if (cl == "compact") {
         spectrum.classList.toggle("compact");
+    } else if (cl == "show-theoretical") {
+        spectrum.classList.toggle("show-theoretical");
     }
 }
 
