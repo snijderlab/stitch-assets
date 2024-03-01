@@ -475,14 +475,14 @@ function SpectrumInputChange(event) {
                 UpdateSpectrumAxes(canvas)
             }
         }
-    } else if (event.target.type == "range") { // Peak labels
-        var ele = document.getElementById(event.target.id + "_value");
+    } else if (event.target.type == "range" || event.target.type == "number") { // Peak labels + masses
+        var ele = document.getElementById(
+            (event.target.type == "number") ?
+                event.target.id.substring(0, event.target.id.length - 6)
+                : event.target.id + "_value");
         ele.value = event.target.value;
-        event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => SpectrumUpdateLabels(Number(event.target.value), canvas))
-    } else if (event.target.type == "number") { // Peak labels
-        var ele = document.getElementById(event.target.id.substring(0, event.target.id.length - 6));
-        ele.value = event.target.value;
-        event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(canvas => SpectrumUpdateLabels(Number(event.target.value), canvas))
+        event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(
+            canvas => SpectrumUpdateLabels(Number(event.target.value), canvas, event.target.id.includes("label") ? "label" : "mass-label"))
     }
 }
 
@@ -562,8 +562,10 @@ function RenderSetup(event) {
 /** Update the spectrum to only show the label for peaks within the given percentage group
  * @param {Number} value the percentage to include (0-100)
  * @param {Element} canvas the canvas to work on
+ * @param {String} parameter the class to toggle 
 */
-function SpectrumUpdateLabels(value, canvas) {
+function SpectrumUpdateLabels(value, canvas, parameter) {
+    console.log(value, canvas)
     var style = window.getComputedStyle(canvas);
     var max = Number(style.getPropertyValue("--max-intensity"));
 
@@ -571,9 +573,9 @@ function SpectrumUpdateLabels(value, canvas) {
     for (let i = 0; i < peaks.length; i++) {
         var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
         if (v > max * (100 - value) / 100) {
-            peaks[i].classList.add("label");
+            peaks[i].classList.add(parameter);
         } else {
-            peaks[i].classList.remove("label");
+            peaks[i].classList.remove(parameter);
         }
     }
 }

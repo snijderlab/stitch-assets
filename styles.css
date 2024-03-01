@@ -2,6 +2,8 @@
     --color-red: #F48771;
     --color-green: #4EC9B0;
     --color-blue: #569CD6;
+    --color-blue-light: #9CDCFE;
+    --color-blue-dark: #1d4f78;
     --color-yellow: #DCD08F;
     --color-purple: #b57fd7;
     --color-red-o: color-mix(in oklab, var(--color-red) 20%, transparent);
@@ -10,8 +12,8 @@
     --color-yellow-o: color-mix(in oklab, var(--color-yellow) 20%, transparent);
     --color-purple-o: color-mix(in oklab, var(--color-purple) 20%, transparent);
     --color-primary: var(--color-blue);
-    --color-primary-s1: #1d4f78;
-    --color-primary-s2: #9CDCFE;
+    --color-primary-s1: var(--color-blue-dark);
+    --color-primary-s2: var(--color-blue-light);
     --color-secondary: var(--color-green);
     --color-tertiary: var(--color-red);
     --color-quaternary: var(--color-yellow);
@@ -29,8 +31,8 @@
 
 @media screen and (prefers-color-scheme: dark) {
     :root {
-        --color-primary-s1: #9CDCFE;
-        --color-primary-s2: #1d4f78;
+        --color-primary-s1: var(--color-blue-light);
+        --color-primary-s2: var(--color-blue-dark);
         --color-primary-o: rgba(86, 156, 214, 30%);
         --color-primary-shade-o: rgba(156, 220, 254, 20%);
         --color-secondary-o: rgba(244, 135, 113, 20%);
@@ -1525,26 +1527,11 @@ footer .version {
     background: none;
 }
 
-.point-graph .show-data-0:checked~* .point:nth-child(1) {
-    display: block;
-}
-
-.point-graph .show-data-1:checked~* .point:nth-child(2) {
-    display: block;
-}
-
-.point-graph .show-data-2:checked~* .point:nth-child(3) {
-    display: block;
-}
-
-.point-graph .show-data-3:checked~* .point:nth-child(4) {
-    display: block;
-}
-
-.point-graph .show-data-4:checked~* .point:nth-child(5) {
-    display: block;
-}
-
+.point-graph .show-data-0:checked~* .point:nth-child(1),
+.point-graph .show-data-1:checked~* .point:nth-child(2),
+.point-graph .show-data-2:checked~* .point:nth-child(3),
+.point-graph .show-data-3:checked~* .point:nth-child(4),
+.point-graph .show-data-4:checked~* .point:nth-child(5),
 .point-graph .show-data-5:checked~* .point:nth-child(6) {
     display: block;
 }
@@ -1752,18 +1739,18 @@ footer .version {
     border-color: var(--color-primary);
 }
 
-.spectrum .legend .label {
+.spectrum .legend .has-slider {
     --color: var(--color-foreground);
     cursor: default;
 }
 
-.spectrum .legend .label input[type=range] {
+.spectrum .legend .has-slider input[type=range] {
     width: 6em;
     vertical-align: middle;
     cursor: pointer;
 }
 
-.spectrum .legend .label input[type=number],
+.spectrum .legend .has-slider input[type=number],
 .spectrum .manual-zoom input[type=number],
 .spectrum .render-setup input {
     width: 6ch;
@@ -1826,46 +1813,36 @@ footer .version {
     --height: .5em;
 }
 
-.spectrum .a {
-    --color: var(--color-primary);
+.spectrum .a,
+.spectrum .w {
+    --color: var(--color-blue);
 }
 
 .spectrum .b,
 .spectrum .glycan {
-    --color: var(--color-secondary);
+    --color: var(--color-green);
 }
 
 .spectrum .c {
-    --color: var(--color-tertiary);
+    --color: var(--color-red);
 }
 
-.spectrum .d {
-    --color: var(--color-quaternary);
-}
-
-.spectrum .v {
-    --color: var(--color-quinary);
-}
-
-.spectrum .w {
-    --color: var(--color-primary);
-}
-
+.spectrum .d,
 .spectrum .x {
-    --color: var(--color-quaternary);
+    --color: var(--color-yellow);
 }
 
+.spectrum .v,
 .spectrum .y {
-    --color: var(--color-quinary);
+    --color: var(--color-purple);
 }
 
 .spectrum .z,
 .spectrum .z· {
-    --color: var(--color-primary-s1);
+    --color: var(--color-blue-light);
 }
 
-.spectrum .unassigned,
-.spectrum .mass-label {
+.spectrum .unassigned {
     --color: var(--color-halfway);
 }
 
@@ -1874,9 +1851,9 @@ footer .version {
 }
 
 .spectrum .peak:not(.cut):hover::after,
-.spectrum:has(.mass-label:checked) .peak.label::after {
+.spectrum .peak.mass-label::after {
     content: attr(data-label);
-    color: var(--color-halfway);
+    color: var(--color);
     padding-left: calc(var(--stroke-spectrum) * 2);
     bottom: min(100%, var(--height));
 }
@@ -2784,7 +2761,7 @@ span.corner.v {
         display: none !important;
     }
 
-    .spectrum .legend .label input[type=number] {
+    .spectrum .legend .has-slider input[type=number] {
         width: 3ch;
     }
 }
