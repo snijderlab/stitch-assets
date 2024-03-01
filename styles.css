@@ -12,6 +12,7 @@
     --color-blue-dark: oklch(50% 0.125 245);
 
     --color-yellow: oklch(85% 0.125 106);
+    --color-yellow-light: oklch(95% 0.125 106);
     --color-yellow-dark: oklch(66% 0.125 106);
 
     --color-purple: oklch(66% 0.125 322);
@@ -1788,13 +1789,9 @@ footer .version {
     border-radius: .2rem;
 }
 
-.spectrum .legend>* {
+.spectrum .legend>*:not(label) {
     color: var(--color);
     cursor: default;
-}
-
-.spectrum .settings input {
-    width: 5rem;
 }
 
 .spectrum .settings {
@@ -1808,20 +1805,25 @@ footer .version {
     height: fit-content;
     margin-bottom: .5rem;
     grid-column: 1 / -1;
+
+    & p {
+        margin: 0;
+    }
+
+    & input {
+        width: 5rem;
+    }
 }
 
-.spectrum .settings p {
-    margin: 0;
-}
 
 .spectrum .wrapper {
     grid-column: 1/-1;
     display: flex;
     flex-direction: column;
-}
 
-.spectrum .wrapper.second {
-    flex-direction: column-reverse;
+    &.second {
+        flex-direction: column-reverse;
+    }
 }
 
 .spectrum .peptide {
@@ -1841,7 +1843,7 @@ footer .version {
     --height: .5em;
 }
 
-.spectrum {
+.spectrum:not(.legend-peptide) {
     & .a {
         --color: var(--color-blue);
     }
@@ -1893,6 +1895,125 @@ footer .version {
     }
 }
 
+.spectrum.legend-peptide {
+    & .ion-series {
+        --color: var(--color-halfway);
+    }
+
+    & .peptide:nth-child(15n+1),
+    & .p0,
+    & .p15,
+    & .p30 {
+        --color: var(--color-blue);
+    }
+
+    & .peptide:nth-child(15n+2),
+    & .p1,
+    & .p16,
+    & .p31 {
+        --color: var(--color-green);
+    }
+
+    & .peptide:nth-child(15n+3),
+    & .p2,
+    & .p17,
+    & .p32 {
+        --color: var(--color-red);
+    }
+
+    & .peptide:nth-child(15n+4),
+    & .p3,
+    & .p18,
+    & .p33 {
+        --color: var(--color-yellow);
+    }
+
+    & .peptide:nth-child(15n+5),
+    & .p4,
+    & .p19,
+    & .p34 {
+        --color: var(--color-purple);
+    }
+
+    & .peptide:nth-child(15n+6),
+    & .p5,
+    & .p20,
+    & .p35 {
+        --color: var(--color-blue-dark);
+    }
+
+    & .peptide:nth-child(15n+7),
+    & .p6,
+    & .p21,
+    & .p36 {
+        --color: var(--color-green-dark);
+    }
+
+    & .peptide:nth-child(15n+8),
+    & .p7,
+    & .p22,
+    & .p37 {
+        --color: var(--color-red-dark);
+    }
+
+    & .peptide:nth-child(15n+9),
+    & .p8,
+    & .p23,
+    & .p38 {
+        --color: var(--color-yellow-dark);
+    }
+
+    & .peptide:nth-child(15n+10),
+    & .p9,
+    & .p24,
+    & .p39 {
+        --color: var(--color-purple-dark);
+    }
+
+    & .peptide:nth-child(15n+11),
+    & .p10,
+    & .p25,
+    & .p40 {
+        --color: var(--color-blue-light);
+    }
+
+    & .peptide:nth-child(15n+12),
+    & .p11,
+    & .p26,
+    & .p41 {
+        --color: var(--color-green-light);
+    }
+
+    & .peptide:nth-child(15n+13),
+    & .p12,
+    & .p27,
+    & .p42 {
+        --color: var(--color-red-light);
+    }
+
+    & .peptide:nth-child(15n+14),
+    & .p13,
+    & .p28,
+    & .p43 {
+        --color: var(--color-yellow-light);
+    }
+
+    & .peptide:nth-child(15n+0),
+    & .p14,
+    & .p29,
+    & .p44 {
+        --color: var(--color-purple-light);
+    }
+
+    & .mp {
+        --color: var(--color-red-light);
+    }
+
+    & .unassigned {
+        --color: var(--color-halfway);
+    }
+}
+
 
 .spectrum .peak:not(.cut):hover::after,
 .spectrum .peak.mass-label::after {
@@ -1902,12 +2023,12 @@ footer .version {
     bottom: min(100%, var(--height));
 }
 
-.spectrum .peak.fragment,
-.spectrum .peak.fragment:not(:hover) span {
+.spectrum .peak.theoretical,
+.spectrum .peak.theoretical:not(:hover) span {
     display: none;
 }
 
-.spectrum.theoretical .peak.fragment {
+.spectrum.theoretical .peak.theoretical {
     height: calc(var(--stroke-spectrum) * 3);
     bottom: calc(var(--stroke-spectrum) * -3);
     display: block;

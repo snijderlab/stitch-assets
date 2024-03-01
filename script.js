@@ -302,6 +302,10 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
     }
+    var elements = document.querySelectorAll(".spectrum .legend .legend-peptide");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
+    }
     var elements = document.querySelectorAll(".spectrum .legend input");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", SpectrumInputChange);
@@ -456,7 +460,7 @@ function ToggleHighlight(event, permanent, start = null) {
  * @param {Event} event
 */
 function SpectrumInputChange(event) {
-    if (event.target.type == "checkbox") { // Background
+    if (event.target.type == "checkbox" && event.target.classList.contains("show-unassigned")) { // Background
         var wrapper = event.target.parentElement.parentElement;
         var canvas = wrapper.querySelector(".canvas-wrapper"); // comment
         var update_axes = !wrapper.classList.contains("first") && !wrapper.classList.contains("second");
@@ -475,6 +479,9 @@ function SpectrumInputChange(event) {
                 UpdateSpectrumAxes(canvas)
             }
         }
+    } else if (event.target.type == "checkbox" && event.target.classList.contains("legend-peptide")) {
+        var canvas = event.target.parentElement.parentElement.parentElement;
+        canvas.classList.toggle("legend-peptide");
     } else if (event.target.type == "range" || event.target.type == "number") { // Peak labels + masses
         var ele = document.getElementById(
             (event.target.type == "number") ?
