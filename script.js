@@ -282,12 +282,12 @@ function HighlightAmbiguous(position, alignment_position) {
 function SpectrumSetUp() {
     var elements = document.querySelectorAll(".spectrum .peptide span");
     for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
-        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
-        elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
-        elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
-        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") ToggleHighlight(e, true) });
+        elements[i].addEventListener("mouseenter", e => { SequenceElementEvent(e, false, true) });
+        elements[i].addEventListener("mouseleave", e => { SequenceElementEvent(e, false, false) });
+        elements[i].addEventListener("focusin", e => { SequenceElementEvent(e, false, true) });
+        elements[i].addEventListener("focusout", e => { SequenceElementEvent(e, false, false) });
+        elements[i].addEventListener("mouseup", e => { SequenceElementEvent(e, true) });
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") SequenceElementEvent(e, true) });
     }
     var elements = document.querySelectorAll(".spectrum .legend .ion");
     for (let i = 0; i < elements.length; i++) {
@@ -322,6 +322,10 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", RenderSetup);
     }
+    var elements = document.querySelectorAll(".spectrum .render-setup button");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("click", RenderSetup);
+    }
     var elements = document.querySelectorAll(".spectrum .wrapper");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousedown", spectrumDragStart)
@@ -343,6 +347,26 @@ function SpectrumSetUp() {
     }
 }
 
+/**
+ * Do the event for a sequence element (one element in the peptide)
+ * @param {Event} e The event
+ * @param {boolean} permanent If it will be applied permanently (true if clicked, false if hovered)
+ * @param {boolean?} start If this is the apply (true) or clear (false) operation
+ */
+function SequenceElementEvent(e, permanent, start = null) {
+    if (document.querySelector(".spectrum").classList.contains("apply-colour")) {
+        if (permanent) {
+            let value = document.querySelector("#colour").value;
+            e.target.classList.remove("red", "green", "blue", "yellow", "purple");
+            if (value != "remove") {
+                e.target.classList.toggle(value);
+            }
+        }
+    } else {
+        ToggleHighlight(e, permanent, start);
+    }
+}
+
 function SetUpSpectrumInterface() {
     SpectrumSetUp();
     var event = new Event('change');
@@ -350,6 +374,12 @@ function SetUpSpectrumInterface() {
 }
 
 var highlight;
+/**
+ * Toggle a highlight
+ * @param {Event} e The event
+ * @param {boolean} permanent If it will be applied permanently (true if clicked, false if hovered)
+ * @param {boolean?} start If this is the apply (true) or clear (false) operation
+ */
 function ToggleHighlight(event, permanent, start = null) {
     var t = event.target; // <span> with the sequence
     if (permanent) t.classList.toggle("permanent");
@@ -520,8 +550,12 @@ function RenderSetup(event) {
         spectrum.style.setProperty("--stroke-spectrum", event.target.value);
     } else if (cl == "compact") {
         spectrum.classList.toggle("compact");
-    } else if (cl == "show-theoretical") {
-        spectrum.classList.toggle("show-theoretical");
+    } else if (cl == "theoretical") {
+        spectrum.classList.toggle("theoretical");
+    } else if (cl == "apply-colour") {
+        spectrum.classList.toggle("apply-colour");
+    } else if (cl == "clear-colour") {
+        spectrum.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple"))
     }
 }
 

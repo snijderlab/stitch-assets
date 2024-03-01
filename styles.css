@@ -1,15 +1,21 @@
 :root {
-    --color-primary: #569CD6;
+    --color-red: #F48771;
+    --color-green: #4EC9B0;
+    --color-blue: #569CD6;
+    --color-yellow: #DCD08F;
+    --color-purple: #b57fd7;
+    --color-red-o: color-mix(in oklab, var(--color-red) 20%, transparent);
+    --color-green-o: color-mix(in oklab, var(--color-green) 20%, transparent);
+    --color-blue-o: color-mix(in oklab, var(--color-blue) 20%, transparent);
+    --color-yellow-o: color-mix(in oklab, var(--color-yellow) 20%, transparent);
+    --color-purple-o: color-mix(in oklab, var(--color-purple) 20%, transparent);
+    --color-primary: var(--color-blue);
     --color-primary-s1: #1d4f78;
     --color-primary-s2: #9CDCFE;
-    --color-secondary: #4EC9B0;
-    --color-tertiary: #F48771;
-    --color-quaternary: #DCD08F;
-    --color-quinary: #b57fd7;
-    --color-yellow: #DCD08F;
-    --color-green: #4EC9B0;
-    --color-red: #F48771;
-    --color-purple: #b57fd7;
+    --color-secondary: var(--color-green);
+    --color-tertiary: var(--color-red);
+    --color-quaternary: var(--color-yellow);
+    --color-quinary: var(--color-pink);
     --color-primary-o: rgba(86, 156, 214, 20%);
     --color-primary-shade-o: rgb(29, 79, 120, 20%);
     --color-secondary-o: rgba(78, 201, 176, 20%);
@@ -263,6 +269,7 @@ th {
     white-space: normal;
     overflow: visible;
     text-overflow: ellipsis;
+    -webkit-user-select: none;
     user-select: none;
     font-weight: 500;
     position: relative;
@@ -563,6 +570,7 @@ label[for^=collapsible],
     border-radius: .2rem;
     margin-top: .5em;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -670,6 +678,7 @@ code .directive {
 }
 
 summary {
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -759,6 +768,7 @@ summary {
     display: block;
     border-radius: .2rem;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -1697,6 +1707,7 @@ footer .version {
 
 .spectrum .legend .ion {
     cursor: crosshair;
+    -webkit-user-select: none;
     user-select: none;
     padding: 0 .2rem;
     font-family: Roboto Mono;
@@ -1713,6 +1724,7 @@ footer .version {
 }
 
 .spectrum .legend .other {
+    -webkit-user-select: none;
     user-select: none;
     padding: .5rem;
     --color: red;
@@ -1730,6 +1742,7 @@ footer .version {
     padding: .1em .25em;
     border: 2px solid var(--color-halfway);
     border-radius: .2rem;
+    -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
 }
@@ -1873,9 +1886,9 @@ footer .version {
     display: none;
 }
 
-.spectrum.show-theoretical .peak.fragment {
-    height: 2%;
-    bottom: -2%;
+.spectrum.theoretical .peak.fragment {
+    height: calc(var(--stroke-spectrum) * 3);
+    bottom: calc(var(--stroke-spectrum) * -3);
     display: block;
 }
 
@@ -1894,8 +1907,13 @@ footer .version {
     padding: .5em;
     display: block;
     cursor: crosshair;
+    -webkit-user-select: none;
     user-select: none;
     font-family: 'Roboto Mono';
+}
+
+.spectrum.apply-colour .peptide>span {
+    cursor: zoom-in;
 }
 
 .peptide>.name {
@@ -1919,17 +1937,38 @@ footer .version {
     pointer-events: none;
 }
 
+.peptide>span.permanent {
+    font-weight: bold;
+    background-color: var(--color-secondary-o);
+}
+
+.peptide>span.red {
+    background-color: var(--color-red-o);
+}
+
+.peptide>span.green {
+    background-color: var(--color-green-o);
+}
+
+.peptide>span.blue {
+    background-color: var(--color-blue-o);
+}
+
+.peptide>span.yellow {
+    background-color: var(--color-yellow-o);
+}
+
+.peptide>span.purple {
+    background-color: var(--color-purple-o);
+}
+
 .spectrum.compact .peptide>* {
     padding: .5em 0;
 }
 
-.spectrum .peptide>*:hover,
-.spectrum .peptide>*:focus {
+.spectrum:not(.apply-colour) .peptide>*:hover,
+.spectrum:not(.apply-colour) .peptide>*:focus {
     background-color: var(--color-primary-o);
-}
-
-.spectrum .peptide>*.permanent {
-    background-color: var(--color-secondary-o);
 }
 
 .spectrum .peptide>*.modification.term {
@@ -2072,6 +2111,7 @@ span.corner.v {
     flex-direction: column-reverse;
     align-items: flex-end;
     position: relative;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -2126,6 +2166,7 @@ span.corner.v {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -2170,6 +2211,7 @@ span.corner.v {
     position: relative;
     border-left: var(--stroke-spectrum) solid var(--color-foreground);
     border-bottom: var(--stroke-spectrum) solid var(--color-foreground);
+    -webkit-user-select: none;
     user-select: none;
     overflow-x: clip;
     overflow-y: visible;
@@ -2353,6 +2395,7 @@ span.corner.v {
     border-radius: .2rem;
     padding: .2rem;
     margin: .2rem;
+    -webkit-user-select: none;
     user-select: none;
     display: inline-block;
 }
@@ -2394,6 +2437,7 @@ span.corner.v {
 .ambiguity-overview [for=ambiguity-stroke-selector]>* {
     color: var(--color-foreground);
     padding: .25rem;
+    -webkit-user-select: none;
     user-select: none;
     width: 3rem;
     display: inline-block;
@@ -2437,6 +2481,7 @@ span.corner.v {
 .ambiguity-overview svg .position {
     fill: var(--color-halfway);
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -2449,6 +2494,7 @@ span.corner.v {
 .ambiguity-overview svg .option {
     fill: var(--color-foreground);
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
     font-family: 'Roboto Mono';
 }
