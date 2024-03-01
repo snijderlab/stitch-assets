@@ -1,16 +1,29 @@
 :root {
-    --color-red: #F48771;
-    --color-green: #4EC9B0;
-    --color-blue: #569CD6;
-    --color-blue-light: #9CDCFE;
-    --color-blue-dark: #1d4f78;
-    --color-yellow: #DCD08F;
-    --color-purple: #b57fd7;
+    --color-red: oklch(66% 0.125 34);
+    --color-red-light: oklch(85% 0.125 34);
+    --color-red-dark: oklch(50% 0.125 34);
+
+    --color-green: oklch(66% 0.125 178);
+    --color-green-light: oklch(85% 0.125 178);
+    --color-green-dark: oklch(50% 0.125 178);
+
+    --color-blue: oklch(66% 0.125 245);
+    --color-blue-light: oklch(85% 0.125 245);
+    --color-blue-dark: oklch(50% 0.125 245);
+
+    --color-yellow: oklch(85% 0.125 106);
+    --color-yellow-dark: oklch(66% 0.125 106);
+
+    --color-purple: oklch(66% 0.125 322);
+    --color-purple-light: oklch(85% 0.125 322);
+    --color-purple-dark: oklch(50% 0.125 322);
+
     --color-red-o: color-mix(in oklab, var(--color-red) 20%, transparent);
     --color-green-o: color-mix(in oklab, var(--color-green) 20%, transparent);
     --color-blue-o: color-mix(in oklab, var(--color-blue) 20%, transparent);
     --color-yellow-o: color-mix(in oklab, var(--color-yellow) 20%, transparent);
     --color-purple-o: color-mix(in oklab, var(--color-purple) 20%, transparent);
+
     --color-primary: var(--color-blue);
     --color-primary-s1: var(--color-blue-dark);
     --color-primary-s2: var(--color-blue-light);
@@ -1600,7 +1613,7 @@ footer .version {
 /* Spectrum */
 
 .spectrum {
-    --color: red;
+    --color: var(--color-purple-light);
     display: grid;
     grid-template-columns: 1fr max-content;
     grid-template-rows: max-content max-content max-content max-content;
@@ -1621,75 +1634,93 @@ footer .version {
 .spectrum .ion-series {
     display: grid;
     grid-template-rows: 1fr 1fr;
-}
+    grid-template-columns: 1fr max-content;
+    grid-template-areas: "top side" "bottom side";
+    column-gap: 1ch;
 
-.spectrum .ion-series>* {
-    display: grid;
-    grid-template-columns: max-content 1fr 1fr max-content;
-    grid-template-rows: repeat(2, 1fr);
-}
+    & .top,
+    & .bottom {
+        display: grid;
+        grid-template-columns: max-content 1fr 1fr max-content;
+        grid-template-rows: repeat(2, 1fr);
+    }
 
-.spectrum .ion-series .bottom {
-    padding-right: 6ch;
-}
+    & .top {
+        padding-left: 6ch;
+        grid-area: top;
+    }
 
-.spectrum .ion-series .top {
-    padding-left: 6ch;
-}
+    & .bottom {
+        padding-right: 6ch;
+        grid-area: bottom;
+    }
 
-.spectrum .ion-series .n-term {
-    grid-row: 1;
-    grid-column: 1;
-}
+    & .side {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        grid-area: side;
+    }
 
-.spectrum .ion-series .a {
-    grid-row: 1;
-    grid-column: 2;
-}
+    & .n-term {
+        grid-row: 1;
+        grid-column: 1;
+    }
 
-.spectrum .ion-series .b {
-    grid-row: 1;
-    grid-column: 3;
-}
+    & .a {
+        grid-row: 1;
+        grid-column: 2;
+    }
 
-.spectrum .ion-series .c {
-    grid-row: 1;
-    grid-column: 4;
-}
+    & .b {
+        grid-row: 1;
+        grid-column: 3;
+    }
 
-.spectrum .ion-series .d {
-    grid-row: 2;
-    grid-column: 3;
-}
+    & .c {
+        grid-row: 1;
+        grid-column: 4;
+    }
 
-.spectrum .ion-series .v {
-    grid-row: 2;
-    grid-column: 4;
-}
+    & .d {
+        grid-row: 2;
+        grid-column: 3;
+    }
 
-.spectrum .ion-series .w {
-    grid-row: 1;
-    grid-column: 2;
-}
+    & .v {
+        grid-row: 2;
+        grid-column: 4;
+    }
 
-.spectrum .ion-series .x {
-    grid-row: 2;
-    grid-column: 1;
-}
+    & .w {
+        grid-row: 1;
+        grid-column: 2;
+    }
 
-.spectrum .ion-series .y {
-    grid-row: 2;
-    grid-column: 2;
-}
+    & .x {
+        grid-row: 2;
+        grid-column: 1;
+    }
 
-.spectrum .ion-series .z {
-    grid-row: 2;
-    grid-column: 3;
-}
+    & .y {
+        grid-row: 2;
+        grid-column: 2;
+    }
 
-.spectrum .ion-series .c-term {
-    grid-row: 2;
-    grid-column: 4;
+    & .z {
+        grid-row: 2;
+        grid-column: 3;
+    }
+
+    & .c-term {
+        grid-row: 2;
+        grid-column: 4;
+    }
+
+    & * {
+        padding: 0 .2rem;
+        color: var(--color);
+    }
 }
 
 .spectrum .legend .ion {
@@ -1698,23 +1729,20 @@ footer .version {
     user-select: none;
     padding: 0 .2rem;
     font-family: Roboto Mono;
-    color: var(--color);
-}
 
-.spectrum .legend .ion:hover,
-.spectrum .legend .ion:focus {
-    background-color: var(--color-primary-o);
-}
+    &:hover,
+    &:focus {
+        background-color: var(--color-primary-o);
+    }
 
-.spectrum .legend .ion.permanent {
-    background-color: var(--color-secondary-o);
+    &.permanent {
+        background-color: var(--color-secondary-o);
+    }
 }
 
 .spectrum .legend .other {
     -webkit-user-select: none;
     user-select: none;
-    padding: .5rem;
-    --color: red;
 }
 
 .spectrum .legend .title {
@@ -1813,42 +1841,58 @@ footer .version {
     --height: .5em;
 }
 
-.spectrum .a,
-.spectrum .w {
-    --color: var(--color-blue);
+.spectrum {
+    & .a {
+        --color: var(--color-blue);
+    }
+
+    & .b,
+    & .glycan {
+        --color: var(--color-green);
+    }
+
+    & .c {
+        --color: var(--color-red);
+    }
+
+    & .d {
+        --color: var(--color-yellow);
+    }
+
+    & .w {
+        --color: var(--color-yellow-dark);
+    }
+
+    & .v {
+        --color: var(--color-purple);
+    }
+
+    & .x {
+        --color: var(--color-blue-dark);
+    }
+
+    & .y {
+        --color: var(--color-green-dark);
+    }
+
+    & .z,
+    & .z· {
+        --color: var(--color-red-dark);
+    }
+
+    & .multi {
+        --color: var(--color-red-light);
+    }
+
+    & .precursor {
+        --color: var(--color-purple-dark);
+    }
+
+    & .unassigned {
+        --color: var(--color-halfway);
+    }
 }
 
-.spectrum .b,
-.spectrum .glycan {
-    --color: var(--color-green);
-}
-
-.spectrum .c {
-    --color: var(--color-red);
-}
-
-.spectrum .d,
-.spectrum .x {
-    --color: var(--color-yellow);
-}
-
-.spectrum .v,
-.spectrum .y {
-    --color: var(--color-purple);
-}
-
-.spectrum .z,
-.spectrum .z· {
-    --color: var(--color-blue-light);
-}
-
-.spectrum .unassigned {
-    --color: var(--color-halfway);
-}
-
-.spectrum .multi {
-    --color: red;
-}
 
 .spectrum .peak:not(.cut):hover::after,
 .spectrum .peak.mass-label::after {
