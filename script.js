@@ -288,7 +288,7 @@ function SpectrumSetUp() {
         elements[i].addEventListener("focusout", e => { SequenceElementEvent(e, false, false) });
         elements[i].addEventListener("mousedown", e => { SequenceElementEvent(e, false, true) });
         elements[i].addEventListener("mouseup", e => { SequenceElementEvent(e, true) });
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") SequenceElementEvent(e, true) });
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
     }
     var elements = document.querySelectorAll(".spectrum .legend .ion");
     for (let i = 0; i < elements.length; i++) {
@@ -297,7 +297,7 @@ function SpectrumSetUp() {
         elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
         elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
         elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") ToggleHighlight(e, true) });
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
     }
     var elements = document.querySelectorAll(".spectrum .legend .unassigned");
     for (let i = 0; i < elements.length; i++) {
@@ -352,6 +352,9 @@ function SpectrumSetUp() {
     }
 }
 
+/**
+ * @type {EventTarget}
+ */
 let sequence_element_start = undefined;
 /**
  * Do the event for a sequence element (one element in the peptide)
@@ -359,11 +362,11 @@ let sequence_element_start = undefined;
  * @param {boolean} permanent If it will be applied permanently (true if clicked, false if hovered)
  * @param {boolean?} turn_on If this is the turns on (true) or turns off (false) the event, the default is toggle (null)
  */
-function SequenceElementEvent(e, permanent, turn_on = null, click = null) {
+function SequenceElementEvent(e, permanent, turn_on = null) {
     if (document.querySelector(".spectrum").classList.contains("apply-colour")) {
-        if (e.type != "mouseenter" && e.type != "mouseleave") { console.log(e, sequence_element_start); }
-        if (e.type == "mouseup" && sequence_element_start != undefined) {
-            let start = sequence_element_start.split("-");
+        if (e.type == "mouseup" && sequence_element_start != undefined && sequence_element_start.dataset.pos != e.target.dataset.pos) {
+            let state = sequence_element_start.classList.contains(selected_colour);
+            let start = sequence_element_start.dataset.pos.split("-");
             let end = e.target.dataset.pos.split("-");
             if (start[0] == end[0]) {
                 let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
@@ -373,7 +376,7 @@ function SequenceElementEvent(e, permanent, turn_on = null, click = null) {
                         if (Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
                             element.classList.remove("red", "green", "blue", "yellow", "purple");
                             if (selected_colour != "remove") {
-                                element.classList.toggle(selected_colour);
+                                element.classList.toggle(selected_colour, !state);
                             }
                         }
                     }
@@ -381,13 +384,14 @@ function SequenceElementEvent(e, permanent, turn_on = null, click = null) {
             }
             sequence_element_start = undefined;
         } else if (permanent) {
+            let state = e.target.classList.contains(selected_colour);
             e.target.classList.remove("red", "green", "blue", "yellow", "purple");
             if (selected_colour != "remove") {
-                e.target.classList.toggle(selected_colour);
+                e.target.classList.toggle(selected_colour, !state);
             }
             sequence_element_start = undefined;
         } else if (e.type == "mousedown") {
-            sequence_element_start = e.target.dataset.pos;
+            sequence_element_start = e.target;
         }
     } else {
         ToggleHighlight(e, permanent, turn_on);
