@@ -25,6 +25,12 @@
     --color-yellow-o: color-mix(in oklab, var(--color-yellow) 20%, transparent);
     --color-purple-o: color-mix(in oklab, var(--color-purple) 20%, transparent);
 
+    --color-red-b: color-mix(in oklab, var(--color-red) 20%, var(--color-background));
+    --color-green-b: color-mix(in oklab, var(--color-green) 20%, var(--color-background));
+    --color-blue-b: color-mix(in oklab, var(--color-blue) 20%, var(--color-background));
+    --color-yellow-b: color-mix(in oklab, var(--color-yellow) 20%, var(--color-background));
+    --color-purple-b: color-mix(in oklab, var(--color-purple) 20%, var(--color-background));
+
     --color-primary: var(--color-blue);
     --color-primary-s1: var(--color-blue-dark);
     --color-primary-s2: var(--color-blue-light);
@@ -1624,12 +1630,12 @@ footer .version {
     --stroke-spectrum: 2px;
     --width: 100%;
     --height: 250px;
-}
 
-.spectrum .legend {
-    display: flex;
-    align-items: center;
-    grid-column: 1/3;
+    & .legend {
+        display: flex;
+        align-items: center;
+        grid-column: 1/3;
+    }
 }
 
 .spectrum .ion-series {
@@ -1869,6 +1875,7 @@ footer .version {
 
 .spectrum .peptide {
     font-size: var(--fs-peptide);
+    --color: var(--color-background);
     margin: 1em;
     display: flex;
     flex-wrap: wrap;
@@ -1877,6 +1884,72 @@ footer .version {
     --side-spacing: calc(var(--stroke-peptide) * 0.5);
     --width: 50%;
     --height: 50%;
+
+
+    &>.name {
+        border: 2px solid var(--color-foreground);
+        border-radius: 50%;
+        text-align: center;
+        margin: auto .5em auto 0;
+        padding: 0 .25em !important;
+        vertical-align: middle;
+    }
+
+    &>span {
+        margin: 0 2px 0 -2px;
+        border: 2px solid transparent;
+        background-color: var(--color);
+
+        &.modification {
+            color: var(--color-blue);
+        }
+
+        &.possible-modification {
+            color: var(--color-red);
+        }
+
+        &.charge-carriers {
+            pointer-events: none;
+        }
+
+        &.permanent {
+            font-weight: bold;
+            --color: var(--color-red-b);
+        }
+
+        &.red {
+            --color: var(--color-red-b);
+        }
+
+        &.green {
+            --color: var(--color-green-b);
+        }
+
+        &.blue {
+            --color: var(--color-blue-b);
+        }
+
+        &.yellow {
+            --color: var(--color-yellow-b);
+        }
+
+        &.purple {
+            --color: var(--color-purple-b);
+        }
+
+        &.select {
+            border-color: var(--color-primary);
+        }
+
+        &.select+.select {
+            border-left-color: transparent;
+        }
+
+        &.select:has(+.select) {
+            border-right-color: transparent;
+        }
+    }
+
 }
 
 .spectrum.compact .peptide {
@@ -2055,26 +2128,6 @@ footer .version {
     }
 }
 
-
-.spectrum .peak:not(.cut):hover::after,
-.spectrum .peak.mass-label::after {
-    content: attr(data-label);
-    color: var(--color);
-    padding-left: calc(var(--stroke-spectrum) * 2);
-    bottom: min(100%, var(--height));
-}
-
-.spectrum .peak.theoretical,
-.spectrum .peak.theoretical:not(:hover) span {
-    display: none;
-}
-
-.spectrum.theoretical .peak.theoretical {
-    height: calc(var(--stroke-spectrum) * 3);
-    bottom: calc(var(--stroke-spectrum) * -3);
-    display: block;
-}
-
 .spectrum .n-term,
 .spectrum .c-term {
     --color: var(--color-foreground);
@@ -2099,51 +2152,6 @@ footer .version {
     cursor: zoom-in;
 }
 
-.peptide>.name {
-    border: 2px solid var(--color-foreground);
-    border-radius: 50%;
-    text-align: center;
-    margin: auto .5em auto 0;
-    padding: 0 .25em !important;
-    vertical-align: middle;
-}
-
-.peptide>span.modification {
-    color: var(--color-primary);
-}
-
-.peptide>span.possible-modification {
-    color: var(--color-secondary);
-}
-
-.peptide>span.charge-carriers {
-    pointer-events: none;
-}
-
-.peptide>span.permanent {
-    font-weight: bold;
-    background-color: var(--color-secondary-o);
-}
-
-.peptide>span.red {
-    background-color: var(--color-red-o);
-}
-
-.peptide>span.green {
-    background-color: var(--color-green-o);
-}
-
-.peptide>span.blue {
-    background-color: var(--color-blue-o);
-}
-
-.peptide>span.yellow {
-    background-color: var(--color-yellow-o);
-}
-
-.peptide>span.purple {
-    background-color: var(--color-purple-o);
-}
 
 .spectrum.compact .peptide>* {
     padding: .5em 0;
@@ -2181,81 +2189,81 @@ footer .version {
     width: var(--width);
     height: var(--height);
     pointer-events: none;
-}
 
-.spectrum .corner.x,
-.spectrum .corner.y,
-.spectrum .corner.z,
-.spectrum .corner.z· {
-    border-right: none;
-    border-bottom: none;
-    top: 0px;
-    left: var(--side-spacing);
-}
+    &.x,
+    &.y,
+    &.z,
+    &.z· {
+        border-right: none;
+        border-bottom: none;
+        top: 0px;
+        left: var(--side-spacing);
+    }
 
-.spectrum .corner.y {
-    top: var(--spacing);
-    left: calc(var(--spacing) + var(--side-spacing));
-    height: calc(var(--height) - var(--spacing));
-    width: calc(var(--width) - var(--spacing));
-}
+    &.y {
+        top: var(--spacing);
+        left: calc(var(--spacing) + var(--side-spacing));
+        height: calc(var(--height) - var(--spacing));
+        width: calc(var(--width) - var(--spacing));
+    }
 
-.spectrum .corner.z,
-.spectrum .corner.z· {
-    top: calc(2 * var(--spacing));
-    left: calc(2 * var(--spacing) + var(--side-spacing));
-    height: calc(var(--height) - 2 * var(--spacing));
-    width: calc(var(--width) - 2 * var(--spacing));
-}
+    &.z,
+    &.z· {
+        top: calc(2 * var(--spacing));
+        left: calc(2 * var(--spacing) + var(--side-spacing));
+        height: calc(var(--height) - 2 * var(--spacing));
+        width: calc(var(--width) - 2 * var(--spacing));
+    }
 
-.spectrum .corner.w {
-    height: 0;
-    border-width: calc(var(--stroke-peptide) * 0.5);
-    left: calc(3 * var(--spacing) + var(--side-spacing));
-    right: calc(3 * var(--spacing) + var(--side-spacing));
-    top: calc(3 * var(--spacing));
-    width: auto;
-}
+    &.w {
+        height: 0;
+        border-width: calc(var(--stroke-peptide) * 0.5);
+        left: calc(3 * var(--spacing) + var(--side-spacing));
+        right: calc(3 * var(--spacing) + var(--side-spacing));
+        top: calc(3 * var(--spacing));
+        width: auto;
+    }
 
-.spectrum .corner.a,
-.spectrum .corner.b,
-.spectrum .corner.c {
-    border-left: none;
-    border-top: none;
-    bottom: 0px;
-    right: var(--side-spacing);
-}
+    &.a,
+    &.b,
+    &.c {
+        border-left: none;
+        border-top: none;
+        bottom: 0px;
+        right: var(--side-spacing);
+    }
 
-.spectrum .corner.b {
-    bottom: var(--spacing);
-    right: calc(var(--spacing) + var(--side-spacing));
-    height: calc(var(--height) - var(--spacing));
-    width: calc(var(--width) - var(--spacing));
-}
+    &.b {
+        bottom: var(--spacing);
+        right: calc(var(--spacing) + var(--side-spacing));
+        height: calc(var(--height) - var(--spacing));
+        width: calc(var(--width) - var(--spacing));
+    }
 
-.spectrum .corner.c {
-    bottom: calc(2 * var(--spacing));
-    right: calc(2 * var(--spacing) + var(--side-spacing));
-    height: calc(var(--height) - 2 * var(--spacing));
-    width: calc(var(--width) - 2 * var(--spacing));
-}
+    &.c {
+        bottom: calc(2 * var(--spacing));
+        right: calc(2 * var(--spacing) + var(--side-spacing));
+        height: calc(var(--height) - 2 * var(--spacing));
+        width: calc(var(--width) - 2 * var(--spacing));
+    }
 
-span.corner.d {
-    height: 0;
-    border-width: calc(var(--stroke-peptide) * 0.5);
-    left: calc(3 * var(--spacing) + var(--side-spacing));
-    right: calc(3 * var(--spacing) + var(--side-spacing));
-    bottom: calc(3 * var(--spacing));
-    width: auto;
-}
+    &.d {
+        height: 0;
+        border-width: calc(var(--stroke-peptide) * 0.5);
+        left: calc(3 * var(--spacing) + var(--side-spacing));
+        right: calc(3 * var(--spacing) + var(--side-spacing));
+        bottom: calc(3 * var(--spacing));
+        width: auto;
+    }
 
-span.corner.v {
-    height: 0;
-    border-width: calc(var(--stroke-peptide) * 0.5);
-    left: calc(3 * var(--spacing) + var(--side-spacing));
-    right: calc(3 * var(--spacing) + var(--side-spacing));
-    bottom: calc(4 * var(--spacing));
-    width: auto;
+    &.v {
+        height: 0;
+        border-width: calc(var(--stroke-peptide) * 0.5);
+        left: calc(3 * var(--spacing) + var(--side-spacing));
+        right: calc(3 * var(--spacing) + var(--side-spacing));
+        bottom: calc(4 * var(--spacing));
+        width: auto;
+    }
 }
 
 .compact span.corner.d {
@@ -2296,51 +2304,51 @@ span.corner.v {
     position: relative;
     -webkit-user-select: none;
     user-select: none;
-}
 
-.spectrum .y-axis::after {
-    content: "Intensity";
-    position: absolute;
-    top: 50%;
-    left: -30%;
-    text-align: center;
-    font-style: italic;
-    color: var(--color-halfway);
-    transform: rotate(270deg);
+    &::after {
+        content: "Intensity";
+        position: absolute;
+        top: 50%;
+        left: -30%;
+        text-align: center;
+        font-style: italic;
+        color: var(--color-halfway);
+        transform: rotate(270deg);
+    }
+
+    & .tick {
+        width: 0px;
+        height: var(--stroke-spectrum);
+        border-right: var(--stroke-spectrum) solid var(--color-foreground);
+        overflow: visible;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+
+        & span {
+            padding-right: var(--stroke-spectrum);
+        }
+
+        &:first-child {
+            align-items: end;
+        }
+
+        &:last-child {
+            align-items: start;
+        }
+    }
 }
 
 .spectrum .first .y-axis::after {
     top: 100%;
 }
 
-.spectrum .second .y-axis::after {
-    display: none;
-}
-
 .spectrum .second .y-axis {
     flex-direction: column;
-}
 
-.spectrum .y-axis .tick {
-    width: 0px;
-    height: var(--stroke-spectrum);
-    border-right: var(--stroke-spectrum) solid var(--color-foreground);
-    overflow: visible;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-}
-
-.spectrum .y-axis .tick span {
-    padding-right: var(--stroke-spectrum);
-}
-
-.spectrum .y-axis .tick:first-child {
-    align-items: end;
-}
-
-.spectrum .y-axis .tick:last-child {
-    align-items: start;
+    &::after {
+        display: none;
+    }
 }
 
 .spectrum .x-axis {
@@ -2351,38 +2359,39 @@ span.corner.v {
     justify-content: space-between;
     -webkit-user-select: none;
     user-select: none;
-}
 
-.spectrum .x-axis .tick {
-    width: 0px;
-    height: var(--stroke-spectrum);
-    border-right: var(--stroke-spectrum) solid var(--color-foreground);
-    overflow: visible;
-    display: flex;
-    justify-content: center;
-}
+    & .tick {
+        width: 0px;
+        height: var(--stroke-spectrum);
+        border-right: var(--stroke-spectrum) solid var(--color-foreground);
+        overflow: visible;
+        display: flex;
+        justify-content: center;
 
-.spectrum .x-axis .tick span {
-    width: max-content;
-    padding-top: calc(2 * var(--stroke-spectrum));
-}
+        & span {
+            width: max-content;
+            padding-top: calc(2 * var(--stroke-spectrum));
 
-.spectrum .x-axis .tick:first-child {
-    justify-content: start;
-}
+        }
 
-.spectrum .x-axis .tick:last-child {
-    justify-content: end;
-}
+        &:first-child {
+            justify-content: start;
+        }
 
-.spectrum .x-axis::after {
-    content: "m/z";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    text-align: center;
-    font-style: italic;
-    color: var(--color-halfway);
+        &:last-child {
+            justify-content: end;
+        }
+    }
+
+    &::after {
+        content: "m/z";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        text-align: center;
+        font-style: italic;
+        color: var(--color-halfway);
+    }
 }
 
 .spectrum .first .x-axis {
@@ -2398,6 +2407,19 @@ span.corner.v {
     user-select: none;
     overflow-x: clip;
     overflow-y: visible;
+
+    & .zoom-out {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        color: var(--color-halfway);
+        padding: .2rem;
+        border: var(--stroke-spectrum) solid var(--color-halfway);
+        background-color: transparent;
+        border-radius: .2rem;
+        font-size: 0.8em;
+        display: none;
+    }
 }
 
 .spectrum .second .canvas {
@@ -2410,19 +2432,6 @@ span.corner.v {
 
 .spectrum:has(.wrapper.dragging) .canvas {
     background-color: var(--color-halfway-o);
-}
-
-.spectrum .canvas .zoom-out {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    color: var(--color-halfway);
-    padding: .2rem;
-    border: var(--stroke-spectrum) solid var(--color-halfway);
-    background-color: transparent;
-    border-radius: .2rem;
-    font-size: 0.8em;
-    display: none;
 }
 
 .spectrum .canvas-wrapper.zoomed .zoom-out {
@@ -2453,99 +2462,120 @@ span.corner.v {
     background-color: var(--color);
     transition: opacity 250ms;
     z-index: 1;
-}
 
-.spectrum .peak:hover {
-    z-index: 2;
-}
+    &:hover {
+        z-index: 2;
+    }
 
-.spectrum .second .peak {
-    top: 0;
-}
+    &.cut::after {
+        content: "▲";
+        display: block;
+        position: absolute;
+        color: var(--color);
+        left: -.45rem;
+        top: -.3rem;
+    }
 
-.spectrum .peak.cut::after {
-    content: "▲";
-    display: block;
-    position: absolute;
-    color: var(--color);
-    left: -.45rem;
-    top: -.3rem;
-}
+    &.unassigned {
+        display: none;
+        z-index: 0;
+    }
 
-.spectrum .second .peak.cut::after {
-    content: "▼";
-    bottom: -.45rem;
-    top: unset;
-}
+    &>span {
+        position: absolute;
+        top: -1.6em;
+        left: -.5em;
+        text-anchor: end;
+        z-index: 10;
+        cursor: default;
+        opacity: 0;
+        width: max-content;
+    }
 
-.spectrum .peak.unassigned {
-    display: none;
-    z-index: 0;
+
+    &.label span {
+        opacity: 1;
+    }
+
+    &:hover>span {
+        color: var(--color-primary);
+        font-weight: 500;
+        opacity: 1;
+    }
+
+    &>span.multi {
+        top: .5em;
+        opacity: 0;
+        border: 2px solid var(--color-halfway);
+        background: var(--color-background);
+        color: var(--color-foreground);
+        padding: 5px 10px 10px 5px;
+        margin: 2px;
+        margin-top: -10px;
+        pointer-events: none;
+    }
+
+    &:hover>span.multi {
+        opacity: 1;
+    }
+
+    &>span.multi>span {
+        display: block;
+    }
+
+    &:hover span.special::after {
+        content: var(--content);
+        position: absolute;
+        display: block;
+    }
+
+    &:not(.cut):hover::after,
+    &.mass-label::after {
+        content: attr(data-label);
+        color: var(--color);
+        padding-left: calc(var(--stroke-spectrum) * 2);
+        bottom: min(100%, var(--height));
+    }
+
+    &.theoretical,
+    &.theoretical:not(:hover) span {
+        display: none;
+    }
+
 }
 
 .spectrum .show-unassigned .peak.unassigned {
     display: block;
 }
 
-.spectrum .peak>span {
-    position: absolute;
-    top: -1.6em;
-    left: -.5em;
-    text-anchor: end;
-    z-index: 10;
-    cursor: default;
-    opacity: 0;
-    width: max-content;
+.spectrum .second .peak {
+    top: 0;
+
+    & span {
+        bottom: -1.6em;
+        top: unset;
+    }
+
+    &.cut::after {
+        content: "▼";
+        bottom: -.45rem;
+        top: unset;
+    }
 }
 
-.spectrum .second .peak span {
-    bottom: -1.6em;
-    top: unset;
-}
-
-.spectrum .peak.label span {
-    opacity: 1;
-}
-
-.spectrum .peak:hover>span {
-    color: var(--color-primary);
-    font-weight: 500;
-    opacity: 1;
-}
-
-.spectrum .peak>span.multi {
-    top: .5em;
-    opacity: 0;
-    border: 2px solid var(--color-halfway);
-    background: var(--color-background);
-    color: var(--color-foreground);
-    padding: 5px 10px 10px 5px;
-    margin: 2px;
-    margin-top: -10px;
-    pointer-events: none;
-}
-
-.spectrum .peak:hover>span.multi {
-    opacity: 1;
-}
-
-.spectrum .peak>span.multi>span {
-    display: block;
-}
-
-.spectrum .peak:hover span.special::after {
-    content: var(--content);
-    position: absolute;
+.spectrum.theoretical .peak.theoretical {
+    height: calc(var(--stroke-spectrum) * 3);
+    bottom: calc(var(--stroke-spectrum) * -3);
     display: block;
 }
 
 .spectrum .highlight .peak {
     opacity: .2;
-}
 
-.spectrum .highlight .peak.highlight,
-.spectrum .highlight .peak.highlight span:not(.multi) {
-    opacity: 1;
+    &.highlight,
+    &.highlight span:not(.multi) {
+        opacity: 1;
+    }
 }
 
 .spectrum .selection {
@@ -2554,14 +2584,14 @@ span.corner.v {
     box-sizing: border-box;
     position: absolute;
     pointer-events: none;
+
+    &.second {
+        border-top: none;
+    }
 }
 
 .spectrum .first .selection.first {
     border-bottom: none;
-}
-
-.spectrum .selection.second {
-    border-top: none;
 }
 
 .spectrum .wrapper.dragging * {
@@ -2760,21 +2790,21 @@ span.corner.v {
 
 .doc-plot {
     flex-basis: 100%;
-}
 
-.doc-plot .histogram {
-    grid-template-rows: 50px 1fr;
-    gap: 0;
-    grid-template-columns: minmax(0px, max-content) repeat(auto-fit, minmax(0px, 1fr));
-}
+    & .histogram {
+        grid-template-rows: 50px 1fr;
+        gap: 0;
+        grid-template-columns: minmax(0px, max-content) repeat(auto-fit, minmax(0px, 1fr));
 
-.doc-plot .histogram .b span {
-    position: absolute;
-    color: var(--color-foreground)
-}
+        & .b span {
+            position: absolute;
+            color: var(--color-foreground)
+        }
 
-.doc-plot .histogram .l {
-    overflow-x: visible;
+        & .l {
+            overflow-x: visible;
+        }
+    }
 }
 
 
@@ -2794,71 +2824,71 @@ span.corner.v {
     z-index: 1000;
     pointer-events: none;
     max-width: calc(100% - 2.5rem);
-}
 
-.alignment-details.active {
-    display: block;
-}
+    &.active {
+        display: block;
+    }
 
-.alignment-details h4 {
-    padding: 1em;
-    margin: 0;
-}
+    & h4 {
+        padding: 1em;
+        margin: 0;
+    }
 
-.alignment-details td {
-    border: none;
-}
+    & td {
+        border: none;
+    }
 
-.alignment-details .histogram {
-    grid-template-rows: 1ch 1fr;
-    grid-template-columns: none;
-}
+    & .histogram {
+        grid-template-rows: 1ch 1fr;
+        grid-template-columns: none;
 
-.alignment-details .histogram .b {
-    min-width: 1ch;
-    max-width: 1ch;
-    border-bottom: none;
-}
+        & .b {
+            min-width: 1ch;
+            max-width: 1ch;
+            border-bottom: none;
+        }
 
-.alignment-details .histogram .l {
-    font-size: .7em;
-    width: 1ch;
-    overflow-x: visible;
-    text-align: right;
-}
+        & .l {
+            font-size: .7em;
+            width: 1ch;
+            overflow-x: visible;
+            text-align: right;
+        }
 
-.alignment-details .histogram .y-axis,
-.alignment-details .histogram .empty {
-    display: none;
+        & .y-axis,
+        & .empty {
+            display: none;
+        }
+    }
 }
 
 .sequence-match-graphic {
     display: flex;
-}
 
-.sequence-match-graphic>* {
-    padding: 1px;
-    height: .8em;
-}
+    &>* {
+        padding: 1px;
+        height: .8em;
+    }
 
-.sequence-match-graphic .match {
-    background-color: var(--color-primary);
-}
+    & .match {
+        background-color: var(--color-primary);
+    }
 
-.sequence-match-graphic .gap-in-template {
-    background-color: var(--color-secondary);
-}
+    & .gap-in-template {
+        background-color: var(--color-secondary);
+    }
 
-.sequence-match-graphic .gap-in-query {
-    background-color: var(--color-foreground);
-}
+    & .gap-in-query {
+        background-color: var(--color-foreground);
+    }
 
-.sequence-match-graphic .swap {
-    background-color: var(--color-halfway);
-}
+    & .swap {
+        background-color: var(--color-halfway);
+    }
 
-.sequence-match-graphic .set {
-    background-color: var(--color-tertiary);
+    & .set {
+        background-color: var(--color-tertiary);
+    }
 }
 
 .hidden {
@@ -2878,6 +2908,7 @@ span.corner.v {
 
     input[type=number] {
         -moz-appearance: textfield;
+        appearance: textfield;
     }
 
     .graph,

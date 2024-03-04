@@ -372,12 +372,11 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
                 let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
                 document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
                     let pos = element.dataset.pos.split("-");
-                    if (pos[0] == start[0]) {
-                        if (Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
-                            element.classList.remove("red", "green", "blue", "yellow", "purple");
-                            if (selected_colour != "remove") {
-                                element.classList.toggle(selected_colour, !state);
-                            }
+                    element.classList.remove("select");
+                    if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
+                        element.classList.remove("red", "green", "blue", "yellow", "purple");
+                        if (selected_colour != "remove") {
+                            element.classList.toggle(selected_colour, !state);
                         }
                     }
                 })
@@ -392,6 +391,20 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
             sequence_element_start = undefined;
         } else if (e.type == "mousedown") {
             sequence_element_start = e.target;
+        } else if (e.type == "mouseenter") {
+            let start = sequence_element_start.dataset.pos.split("-");
+            let end = e.target.dataset.pos.split("-");
+            if (start[0] == end[0]) {
+                let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
+                document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
+                    let pos = element.dataset.pos.split("-");
+                    if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
+                        element.classList.add("select");
+                    } else {
+                        element.classList.remove("select");
+                    }
+                })
+            }
         }
     } else {
         ToggleHighlight(e, permanent, turn_on);
