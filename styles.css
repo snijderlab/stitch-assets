@@ -1813,6 +1813,49 @@ footer .version {
     & input {
         width: 5rem;
     }
+
+    & .colour {
+        width: 1rem;
+        padding: 2px;
+        position: relative;
+    }
+
+    & .colour::after {
+        content: "";
+        display: block;
+        top: 2px;
+        bottom: 2px;
+        left: 2px;
+        right: 2px;
+        position: absolute;
+        background-color: var(--color);
+    }
+
+    & .red {
+        --color: var(--color-red);
+    }
+
+    & .green {
+        --color: var(--color-green);
+    }
+
+    & .blue {
+        --color: var(--color-blue);
+    }
+
+    & .yellow {
+        --color: var(--color-yellow);
+    }
+
+    & .purple {
+        --color: var(--color-purple);
+    }
+
+    & .remove {
+        --color: transparent;
+        text-align: center;
+        vertical-align: middle;
+    }
 }
 
 

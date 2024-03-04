@@ -360,10 +360,9 @@ function SpectrumSetUp() {
 function SequenceElementEvent(e, permanent, start = null) {
     if (document.querySelector(".spectrum").classList.contains("apply-colour")) {
         if (permanent) {
-            let value = document.querySelector("#colour").value;
             e.target.classList.remove("red", "green", "blue", "yellow", "purple");
-            if (value != "remove") {
-                e.target.classList.toggle(value);
+            if (selected_colour != "remove") {
+                e.target.classList.toggle(selected_colour);
             }
         }
     } else {
@@ -540,6 +539,7 @@ function ManualZoomSpectrumGraph(event) {
 /** Setup properties of the spectrum for publication
  * @param {Event} event
 */
+let selected_colour = "red";
 function RenderSetup(event) {
     var cl = event.target.className;
     var spectrum = event.target.parentElement.parentElement;
@@ -559,8 +559,16 @@ function RenderSetup(event) {
         spectrum.classList.toggle("compact");
     } else if (cl == "theoretical") {
         spectrum.classList.toggle("theoretical");
-    } else if (cl == "apply-colour") {
-        spectrum.classList.toggle("apply-colour");
+    } else if (cl == "colour") {
+        let state = event.target.checked;
+        spectrum.querySelectorAll(".colour").forEach(e => e.checked = false);
+        event.target.checked = state;
+        if (event.target.checked) {
+            spectrum.classList.add("apply-colour");
+        } else {
+            spectrum.classList.remove("apply-colour");
+        }
+        selected_colour = event.target.dataset.value;
     } else if (cl == "clear-colour") {
         spectrum.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple"))
     }
