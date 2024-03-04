@@ -1781,7 +1781,8 @@ footer .version {
 
 .spectrum .legend .has-slider input[type=number],
 .spectrum .manual-zoom input[type=number],
-.spectrum .render-setup input {
+.spectrum .render-setup input,
+.spectrum .render-setup button {
     width: 6ch;
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -1823,10 +1824,7 @@ footer .version {
     & .colour::after {
         content: "";
         display: block;
-        top: 2px;
-        bottom: 2px;
-        left: 2px;
-        right: 2px;
+        inset: .25rem;
         position: absolute;
         background-color: var(--color);
     }

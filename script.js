@@ -286,6 +286,7 @@ function SpectrumSetUp() {
         elements[i].addEventListener("mouseleave", e => { SequenceElementEvent(e, false, false) });
         elements[i].addEventListener("focusin", e => { SequenceElementEvent(e, false, true) });
         elements[i].addEventListener("focusout", e => { SequenceElementEvent(e, false, false) });
+        elements[i].addEventListener("mousedown", e => { SequenceElementEvent(e, false, true) });
         elements[i].addEventListener("mouseup", e => { SequenceElementEvent(e, true) });
         elements[i].addEventListener("keyup", e => { if (e.key == "Enter") SequenceElementEvent(e, true) });
     }
@@ -351,22 +352,45 @@ function SpectrumSetUp() {
     }
 }
 
+let sequence_element_start = undefined;
 /**
  * Do the event for a sequence element (one element in the peptide)
- * @param {Event} e The event
+ * @param {MouseEvent} e The event
  * @param {boolean} permanent If it will be applied permanently (true if clicked, false if hovered)
- * @param {boolean?} start If this is the apply (true) or clear (false) operation
+ * @param {boolean?} turn_on If this is the turns on (true) or turns off (false) the event, the default is toggle (null)
  */
-function SequenceElementEvent(e, permanent, start = null) {
+function SequenceElementEvent(e, permanent, turn_on = null, click = null) {
     if (document.querySelector(".spectrum").classList.contains("apply-colour")) {
-        if (permanent) {
+        if (e.type != "mouseenter" && e.type != "mouseleave") { console.log(e, sequence_element_start); }
+        if (e.type == "mouseup" && sequence_element_start != undefined) {
+            let start = sequence_element_start.split("-");
+            let end = e.target.dataset.pos.split("-");
+            if (start[0] == end[0]) {
+                let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
+                document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
+                    let pos = element.dataset.pos.split("-");
+                    if (pos[0] == start[0]) {
+                        if (Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
+                            element.classList.remove("red", "green", "blue", "yellow", "purple");
+                            if (selected_colour != "remove") {
+                                element.classList.toggle(selected_colour);
+                            }
+                        }
+                    }
+                })
+            }
+            sequence_element_start = undefined;
+        } else if (permanent) {
             e.target.classList.remove("red", "green", "blue", "yellow", "purple");
             if (selected_colour != "remove") {
                 e.target.classList.toggle(selected_colour);
             }
+            sequence_element_start = undefined;
+        } else if (e.type == "mousedown") {
+            sequence_element_start = e.target.dataset.pos;
         }
     } else {
-        ToggleHighlight(e, permanent, start);
+        ToggleHighlight(e, permanent, turn_on);
     }
 }
 
