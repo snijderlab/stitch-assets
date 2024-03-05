@@ -237,7 +237,8 @@ sup+sub {
 
     :is(input,
         select,
-        textarea) {
+        textarea,
+        .peptide-input) {
         border: 2px solid var(--color-halfway);
         cursor: pointer;
         background: var(--color-background);
@@ -314,14 +315,15 @@ sup+sub {
 
     .select-box {
         border-radius: 1000px;
-        border: 2px solid var(--color-halfway);
+        --_clr-border: var(--color-halfway);
+        border: 2px solid var(--_clr-border);
         padding: 2px;
         padding-bottom: 1px;
         width: max-content;
         cursor: pointer;
 
         &:hover {
-            border-color: var(--color-halfway-fg);
+            --_clr-border: var(--color-halfway-fg);
         }
 
         & label {
@@ -362,31 +364,32 @@ sup+sub {
             border: none;
             background: var(--color-foreground);
             height: 4px;
+            border-radius: 1000px;
         }
 
         &::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             box-shadow: none;
-            border: none;
+            border: 2px solid var(--color-foreground);
             background: var(--color-foreground);
+            box-sizing: border-box;
             height: 2ch;
             width: 2ch;
             border-radius: 50%;
             margin-top: calc(-1ch + 2px);
         }
 
-        &:hover::-webkit-slider-runnable-track {
-            background: var(--color-halfway-fg);
-        }
-
         &:hover::-webkit-slider-thumb {
-            background: var(--color-halfway-fg);
+            border-color: var(--color-halfway-fg);
         }
 
-        &:active::-webkit-slider-thumb,
-        &:focus::-webkit-slider-thumb {
-            background: var(--color-primary);
+        &:focus-visible::-webkit-slider-thumb {
+            border-color: var(--color-foreground);
+        }
+
+        &:active::-webkit-slider-thumb {
+            border-color: var(--color-primary);
         }
     }
 }
@@ -1972,7 +1975,7 @@ footer .version {
 
     &>* {
         flex-grow: 1;
-        flex-basis: 1;
+        flex-basis: 350px;
     }
 }
 
@@ -2010,6 +2013,13 @@ footer .version {
     grid-column: 1 / -1;
 
     .row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1ch;
+    }
+
+    .row.align {
         display: flex;
         justify-content: flex-end;
 
@@ -2086,7 +2096,7 @@ footer .version {
 
 .spectrum .peptide {
     font-size: var(--fs-peptide);
-    --color: var(--color-background);
+    --color-highlight: var(--color-background);
     margin: 1em;
     display: flex;
     flex-wrap: wrap;
@@ -2109,7 +2119,7 @@ footer .version {
     &>span {
         margin: 0 2px 0 -2px;
         border: 2px solid transparent;
-        background-color: var(--color);
+        background-color: var(--color-highlight);
 
         &.modification {
             color: var(--color-blue);
@@ -2125,27 +2135,27 @@ footer .version {
 
         &.permanent {
             font-weight: bold;
-            --color: var(--color-red-b);
+            --color-highlight: var(--color-red-b);
         }
 
         &.red {
-            --color: var(--color-red-b);
+            --color-highlight: var(--color-red-b);
         }
 
         &.green {
-            --color: var(--color-green-b);
+            --color-highlight: var(--color-green-b);
         }
 
         &.blue {
-            --color: var(--color-blue-b);
+            --color-highlight: var(--color-blue-b);
         }
 
         &.yellow {
-            --color: var(--color-yellow-b);
+            --color-highlight: var(--color-yellow-b);
         }
 
         &.purple {
-            --color: var(--color-purple-b);
+            --color-highlight: var(--color-purple-b);
         }
 
         &.select {
@@ -2755,7 +2765,7 @@ footer .version {
 
 }
 
-.spectrum .show-unassigned .peak.unassigned {
+.spectrum.show-unassigned .peak.unassigned {
     display: block;
 }
 
@@ -2775,8 +2785,8 @@ footer .version {
 }
 
 .spectrum.theoretical .peak.theoretical {
-    height: calc(var(--stroke-spectrum) * 3);
-    bottom: calc(var(--stroke-spectrum) * -3);
+    height: calc(var(--stroke-spectrum) * 4);
+    bottom: calc(var(--stroke-spectrum) * -4);
     display: block;
 }
 

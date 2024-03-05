@@ -280,7 +280,67 @@ function HighlightAmbiguous(position, alignment_position) {
 
 /* Spectrum viewer code */
 function SpectrumSetUp() {
-    var elements = document.querySelectorAll(".spectrum .peptide span");
+    // Settings
+    var elements = document.querySelectorAll("#spectrum-wrapper .graphics-settings input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", GraphicsSettings);
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .graphics-settings button");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("click", GraphicsSettings);
+    }
+    document.querySelectorAll("#spectrum-wrapper .spectrum-graph-settings input")
+        .forEach(ele => ele.addEventListener("change", SpectrumGraphSettings));
+    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-graph-settings .manual-zoom input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", ManualZoomSpectrumGraph);
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .peptide-settings input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", PeptideSettings);
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .peptide-settings button");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("click", PeptideSettings);
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-settings input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", SpectrumSettings);
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-settings button");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("click", SpectrumSettings);
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-settings .manual-zoom input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", ManualZoom);
+    }
+
+    // Legend
+    var elements = document.querySelectorAll("#spectrum-wrapper .legend .ion");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
+        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
+        elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
+        elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
+        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .legend .unassigned");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .legend .legend-peptide");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
+    }
+    var elements = document.querySelectorAll("#spectrum-wrapper .legend input");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("change", SpectrumInputChange);
+    }
+
+    // Peptide
+    var elements = document.querySelectorAll("#spectrum-wrapper .peptide span");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mouseenter", e => { SequenceElementEvent(e, false, true) });
         elements[i].addEventListener("mouseleave", e => { SequenceElementEvent(e, false, false) });
@@ -290,66 +350,36 @@ function SpectrumSetUp() {
         elements[i].addEventListener("mouseup", e => { SequenceElementEvent(e, true) });
         elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
     }
-    var elements = document.querySelectorAll(".spectrum .legend .ion");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
-        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
-        elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
-        elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
-        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
-    }
-    var elements = document.querySelectorAll(".spectrum .legend .unassigned");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
-    }
-    var elements = document.querySelectorAll(".spectrum .legend .legend-peptide");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
-    }
-    var elements = document.querySelectorAll(".spectrum .legend input");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("change", SpectrumInputChange);
-    }
-    var elements = document.querySelectorAll(".spectrum>.wrapper>.manual-zoom input");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("change", ManualZoom);
-    }
-    var elements = document.querySelectorAll(".spectrum-graph-setup .manual-zoom input");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("change", ManualZoomSpectrumGraph);
-    }
-    var elements = document.querySelectorAll(".spectrum-graph");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mousemove", SpectrumGraphMouseMove)
-    }
-    var elements = document.querySelectorAll(".spectrum .render-setup input");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("change", RenderSetup);
-    }
-    var elements = document.querySelectorAll(".spectrum .render-setup button");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("click", RenderSetup);
-    }
-    var elements = document.querySelectorAll(".spectrum .wrapper");
+
+    // Spectrum
+    var elements = document.querySelectorAll("#spectrum-wrapper .wrapper");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousedown", spectrumDragStart)
         elements[i].addEventListener("mousemove", spectrumDrag)
         elements[i].addEventListener("mouseup", spectrumDragEnd)
         elements[i].addEventListener("mouseout", spectrumDragOut)
     }
-    var elements = document.querySelectorAll(".spectrum .canvas-wrapper");
+    var elements = document.querySelectorAll("#spectrum-wrapper .canvas-wrapper");
     for (let i = 0; i < elements.length; i++) {
         var d = elements[i].dataset;
         d.minMz = 0;
         d.maxMz = d.initialMaxMz;
         d.maxIntensity = d.initialMaxIntensity;
     }
-    var elements = document.querySelectorAll(".spectrum .zoom-out");
+    var elements = document.querySelectorAll("#spectrum-wrapper .zoom-out");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mouseup", spectrumZoomOut)
         elements[i].addEventListener("keyup", e => { if (e.key == "Enter") spectrumZoomOut(e) })
     }
+
+    // Spectrum graph
+    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-graph");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("mousemove", SpectrumGraphMouseMove)
+    }
+
+    // Make the axes look nice
+    UpdateSpectrumAxes(document.querySelector("#spectrum-wrapper .canvas-wrapper"));
 }
 
 /**
@@ -363,7 +393,7 @@ let sequence_element_start = undefined;
  * @param {boolean?} turn_on If this is the turns on (true) or turns off (false) the event, the default is toggle (null)
  */
 function SequenceElementEvent(e, permanent, turn_on = null) {
-    if (document.querySelector(".spectrum").classList.contains("apply-colour")) {
+    if (selected_colour != "highlight") {
         if (e.type == "mouseup" && sequence_element_start != undefined && sequence_element_start.dataset.pos != e.target.dataset.pos) {
             let state = sequence_element_start.classList.contains(selected_colour);
             let start = sequence_element_start.dataset.pos.split("-");
@@ -391,7 +421,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
             sequence_element_start = undefined;
         } else if (e.type == "mousedown") {
             sequence_element_start = e.target;
-        } else if (e.type == "mouseenter") {
+        } else if (e.type == "mouseenter" && sequence_element_start != undefined) {
             let start = sequence_element_start.dataset.pos.split("-");
             let end = e.target.dataset.pos.split("-");
             if (start[0] == end[0]) {
@@ -414,7 +444,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
 function SetUpSpectrumInterface() {
     SpectrumSetUp();
     var event = new Event('change');
-    document.getElementById("y-max").dispatchEvent(event);
+    document.getElementById("spectrum-graph-y-max").dispatchEvent(event);
 }
 
 var highlight;
@@ -496,43 +526,6 @@ function ToggleHighlight(event, permanent, start = null) {
     }
 }
 
-/** Toggle features on or off in the spectrum (eg background peaks, peak labels)
- * @param {Event} event
-*/
-function SpectrumInputChange(event) {
-    if (event.target.type == "checkbox" && event.target.classList.contains("show-unassigned")) { // Background
-        var wrapper = event.target.parentElement.parentElement;
-        var canvas = wrapper.querySelector(".canvas-wrapper"); // comment
-        var update_axes = !wrapper.classList.contains("first") && !wrapper.classList.contains("second");
-        if (event.target.checked) { // Will be adding all background peaks
-            wrapper.classList.add('show-unassigned');
-            if (update_axes && canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensityAssigned) {
-                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
-                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
-                UpdateSpectrumAxes(canvas)
-            }
-        } else { // Will be removing all background peaks
-            wrapper.classList.remove('show-unassigned');
-            if (update_axes && canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
-                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
-                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
-                UpdateSpectrumAxes(canvas)
-            }
-        }
-    } else if (event.target.type == "checkbox" && event.target.classList.contains("legend-peptide")) {
-        var canvas = event.target.parentElement.parentElement.parentElement;
-        canvas.classList.toggle("legend-peptide");
-    } else if (event.target.type == "range" || event.target.type == "number") { // Peak labels + masses
-        var ele = document.getElementById(
-            (event.target.type == "number") ?
-                event.target.id.substring(0, event.target.id.length - 6)
-                : event.target.id + "_value");
-        ele.value = event.target.value;
-        event.target.parentElement.parentElement.parentElement.querySelectorAll(".canvas").forEach(
-            canvas => SpectrumUpdateLabels(Number(event.target.value), canvas, event.target.id.includes("label") ? "label" : "mass-label"))
-    }
-}
-
 /** The mouse moved in the spectrum graph.
  * @param {MouseEvent} event
 */
@@ -570,48 +563,120 @@ function ManualZoom(event) {
  * @param {Event} event
 */
 function ManualZoomSpectrumGraph(event) {
-    var spectrum = event.target.parentElement.parentElement.parentElement;
-    var min_y = Number(spectrum.querySelector(".y-min").value);
-    var max_y = Number(spectrum.querySelector(".y-max").value);
+    var min_y = Number(document.getElementById("spectrum-graph-y-min").value);
+    var max_y = Number(document.getElementById("spectrum-graph-y-max").value);
+    console.log(max_y, min_y);
 
-    spectrum.querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_y, max_y));
+    document.getElementById("spectrum-wrapper")
+        .querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_y, max_y));
 }
 
 /** Setup properties of the spectrum for publication
  * @param {Event} event
 */
-let selected_colour = "red";
-function RenderSetup(event) {
+function GraphicsSettings(event) {
     var cl = event.target.className;
-    var spectrum = event.target.parentElement.parentElement;
+    let spectrum_wrapper = document.getElementById("spectrum-wrapper");
     if (cl == "width") {
-        spectrum.style.setProperty("--width", event.target.value);
+        spectrum_wrapper.style.setProperty("--width", event.target.value);
     } else if (cl == "height") {
-        spectrum.style.setProperty("--height", event.target.value);
+        spectrum_wrapper.style.setProperty("--height", event.target.value);
     } else if (cl == "fs-peptide") {
-        spectrum.style.setProperty("--fs-peptide", event.target.value);
+        spectrum_wrapper.style.setProperty("--fs-peptide", event.target.value);
     } else if (cl == "stroke-peptide") {
-        spectrum.style.setProperty("--stroke-peptide", event.target.value);
+        spectrum_wrapper.style.setProperty("--stroke-peptide", event.target.value);
     } else if (cl == "fs-spectrum") {
-        spectrum.style.setProperty("--fs-spectrum", event.target.value);
+        spectrum_wrapper.style.setProperty("--fs-spectrum", event.target.value);
     } else if (cl == "stroke-spectrum") {
-        spectrum.style.setProperty("--stroke-spectrum", event.target.value);
-    } else if (cl == "compact") {
-        spectrum.classList.toggle("compact");
-    } else if (cl == "theoretical") {
-        spectrum.classList.toggle("theoretical");
-    } else if (cl == "colour") {
-        let state = event.target.checked;
-        spectrum.querySelectorAll(".colour").forEach(e => e.checked = false);
-        event.target.checked = state;
-        if (event.target.checked) {
-            spectrum.classList.add("apply-colour");
-        } else {
-            spectrum.classList.remove("apply-colour");
+        spectrum_wrapper.style.setProperty("--stroke-spectrum", event.target.value);
+    }
+}
+
+/** Setup properties of the spectrum for publication
+ * @param {Event} event
+*/
+function SpectrumGraphSettings(event) {
+    var id = event.target.id;
+    let spectrum_wrapper = document.getElementById("spectrum-wrapper");
+    if (id == "spectrum-graph-type-absolute") {
+        spectrum_wrapper.classList.toggle("spectrum-graph-absolute");
+        spectrum_wrapper.classList.remove("spectrum-graph-relative");
+    } else if (id == "spectrum-graph-type-relative") {
+        spectrum_wrapper.classList.remove("spectrum-graph-absolute");
+        spectrum_wrapper.classList.toggle("spectrum-graph-relative");
+    } else if (id == "intensity") {
+        spectrum_wrapper.classList.toggle("spectrum-graph-intensity");
+    }
+}
+
+/** Setup properties of the spectrum for publication
+ * @param {Event} event
+*/
+let selected_colour = "highlight";
+function PeptideSettings(event) {
+    var t = event.target;
+    let spectrum_wrapper = document.getElementById("spectrum-wrapper");
+    if (t.id == "spectrum-compact") {
+        spectrum_wrapper.classList.toggle("compact");
+    } else if (t.name == "highlight") {
+        selected_colour = t.value;
+    } else if (t.id == "clear-colour") {
+        spectrum_wrapper.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple"))
+    }
+}
+
+/** Setup properties of the spectrum for publication
+ * @param {Event} event
+*/
+function SpectrumSettings(event) {
+    var cl = event.target.className;
+    let spectrum_wrapper = document.getElementById("spectrum-wrapper");
+    let canvas = spectrum_wrapper.querySelector(".canvas-wrapper");
+    if (cl == "theoretical") {
+        spectrum_wrapper.classList.toggle("theoretical");
+    } else if (event.target.value == "ion") {
+        spectrum_wrapper.classList.add("legend-ion");
+        spectrum_wrapper.classList.remove("legend-peptide");
+    } else if (event.target.value == "peptide") {
+        spectrum_wrapper.classList.remove("legend-ion");
+        spectrum_wrapper.classList.add("legend-peptide");
+    } else if (cl == "unassigned") {
+        console.log(canvas.dataset)
+        if (event.target.checked) { // Will be adding all background peaks
+            spectrum_wrapper.classList.add('show-unassigned');
+            if (Number(canvas.dataset.maxIntensity) == Number(canvas.dataset.initialMaxIntensityAssigned)) {
+                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
+                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+                UpdateSpectrumAxes(canvas)
+            }
+        } else { // Will be removing all background peaks
+            spectrum_wrapper.classList.remove('show-unassigned');
+            if (canvas.dataset.maxIntensity == canvas.dataset.initialMaxIntensity) {
+                canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensityAssigned;
+                canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+                UpdateSpectrumAxes(canvas)
+            }
         }
-        selected_colour = event.target.dataset.value;
-    } else if (cl == "clear-colour") {
-        spectrum.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple"))
+    } else if (event.target.id == "spectrum-mz-min") {
+        canvas.dataset.minMz = Number(event.target.value);
+        canvas.style.setProperty("--min-mz", canvas.dataset.minMz);
+        UpdateSpectrumAxes(canvas)
+    } else if (event.target.id == "spectrum-mz-max") {
+        canvas.dataset.maxMz = Number(event.target.value);
+        canvas.style.setProperty("--max-mz", canvas.dataset.maxMz);
+        UpdateSpectrumAxes(canvas)
+    } else if (event.target.id == "spectrum-intensity-max") {
+        canvas.dataset.maxIntensity = Number(event.target.value);
+        canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
+        UpdateSpectrumAxes(canvas)
+    } else if (event.target.type == "range" || event.target.type == "number") { // Peak labels + masses
+        var ele = document.getElementById(
+            (event.target.type == "number") ?
+                event.target.id.substring(0, event.target.id.length - 6)
+                : event.target.id + "-value");
+        ele.value = event.target.value;
+        spectrum_wrapper.querySelectorAll(".canvas").forEach(
+            canvas => SpectrumUpdateLabels(Number(event.target.value), canvas, event.target.id.includes("label") ? "label" : "mass-label"))
     }
 }
 
@@ -773,10 +838,9 @@ function Zoom(canvas, min, max, maxI) {
     canvas.style.setProperty("--max-mz", max);
     canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
 
-    var spectrum = canvas.parentElement.parentElement.parentElement;
-    spectrum.querySelector(".mz-min").value = fancyRound(max, min, min);
-    spectrum.querySelector(".mz-max").value = fancyRound(max, min, max);
-    spectrum.querySelector(".intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
+    document.getElementById("spectrum-mz-min").value = fancyRound(max, min, min);
+    document.getElementById("spectrum-mz-max").value = fancyRound(max, min, max);
+    document.getElementById("spectrum-intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
 
     UpdateSpectrumAxes(canvas)
 }
