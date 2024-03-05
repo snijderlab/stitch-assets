@@ -1,3 +1,5 @@
+@layer base, base1;
+
 :root {
     --color-red: oklch(66% 0.125 34);
     --color-red-light: oklch(85% 0.125 34);
@@ -45,6 +47,8 @@
     --color-foreground: #1E1E1E;
     --color-halfway: #7E7E7E;
     --color-halfway-o: rgb(126, 126, 126, 20%);
+    --color-halfway-fg: color-mix(in oklab, var(--color-halfway), var(--color-foreground));
+    --color-halfway-bg: color-mix(in oklab, var(--color-halfway), var(--color-background));
     --color-background: #fff;
     --color-label: var(--color-primary);
 }
@@ -188,6 +192,203 @@ sup+sub {
 
 .message {
     font-style: italic;
+}
+
+/* Input general */
+
+@layer base {
+    button {
+        --_clr-main: var(--color-primary);
+        --_clr-text: var(--color-background);
+        --_clr-active: var(--color-foreground);
+        --_clr-hover: var(--color-halfway-fg);
+
+        -webkit-user-select: none;
+        user-select: none;
+        border: 2px solid var(--_clr-main);
+        cursor: pointer;
+        background: var(--_clr-main);
+        color: var(--_clr-text);
+        border-radius: 1000px;
+        font-size: 1rem;
+        padding: .25rem;
+
+        &:hover {
+            border-color: var(--_clr-hover);
+        }
+
+        &:focus-visible {
+            border-color: var(--_clr-active);
+            outline: none;
+        }
+
+        &:active {
+            border-color: var(--_clr-active);
+            background-color: var(--_clr-active);
+        }
+
+        &.secondary {
+            --_clr-main: var(--color-halfway);
+            --_clr-text: var(--color-background);
+            --_clr-active: var(--color-foreground);
+            --_clr-hover: var(--color-halfway-fg);
+        }
+    }
+
+    :is(input,
+        select,
+        textarea) {
+        border: 2px solid var(--color-halfway);
+        cursor: pointer;
+        background: var(--color-background);
+        font-size: 1rem;
+
+        &:hover {
+            border-color: var(--color-halfway-fg);
+        }
+
+        &:focus-visible {
+            border-color: var(--color-foreground);
+            outline: none;
+        }
+
+        &:active {
+            border-color: var(--color-primary);
+        }
+    }
+
+    input[type=checkbox]:not([switch]) {
+        display: none;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+}
+
+@layer base1 {
+    input[type=checkbox][switch] {
+        appearance: none;
+        width: 3ch;
+        height: 2ch;
+        box-sizing: content-box;
+        border-radius: 1000px;
+        background: var(--color-halfway);
+        position: relative;
+        vertical-align: middle;
+        margin-right: 1ch;
+        cursor: pointer;
+
+        &:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        &:hover {
+            border-color: var(--color-halfway-fg);
+        }
+
+        &::after {
+            content: "";
+            border-radius: 1000px;
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 2ch;
+            height: 2ch;
+            background-color: var(--color-foreground);
+        }
+
+        &:checked::after {
+            transform: translate(1ch);
+        }
+    }
+
+    label:has(input[type=checkbox]) {
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .select-box {
+        border-radius: 1000px;
+        border: 2px solid var(--color-halfway);
+        padding: 2px;
+        padding-bottom: 1px;
+        width: max-content;
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--color-halfway-fg);
+        }
+
+        & label {
+            padding: .25rem .5rem;
+            margin: 0 -4px;
+            -webkit-user-select: none;
+            user-select: none;
+            border: 2px solid transparent;
+            cursor: pointer;
+            border-radius: 1000px;
+
+            &:not(:first-child) {
+                margin-left: 2px;
+            }
+
+            &:where(:has(input:checked)) {
+                background-color: var(--color-primary);
+                border-color: var(--color-primary);
+                color: var(--color-background);
+            }
+
+            &:hover {
+                border-color: var(--color-halfway-fg)
+            }
+        }
+    }
+
+    input[type=range] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: none;
+        border: none;
+
+        &::-webkit-slider-runnable-track {
+            -webkit-appearance: none;
+            appearance: none;
+            box-shadow: none;
+            border: none;
+            background: var(--color-foreground);
+            height: 4px;
+        }
+
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            box-shadow: none;
+            border: none;
+            background: var(--color-foreground);
+            height: 2ch;
+            width: 2ch;
+            border-radius: 50%;
+            margin-top: calc(-1ch + 2px);
+        }
+
+        &:hover::-webkit-slider-runnable-track {
+            background: var(--color-halfway-fg);
+        }
+
+        &:hover::-webkit-slider-thumb {
+            background: var(--color-halfway-fg);
+        }
+
+        &:active::-webkit-slider-thumb,
+        &:focus::-webkit-slider-thumb {
+            background: var(--color-primary);
+        }
+    }
 }
 
 /* Scrollbar */
@@ -570,15 +771,6 @@ td.bar::before {
     clear: both;
     display: block;
     height: 1px;
-}
-
-
-input[type="checkbox"] {
-    display: none;
-}
-
-input[type="radio"] {
-    display: none;
 }
 
 label[for^=collapsible],
@@ -1774,38 +1966,42 @@ footer .version {
     border-color: var(--color-primary);
 }
 
-.spectrum .legend .has-slider {
+.spectrum .all-settings {
+    display: flex;
+    flex-wrap: wrap;
+
+    &>* {
+        flex-grow: 1;
+        flex-basis: 1;
+    }
+}
+
+.spectrum .manual-zoom input[type=number],
+.spectrum .settings input:not([type=checkbox]):not([type=range]) {
+    width: 12ch;
+}
+
+.spectrum .settings .has-slider {
     --color: var(--color-foreground);
     cursor: default;
-}
 
-.spectrum .legend .has-slider input[type=range] {
-    width: 6em;
-    vertical-align: middle;
-    cursor: pointer;
-}
+    & input[type=range] {
+        min-width: 6em;
+        max-width: 10em;
+        vertical-align: middle;
+        cursor: pointer;
+    }
 
-.spectrum .legend .has-slider input[type=number],
-.spectrum .manual-zoom input[type=number],
-.spectrum .render-setup input,
-.spectrum .render-setup button {
-    width: 6ch;
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    border: 2px solid var(--color-halfway);
-    border-radius: .2rem;
-}
-
-.spectrum .legend>*:not(label) {
-    color: var(--color);
-    cursor: default;
+    & input[type=number] {
+        width: 6ch;
+    }
 }
 
 .spectrum .settings {
     border: 2px solid var(--color-halfway);
-    border-radius: .2rem;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     gap: .5rem;
     padding: .5rem;
     width: fit-content;
@@ -1813,52 +2009,67 @@ footer .version {
     margin-bottom: .5rem;
     grid-column: 1 / -1;
 
+    .row {
+        display: flex;
+        justify-content: flex-end;
+
+        &>*:first-child {
+            flex-grow: 1;
+            margin-right: 1ch;
+        }
+    }
+
     & p {
         margin: 0;
     }
 
-    & input {
+    & input:not([type=checkbox]) {
         width: 5rem;
     }
 
-    & .colour {
-        width: 1rem;
-        padding: 2px;
-        position: relative;
+    & #highlight {
+        padding-bottom: 0;
+
+        & .colour {
+            width: 2ch;
+            padding: 2px;
+            position: relative;
+            background-color: var(--color);
+            display: inline-block;
+            height: 2ch;
+            background-clip: content-box;
+            vertical-align: middle;
+            margin-top: -3px;
+
+            &:has(input[value=red]) {
+                --color: var(--color-red);
+            }
+
+            &:has(input[value=green]) {
+                --color: var(--color-green);
+            }
+
+            &:has(input[value=blue]) {
+                --color: var(--color-blue);
+            }
+
+            &:has(input[value=yellow]) {
+                --color: var(--color-yellow);
+            }
+
+            &:has(input[value=purple]) {
+                --color: var(--color-purple);
+            }
+
+            &:has(input[value=remove]) {
+                --color: transparent;
+                text-align: center;
+            }
+        }
     }
 
-    & .colour::after {
-        content: "";
-        display: block;
-        inset: .25rem;
-        position: absolute;
-        background-color: var(--color);
-    }
-
-    & .red {
-        --color: var(--color-red);
-    }
-
-    & .green {
-        --color: var(--color-green);
-    }
-
-    & .blue {
-        --color: var(--color-blue);
-    }
-
-    & .yellow {
-        --color: var(--color-yellow);
-    }
-
-    & .purple {
-        --color: var(--color-purple);
-    }
-
-    & .remove {
-        --color: transparent;
-        text-align: center;
-        vertical-align: middle;
+    & #clear-colour {
+        width: max-content;
     }
 }
 
@@ -2460,7 +2671,7 @@ footer .version {
     left: calc(100% * (var(--mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
     width: var(--stroke-spectrum);
     background-color: var(--color);
-    transition: opacity 250ms;
+    transition: opacity 125ms;
     z-index: 1;
 
     &:hover {
