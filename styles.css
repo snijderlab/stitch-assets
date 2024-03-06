@@ -1972,6 +1972,7 @@ footer .version {
 .spectrum .all-settings {
     display: flex;
     flex-wrap: wrap;
+    gap: 1ch;
 
     &>* {
         flex-grow: 1;
@@ -2078,7 +2079,8 @@ footer .version {
         }
     }
 
-    & #clear-colour {
+    & #clear-colour,
+    & #reset-zoom {
         width: max-content;
     }
 }

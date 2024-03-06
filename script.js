@@ -315,6 +315,11 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoom);
     }
+    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-settings .reset-zoom");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("mouseup", spectrumZoomOut)
+        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") spectrumZoomOut(e) })
+    }
 
     // Legend
     var elements = document.querySelectorAll("#spectrum-wrapper .legend .ion");
@@ -365,11 +370,6 @@ function SpectrumSetUp() {
         d.minMz = 0;
         d.maxMz = d.initialMaxMz;
         d.maxIntensity = d.initialMaxIntensity;
-    }
-    var elements = document.querySelectorAll("#spectrum-wrapper .zoom-out");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseup", spectrumZoomOut)
-        elements[i].addEventListener("keyup", e => { if (e.key == "Enter") spectrumZoomOut(e) })
     }
 
     // Spectrum graph
