@@ -2118,7 +2118,7 @@ footer .version {
     }
 
     & #highlight {
-        padding-bottom: 0;
+        /* padding-bottom: 0; */
 
         & .colour {
             width: 2ch;
@@ -2177,15 +2177,14 @@ footer .version {
 
 .spectrum .peptide {
     font-size: var(--fs-peptide);
-    --color-highlight: var(--color-background);
     margin: 1em;
     display: flex;
     flex-wrap: wrap;
     grid-column: 1/3;
     --spacing: calc(var(--stroke-peptide) * 1.5);
     --side-spacing: calc(var(--stroke-peptide) * 0.5);
-    --width: 50%;
-    --height: 50%;
+    --width: .8em;
+    --height: .8em;
 
 
     &>.name {
@@ -2198,9 +2197,29 @@ footer .version {
     }
 
     &>span {
+        --pad: .5em;
+        --pad-left: 0px;
+        --pad-right: 0px;
         margin: 0 2px 0 -2px;
         border: 2px solid transparent;
-        background-color: var(--color-highlight);
+        background-color: color-mix(in oklab, var(--color-highlight) 20%, var(--color-background));
+        position: relative;
+        padding: var(--pad) calc(var(--pad) + var(--pad-right)) var(--pad) calc(var(--pad) + var(--pad-left));
+        display: block;
+        cursor: crosshair;
+        -webkit-user-select: none;
+        user-select: none;
+        font-family: 'Roboto Mono';
+        box-sizing: content-box;
+
+        &:hover {
+            border-color: var(--color-halfway-fg);
+        }
+
+        &:focus-visible,
+        &:active {
+            border-color: var(--color-primary);
+        }
 
         &.modification {
             color: var(--color-blue);
@@ -2214,50 +2233,79 @@ footer .version {
             pointer-events: none;
         }
 
-        &.permanent {
-            font-weight: bold;
-            --color-highlight: var(--color-red-b);
+        &.default {
+            border-color: var(--color-halfway);
         }
 
         &.red {
-            --color-highlight: var(--color-red-b);
+            --color-highlight: var(--color-red);
         }
 
         &.green {
-            --color-highlight: var(--color-green-b);
+            --color-highlight: var(--color-green);
         }
 
         &.blue {
-            --color-highlight: var(--color-blue-b);
+            --color-highlight: var(--color-blue);
         }
 
         &.yellow {
-            --color-highlight: var(--color-yellow-b);
+            --color-highlight: var(--color-yellow);
         }
 
         &.purple {
-            --color-highlight: var(--color-purple-b);
+            --color-highlight: var(--color-purple);
         }
 
         &.select {
             border-color: var(--color-primary);
         }
 
-        &.select+.select {
-            border-left-color: transparent;
+        &.select+.select,
+        &.default+.default {
+            border-left: none;
+            --pad-left: 2px;
         }
 
-        &.select:has(+.select) {
-            border-right-color: transparent;
+        &.select:has(+.select),
+        &.default:has(+.default) {
+            border-right: transparent;
+            --pad-right: 2px;
         }
     }
 
+    &>.modification {
+        &.term {
+            width: var(--spacing);
+        }
+
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: calc(.5em + var(--spacing));
+            left: calc(50% - 0.5 * var(--spacing));
+            width: var(--spacing);
+            height: var(--spacing);
+            border-radius: 50%;
+            background-color: var(--color-primary);
+        }
+
+        &.term::before {
+            top: calc(50% - var(--stroke-peptide));
+        }
+    }
 }
 
 .spectrum.compact .peptide {
     --width: calc(.5em - var(--side-spacing));
     --height: .5em;
+
+    &>* {
+        padding: var(--pad) var(--pad-right) var(--pad) var(--pad-left);
+    }
 }
+
 
 .spectrum:not(.legend-peptide) {
     & .a {
@@ -2430,6 +2478,28 @@ footer .version {
     }
 }
 
+.canvas .peak.highlight {
+    &.red {
+        --color: var(--color-red);
+    }
+
+    &.green {
+        --color: var(--color-green);
+    }
+
+    &.blue {
+        --color: var(--color-blue);
+    }
+
+    &.yellow {
+        --color: var(--color-yellow);
+    }
+
+    &.purple {
+        --color: var(--color-purple);
+    }
+}
+
 .spectrum .n-term,
 .spectrum .c-term {
     --color: var(--color-foreground);
@@ -2440,54 +2510,10 @@ footer .version {
     flex-wrap: wrap;
 }
 
-.spectrum .peptide>* {
-    position: relative;
-    padding: .5em;
-    display: block;
-    cursor: crosshair;
-    -webkit-user-select: none;
-    user-select: none;
-    font-family: 'Roboto Mono';
-}
-
-.spectrum.apply-colour .peptide>span {
-    cursor: zoom-in;
-}
-
-
-.spectrum.compact .peptide>* {
-    padding: .5em 0;
-}
-
-.spectrum:not(.apply-colour) .peptide>*:hover,
-.spectrum:not(.apply-colour) .peptide>*:focus {
-    background-color: var(--color-primary-o);
-}
-
-.spectrum .peptide>*.modification.term {
-    width: var(--spacing);
-}
-
-.spectrum .peptide>*.modification::before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: calc(.5em + var(--spacing));
-    left: calc(50% - 0.5 * var(--spacing));
-    width: var(--spacing);
-    height: var(--spacing);
-    border-radius: 50%;
-    background-color: var(--color-primary);
-}
-
-.spectrum .peptide>*.modification.term::before {
-    top: calc(50% - var(--stroke-peptide));
-}
-
 .spectrum .corner {
     position: absolute;
     display: block;
-    border: var(--stroke-peptide) solid var(--color);
+    border: var(--stroke-peptide) solid var(--color-highlight, var(--color, red));
     width: var(--width);
     height: var(--height);
     pointer-events: none;
@@ -2499,12 +2525,12 @@ footer .version {
         border-right: none;
         border-bottom: none;
         top: 0px;
-        left: var(--side-spacing);
+        left: calc(var(--side-spacing) + var(--pad-left));
     }
 
     &.y {
         top: var(--spacing);
-        left: calc(var(--spacing) + var(--side-spacing));
+        left: calc(var(--spacing) + var(--side-spacing) + var(--pad-left));
         height: calc(var(--height) - var(--spacing));
         width: calc(var(--width) - var(--spacing));
     }
@@ -2512,7 +2538,7 @@ footer .version {
     &.z,
     &.z· {
         top: calc(2 * var(--spacing));
-        left: calc(2 * var(--spacing) + var(--side-spacing));
+        left: calc(2 * var(--spacing) + var(--side-spacing) + var(--pad-left));
         height: calc(var(--height) - 2 * var(--spacing));
         width: calc(var(--width) - 2 * var(--spacing));
     }
@@ -2520,8 +2546,8 @@ footer .version {
     &.w {
         height: 0;
         border-width: calc(var(--stroke-peptide) * 0.5);
-        left: calc(3 * var(--spacing) + var(--side-spacing));
-        right: calc(3 * var(--spacing) + var(--side-spacing));
+        left: calc(3 * var(--spacing) + var(--side-spacing) + var(--pad-left));
+        right: calc(3 * var(--spacing) + var(--side-spacing) + var(--pad-right));
         top: calc(3 * var(--spacing));
         width: auto;
     }
@@ -2532,19 +2558,19 @@ footer .version {
         border-left: none;
         border-top: none;
         bottom: 0px;
-        right: var(--side-spacing);
+        right: calc(var(--side-spacing) + var(--pad-right));
     }
 
     &.b {
         bottom: var(--spacing);
-        right: calc(var(--spacing) + var(--side-spacing));
+        right: calc(var(--spacing) + var(--side-spacing) + var(--pad-right));
         height: calc(var(--height) - var(--spacing));
         width: calc(var(--width) - var(--spacing));
     }
 
     &.c {
         bottom: calc(2 * var(--spacing));
-        right: calc(2 * var(--spacing) + var(--side-spacing));
+        right: calc(2 * var(--spacing) + var(--side-spacing) + var(--pad-right));
         height: calc(var(--height) - 2 * var(--spacing));
         width: calc(var(--width) - 2 * var(--spacing));
     }
@@ -2552,8 +2578,8 @@ footer .version {
     &.d {
         height: 0;
         border-width: calc(var(--stroke-peptide) * 0.5);
-        left: calc(3 * var(--spacing) + var(--side-spacing));
-        right: calc(3 * var(--spacing) + var(--side-spacing));
+        left: calc(3 * var(--spacing) + var(--side-spacing) + var(--pad-left));
+        right: calc(3 * var(--spacing) + var(--side-spacing) + var(--pad-right));
         bottom: calc(3 * var(--spacing));
         width: auto;
     }
@@ -2561,8 +2587,8 @@ footer .version {
     &.v {
         height: 0;
         border-width: calc(var(--stroke-peptide) * 0.5);
-        left: calc(3 * var(--spacing) + var(--side-spacing));
-        right: calc(3 * var(--spacing) + var(--side-spacing));
+        left: calc(3 * var(--spacing) + var(--side-spacing) + var(--pad-left));
+        right: calc(3 * var(--spacing) + var(--side-spacing) + var(--pad-right));
         bottom: calc(4 * var(--spacing));
         width: auto;
     }

@@ -324,11 +324,11 @@ function SpectrumSetUp() {
     // Legend
     var elements = document.querySelectorAll("#spectrum-wrapper .legend .ion");
     for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e, false, true) });
-        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e, false, false) });
-        elements[i].addEventListener("focusin", e => { ToggleHighlight(e, false, true) });
-        elements[i].addEventListener("focusout", e => { ToggleHighlight(e, false, false) });
-        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e, true) });
+        elements[i].addEventListener("mouseenter", e => { ToggleHighlight(e.target, false, true) });
+        elements[i].addEventListener("mouseleave", e => { ToggleHighlight(e.target, false, false) });
+        elements[i].addEventListener("focusin", e => { ToggleHighlight(e.target, false, true) });
+        elements[i].addEventListener("focusout", e => { ToggleHighlight(e.target, false, false) });
+        elements[i].addEventListener("mouseup", e => { ToggleHighlight(e.target, true) });
         elements[i].addEventListener("keyup", e => { if (e.key == "Enter") e.target.click() });
     }
     var elements = document.querySelectorAll("#spectrum-wrapper .legend .unassigned");
@@ -393,51 +393,52 @@ let sequence_element_start = undefined;
  * @param {boolean?} turn_on If this is the turns on (true) or turns off (false) the event, the default is toggle (null)
  */
 function SequenceElementEvent(e, permanent, turn_on = null) {
-    if (selected_colour != "highlight") {
-        if (e.type == "mouseup" && sequence_element_start != undefined && sequence_element_start.dataset.pos != e.target.dataset.pos) {
-            let state = sequence_element_start.classList.contains(selected_colour);
-            let start = sequence_element_start.dataset.pos.split("-");
-            let end = e.target.dataset.pos.split("-");
-            if (start[0] == end[0]) {
-                let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
-                document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
-                    let pos = element.dataset.pos.split("-");
-                    element.classList.remove("select");
-                    if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
-                        element.classList.remove("red", "green", "blue", "yellow", "purple");
-                        if (selected_colour != "remove") {
-                            element.classList.toggle(selected_colour, !state);
-                        }
+    // if (selected_colour != "highlight") {
+    if (e.type == "mouseup" && sequence_element_start != undefined && sequence_element_start.dataset.pos != e.target.dataset.pos) {
+        let state = sequence_element_start.classList.contains(selected_colour);
+        let start = sequence_element_start.dataset.pos.split("-");
+        let end = e.target.dataset.pos.split("-");
+        if (start[0] == end[0]) {
+            let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
+            document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
+                let pos = element.dataset.pos.split("-");
+                element.classList.remove("select");
+                if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
+                    element.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight");
+                    ToggleHighlight(element, true, !state, selected_colour);//, ".p" + pos[0] + "-" + pos[1]);
+                    if (selected_colour != "remove") {
+                        element.classList.toggle(selected_colour, !state);
+                        element.classList.toggle("highlight", !state);
                     }
-                })
-            }
-            sequence_element_start = undefined;
-        } else if (permanent) {
-            let state = e.target.classList.contains(selected_colour);
-            e.target.classList.remove("red", "green", "blue", "yellow", "purple");
-            if (selected_colour != "remove") {
-                e.target.classList.toggle(selected_colour, !state);
-            }
-            sequence_element_start = undefined;
-        } else if (e.type == "mousedown") {
-            sequence_element_start = e.target;
-        } else if (e.type == "mouseenter" && sequence_element_start != undefined) {
-            let start = sequence_element_start.dataset.pos.split("-");
-            let end = e.target.dataset.pos.split("-");
-            if (start[0] == end[0]) {
-                let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
-                document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
-                    let pos = element.dataset.pos.split("-");
-                    if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
-                        element.classList.add("select");
-                    } else {
-                        element.classList.remove("select");
-                    }
-                })
-            }
+                }
+            })
         }
-    } else {
-        ToggleHighlight(e, permanent, turn_on);
+        sequence_element_start = undefined;
+    } else if (permanent) {
+        let state = e.target.classList.contains(selected_colour);
+        e.target.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight");
+        ToggleHighlight(e.target, true, !state, selected_colour);
+        if (selected_colour != "remove") {
+            e.target.classList.toggle(selected_colour, !state);
+            e.target.classList.toggle("highlight", !state);
+        }
+        sequence_element_start = undefined;
+    } else if (e.type == "mousedown") {
+        sequence_element_start = e.target;
+    } else if (e.type == "mouseenter" && sequence_element_start != undefined) {
+        let start = sequence_element_start.dataset.pos.split("-");
+        let end = e.target.dataset.pos.split("-");
+        if (start[0] == end[0]) {
+            let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
+            document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
+                let pos = element.dataset.pos.split("-");
+                if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
+                    element.classList.add("select");
+                } else {
+                    element.classList.remove("select");
+                }
+            })
+        }
     }
 }
 
@@ -450,12 +451,14 @@ function SetUpSpectrumInterface() {
 var highlight;
 /**
  * Toggle a highlight
- * @param {Event} e The event
+ * @param {Element} t The target
  * @param {boolean} permanent If it will be applied permanently (true if clicked, false if hovered)
  * @param {boolean?} start If this is the apply (true) or clear (false) operation
+ * @param {string} selected_colour For peptide highlights the colour selected or "default"
  */
-function ToggleHighlight(event, permanent, start = null) {
-    var t = event.target; // <span> with the sequence
+function ToggleHighlight(t, permanent, start, selected_colour) {
+    console.log("toggle_highlight", t, permanent, start, selected_colour);
+    let was_permanent = t.classList.contains("highlight");
     if (permanent) t.classList.toggle("permanent");
     if (t.classList.contains("permanent") && !permanent) return;
 
@@ -465,54 +468,45 @@ function ToggleHighlight(event, permanent, start = null) {
     function toggle(element) {
         if (element.dataset.n == undefined) element.dataset.n = 0;
         if (element.dataset.n < 0) element.dataset.n = 0;
-        if ((permanent && t.classList.contains("permanent"))) {
-            element.dataset.n = Number(element.dataset.n) + 1;
+        element.classList.remove("red", "green", "blue", "yellow", "purple", "default");
+        if ((permanent && (t.classList.contains("permanent") || start === true))) {
+            if (!was_permanent) element.dataset.n = Number(element.dataset.n) + 1;
             if (element.dataset.n == 1) element.classList.add("highlight");
+            element.classList.add(selected_colour);
         }
-        else if (permanent) {
+        else if (permanent && start === false) {
             element.dataset.n = Number(element.dataset.n) - 1;
             if (element.dataset.n <= 0) element.classList.remove("highlight");
+            element.classList.remove(selected_colour);
         } else {
             if (element.dataset.n == undefined || element.dataset.n == 0) {
-                if (start) {
-                    element.classList.add("highlight");
-                } else if (start == null) {
-                    element.classList.toggle("highlight");
+                if (start === true) {
+                    element.classList.add("highlight", selected_colour);
+                } else if (start === null) {
+                    element.classList.toggle("highlight", selected_colour);
                 } else {
-                    element.classList.remove("highlight");
+                    element.classList.remove("highlight", selected_colour);
                 }
             }
         }
     }
     container.querySelectorAll(".canvas").forEach(canvas => {
+        let selector = "";
         if (t.classList.contains("n-term")) {
-            var elements = canvas.querySelectorAll(":is(.a, .b, .c, .d, .v)");
-            for (let i = 0; i < elements.length; i++) {
-                toggle(elements[i]);
-            }
+            selector = ":is(.a, .b, .c, .d, .v)";
         } else if (t.classList.contains("c-term")) {
-            var elements = canvas.querySelectorAll(":is(.w, .x, .y, .z)");
-            for (let i = 0; i < elements.length; i++) {
-                toggle(elements[i]);
-            }
+            selector = ":is(.w, .x, .y, .z)";
         } else if (t.classList.contains("ion")) {
             var cl = t.classList[1];
-            var elements = canvas.querySelectorAll("." + cl);
-            for (let i = 0; i < elements.length; i++) {
-                toggle(elements[i]);
-            }
+            selector = "." + cl;
         } else if (t.classList.contains("name")) {
             var cl = Number(t.innerText) - 1;
-            var elements = canvas.querySelectorAll(".p" + cl);
-            for (let i = 0; i < elements.length; i++) {
-                toggle(elements[i]);
-            }
+            selector = ".p" + cl;
         } else {
-            var elements = canvas.querySelectorAll(".p" + t.dataset.pos);
-            for (let i = 0; i < elements.length; i++) {
-                toggle(elements[i]);
-            }
+            selector = ".p" + t.dataset.pos;
         }
+        console.log("selector", selector);
+        canvas.querySelectorAll(selector).forEach(element => toggle(element))
     })
 
     if (start || container.querySelector(".permanent") != null) {
@@ -612,7 +606,7 @@ function SpectrumGraphSettings(event) {
 /** Setup properties of the spectrum for publication
  * @param {Event} event
 */
-let selected_colour = "highlight";
+let selected_colour = "default";
 function PeptideSettings(event) {
     var t = event.target;
     let spectrum_wrapper = document.getElementById("spectrum-wrapper");
@@ -621,7 +615,10 @@ function PeptideSettings(event) {
     } else if (t.name == "highlight") {
         selected_colour = t.value;
     } else if (t.id == "clear-colour") {
-        spectrum_wrapper.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple"))
+        spectrum_wrapper.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight"))
+        spectrum_wrapper.querySelectorAll(".ion-series .permanent").forEach(item => item.classList.remove("permanent"))
+        spectrum_wrapper.querySelectorAll(".peak").forEach(item => { item.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight"); item.dataset.n = 0; })
+        spectrum_wrapper.querySelectorAll(".canvas").forEach(item => item.classList.remove("highlight"))
     }
 }
 
