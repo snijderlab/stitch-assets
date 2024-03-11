@@ -405,7 +405,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
                 element.classList.remove("select");
                 if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
                     element.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight");
-                    ToggleHighlight(element, true, !state, selected_colour);//, ".p" + pos[0] + "-" + pos[1]);
+                    ToggleHighlight(element, true, (selected_colour == "remove" ? false : !state), selected_colour);//, ".p" + pos[0] + "-" + pos[1]);
                     if (selected_colour != "remove") {
                         element.classList.toggle(selected_colour, !state);
                         element.classList.toggle("highlight", !state);
@@ -417,7 +417,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
     } else if (permanent) {
         let state = e.target.classList.contains(selected_colour);
         e.target.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight");
-        ToggleHighlight(e.target, true, !state, selected_colour);
+        ToggleHighlight(e.target, true, (selected_colour == "remove" ? false : !state), selected_colour);
         if (selected_colour != "remove") {
             e.target.classList.toggle(selected_colour, !state);
             e.target.classList.toggle("highlight", !state);
@@ -453,36 +453,51 @@ var highlight;
  * Toggle a highlight
  * @param {Element} t The target
  * @param {boolean} permanent If it will be applied permanently (true if clicked, false if hovered)
- * @param {boolean?} start If this is the apply (true) or clear (false) operation
+ * @param {boolean?} state If this is the apply (true) or clear (false) operation
  * @param {string} selected_colour For peptide highlights the colour selected or "default"
  */
-function ToggleHighlight(t, permanent, start, selected_colour) {
-    console.log("toggle_highlight", t, permanent, start, selected_colour);
-    let was_permanent = t.classList.contains("highlight");
-    if (permanent) t.classList.toggle("permanent");
+function ToggleHighlight(t, permanent, state, selected_colour) {
+    let current_state = t.classList.contains("permanent");
+    if (permanent) t.classList.toggle("permanent", state);
     if (t.classList.contains("permanent") && !permanent) return;
 
     highlight = t;
-    var container = t.parentElement.parentElement;
-    if (container.classList.contains("ion-series") || container.classList.contains("complex-peptide")) container = container.parentElement.parentElement;
+    var container = document.getElementById("spectrum-wrapper");
+
+    // Set the correct state for a single peak
     function toggle(element) {
+        // Make sure the n is set, this tracks the number of reasons why a peak should be highlighted
         if (element.dataset.n == undefined) element.dataset.n = 0;
         if (element.dataset.n < 0) element.dataset.n = 0;
+
+        // Clear any colour set for this peak
         element.classList.remove("red", "green", "blue", "yellow", "purple", "default");
-        if ((permanent && (t.classList.contains("permanent") || start === true))) {
-            if (!was_permanent) element.dataset.n = Number(element.dataset.n) + 1;
-            if (element.dataset.n == 1) element.classList.add("highlight");
-            element.classList.add(selected_colour);
-        }
-        else if (permanent && start === false) {
-            element.dataset.n = Number(element.dataset.n) - 1;
-            if (element.dataset.n <= 0) element.classList.remove("highlight");
-            element.classList.remove(selected_colour);
+
+        if (permanent) {
+            // A permanent highlight, where this position or ion type is clicked
+            if (state === true) {
+                // If this position in the peptide was already highlighted do not add one to n
+                if (current_state != state) element.dataset.n = Number(element.dataset.n) + 1;
+
+                // Set up the classes
+                if (element.dataset.n == 1) element.classList.add("highlight");
+                element.classList.add(selected_colour);
+            }
+            else if (state === false) {
+                if (current_state != state) element.dataset.n = Number(element.dataset.n) - 1;
+
+                // Set up the classes
+                if (element.dataset.n <= 0) element.classList.remove("highlight");
+                element.classList.remove(selected_colour);
+            } else {
+                console.error("When using 'permanent' the state should be set");
+            }
         } else {
+            // A temporary highlight, while hovering over this position or ion type
             if (element.dataset.n == undefined || element.dataset.n == 0) {
-                if (start === true) {
+                if (state === true) {
                     element.classList.add("highlight", selected_colour);
-                } else if (start === null) {
+                } else if (state === null) {
                     element.classList.toggle("highlight", selected_colour);
                 } else {
                     element.classList.remove("highlight", selected_colour);
@@ -490,6 +505,8 @@ function ToggleHighlight(t, permanent, start, selected_colour) {
             }
         }
     }
+
+    // Select all peaks for this operation
     container.querySelectorAll(".canvas").forEach(canvas => {
         let selector = "";
         if (t.classList.contains("n-term")) {
@@ -505,11 +522,11 @@ function ToggleHighlight(t, permanent, start, selected_colour) {
         } else {
             selector = ".p" + t.dataset.pos;
         }
-        console.log("selector", selector);
         canvas.querySelectorAll(selector).forEach(element => toggle(element))
     })
 
-    if (start || container.querySelector(".permanent") != null) {
+    // Set the state for the whole canvas (is there anything highlighted still)
+    if (state === true || container.querySelector(".permanent") != null) {
         container.querySelectorAll(".canvas").forEach(canvas => {
             canvas.classList.add("highlight");
         })
@@ -559,7 +576,6 @@ function ManualZoom(event) {
 function ManualZoomSpectrumGraph(event) {
     var min_y = Number(document.getElementById("spectrum-graph-y-min").value);
     var max_y = Number(document.getElementById("spectrum-graph-y-max").value);
-    console.log(max_y, min_y);
 
     document.getElementById("spectrum-wrapper")
         .querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_y, max_y));
@@ -638,7 +654,6 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.remove("legend-ion");
         spectrum_wrapper.classList.add("legend-peptide");
     } else if (cl == "unassigned") {
-        console.log(canvas.dataset)
         if (event.target.checked) { // Will be adding all background peaks
             spectrum_wrapper.classList.add('show-unassigned');
             if (Number(canvas.dataset.maxIntensity) == Number(canvas.dataset.initialMaxIntensityAssigned)) {
@@ -683,7 +698,6 @@ function SpectrumSettings(event) {
  * @param {String} parameter the class to toggle 
 */
 function SpectrumUpdateLabels(value, canvas, parameter) {
-    console.log(value, canvas)
     var style = window.getComputedStyle(canvas);
     var max = Number(style.getPropertyValue("--max-intensity"));
 
