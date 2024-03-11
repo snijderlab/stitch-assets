@@ -1910,6 +1910,10 @@ footer .version {
         align-items: center;
         grid-column: 1/3;
     }
+
+    &.legend-none {
+        --color: var(--color-halfway);
+    }
 }
 
 .spectrum .ion-series {
@@ -2307,7 +2311,7 @@ footer .version {
 }
 
 
-.spectrum:not(.legend-peptide) {
+.spectrum.legend-ion {
     & .a {
         --color: var(--color-blue);
     }
@@ -2478,7 +2482,7 @@ footer .version {
     }
 }
 
-.canvas .peak.highlight {
+.canvas .highlight {
     &.red {
         --color: var(--color-red);
     }
@@ -2821,7 +2825,8 @@ footer .version {
     }
 
 
-    &[data-show-label=true] span {
+    &[data-show-label=true] span,
+    &[data-show-label-manually=true] span {
         opacity: 1;
     }
 
@@ -2858,7 +2863,8 @@ footer .version {
     }
 
     &:not(.cut):hover::after,
-    &[data-show-masses=true]::after {
+    &[data-show-mass=true]::after,
+    &[data-show-mass-manually=true]::after {
         content: attr(data-label);
         color: var(--color);
         padding-left: calc(var(--stroke-spectrum) * 2);
@@ -2869,7 +2875,11 @@ footer .version {
     &.theoretical:not(:hover) span {
         display: none;
     }
+}
 
+.spectrum.force-show-label .peak,
+.spectrum.force-show-mass .peak {
+    cursor: crosshair;
 }
 
 .spectrum.show-unassigned .peak.unassigned {

@@ -357,20 +357,21 @@ function SpectrumSetUp() {
     }
 
     // Spectrum
-    var elements = document.querySelectorAll("#spectrum-wrapper .wrapper");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mousedown", spectrumDragStart)
-        elements[i].addEventListener("mousemove", spectrumDrag)
-        elements[i].addEventListener("mouseup", spectrumDragEnd)
-        elements[i].addEventListener("mouseout", spectrumDragOut)
-    }
-    var elements = document.querySelectorAll("#spectrum-wrapper .canvas-wrapper");
-    for (let i = 0; i < elements.length; i++) {
-        var d = elements[i].dataset;
+    document.querySelectorAll("#spectrum-wrapper .wrapper").forEach(element => {
+        element.addEventListener("mousedown", spectrumDragStart)
+        element.addEventListener("mousemove", spectrumDrag)
+        element.addEventListener("mouseup", spectrumDragEnd)
+        element.addEventListener("mouseout", spectrumDragOut)
+    })
+    document.querySelectorAll("#spectrum-wrapper .canvas-wrapper").forEach(element => {
+        var d = element.dataset;
         d.minMz = 0;
         d.maxMz = d.initialMaxMz;
         d.maxIntensity = d.initialMaxIntensity;
-    }
+    })
+    document.querySelectorAll("#spectrum-wrapper .peak:not(.fragment)").forEach(element => {
+        element.addEventListener("click", ForceShowLabels)
+    })
 
     // Spectrum graph
     var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-graph");
@@ -381,6 +382,28 @@ function SpectrumSetUp() {
     // Make the axes look nice
     UpdateSpectrumAxes(document.querySelector("#spectrum-wrapper .canvas-wrapper"));
 }
+
+/**
+ * Force show the labels of a peak (click event)
+ * @param {MouseEvent} e The event
+ */
+function ForceShowLabels(e) {
+    let spectrum = document.getElementById("spectrum-wrapper");
+    if (spectrum.classList.contains("force-show-label")) {
+        if ("showLabelManually" in e.target.dataset) {
+            delete e.target.dataset.showLabelManually;
+        } else {
+            e.target.dataset.showLabelManually = true;
+        }
+    } else if (spectrum.classList.contains("force-show-mass")) {
+        if ("showMassManually" in e.target.dataset) {
+            delete e.target.dataset.showMassManually;
+        } else {
+            e.target.dataset.showMassManually = true;
+        }
+    }
+}
+
 
 /**
  * @type {EventTarget}
@@ -634,6 +657,7 @@ function PeptideSettings(event) {
         spectrum_wrapper.querySelectorAll(".peptide>span").forEach(item => item.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight"))
         spectrum_wrapper.querySelectorAll(".ion-series .permanent").forEach(item => item.classList.remove("permanent"))
         spectrum_wrapper.querySelectorAll(".peak").forEach(item => { item.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight"); item.dataset.n = 0; })
+        spectrum_wrapper.querySelectorAll(".point").forEach(item => { item.classList.remove("red", "green", "blue", "yellow", "purple", "default", "highlight"); item.dataset.n = 0; })
         spectrum_wrapper.querySelectorAll(".canvas").forEach(item => item.classList.remove("highlight"))
     }
 }
@@ -642,19 +666,33 @@ function PeptideSettings(event) {
  * @param {Event} event
 */
 function SpectrumSettings(event) {
-    var cl = event.target.className;
+    var t = event.target;
+    var cl = t.className;
     let spectrum_wrapper = document.getElementById("spectrum-wrapper");
     let canvas = spectrum_wrapper.querySelector(".canvas-wrapper");
     if (cl == "theoretical") {
         spectrum_wrapper.classList.toggle("theoretical");
-    } else if (event.target.value == "ion") {
+    } else if (t.id == "peak-colour-ion") {
         spectrum_wrapper.classList.add("legend-ion");
-        spectrum_wrapper.classList.remove("legend-peptide");
-    } else if (event.target.value == "peptide") {
-        spectrum_wrapper.classList.remove("legend-ion");
+        spectrum_wrapper.classList.remove("legend-peptide", "legend-none");
+    } else if (t.id == "peak-colour-peptide") {
+        spectrum_wrapper.classList.remove("legend-ion", "legend-none");
         spectrum_wrapper.classList.add("legend-peptide");
+    } else if (t.id == "peak-colour-none") {
+        spectrum_wrapper.classList.remove("legend-ion", "legend-peptide");
+        spectrum_wrapper.classList.add("legend-none");
+    } else if (t.id == "force-show-none") {
+        spectrum_wrapper.classList.remove("force-show-label", "force-show-mass");
+    } else if (t.id == "force-show-label") {
+        spectrum_wrapper.classList.add("force-show-label");
+        spectrum_wrapper.classList.remove("force-show-mass");
+    } else if (t.id == "force-show-mass") {
+        spectrum_wrapper.classList.remove("force-show-label");
+        spectrum_wrapper.classList.add("force-show-mass");
+    } else if (t.id == "force-show-clear") {
+        spectrum_wrapper.querySelectorAll(".peak").forEach(element => { delete element.dataset.showLabelManually; delete element.dataset.showMassManually; });
     } else if (cl == "unassigned") {
-        if (event.target.checked) { // Will be adding all background peaks
+        if (t.checked) { // Will be adding all background peaks
             spectrum_wrapper.classList.add('show-unassigned');
             if (Number(canvas.dataset.maxIntensity) == Number(canvas.dataset.initialMaxIntensityAssigned)) {
                 canvas.dataset.maxIntensity = canvas.dataset.initialMaxIntensity;
@@ -669,29 +707,27 @@ function SpectrumSettings(event) {
                 UpdateSpectrumAxes(canvas)
             }
         }
-    } else if (event.target.id == "spectrum-mz-min") {
-        canvas.dataset.minMz = Number(event.target.value);
+    } else if (t.id == "spectrum-mz-min") {
+        canvas.dataset.minMz = Number(t.value);
         canvas.style.setProperty("--min-mz", canvas.dataset.minMz);
         UpdateSpectrumAxes(canvas)
-    } else if (event.target.id == "spectrum-mz-max") {
-        canvas.dataset.maxMz = Number(event.target.value);
+    } else if (t.id == "spectrum-mz-max") {
+        canvas.dataset.maxMz = Number(t.value);
         canvas.style.setProperty("--max-mz", canvas.dataset.maxMz);
         UpdateSpectrumAxes(canvas)
-    } else if (event.target.id == "spectrum-intensity-max") {
-        canvas.dataset.maxIntensity = Number(event.target.value);
+    } else if (t.id == "spectrum-intensity-max") {
+        canvas.dataset.maxIntensity = Number(t.value);
         canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
         UpdateSpectrumAxes(canvas)
-    } else if (event.target.type == "range" || event.target.type == "number") { // Peak labels + masses
+    } else if (t.type == "range" || t.type == "number") { // Peak labels + masses
         var ele = document.getElementById(
-            (event.target.type == "number") ?
-                event.target.id.substring(0, event.target.id.length - 6)
-                : event.target.id + "-value");
-        ele.value = event.target.value;
+            (t.type == "number") ?
+                t.id.substring(0, t.id.length - 6)
+                : t.id + "-value");
+        ele.value = t.value;
 
-        var label = document.getElementById("spectrum-label-value").value;
-        var masses = document.getElementById("spectrum-masses-value").value;
-        spectrum_wrapper.querySelectorAll(".spectrum").forEach(
-            canvas => SpectrumUpdateLabels(label, masses, canvas))
+        spectrum_wrapper.querySelectorAll(".canvas-spectrum").forEach(
+            canvas => SpectrumUpdateLabels(canvas))
     }
 }
 
@@ -700,7 +736,10 @@ function SpectrumSettings(event) {
  * @param {Element} canvas the canvas to work on
  * @param {String} parameter the class to toggle 
 */
-function SpectrumUpdateLabels(label_value, masses_value, canvas) {
+function SpectrumUpdateLabels(canvas) {
+    var label_value = document.getElementById("spectrum-label-value").value;
+    var masses_value = document.getElementById("spectrum-masses-value").value;
+
     var style = window.getComputedStyle(canvas);
     var max = Number(style.getPropertyValue("--max-intensity"));
 
@@ -714,9 +753,9 @@ function SpectrumUpdateLabels(label_value, masses_value, canvas) {
                 peak.dataset.showLabel = "";
             }
             if (masses_value != 0 && v <= masses_value) {
-                peak.dataset.showMasses = "true";
+                peak.dataset.showMass = "true";
             } else {
-                peak.dataset.showMasses = "";
+                peak.dataset.showMass = "";
             }
         })
         canvas.classList.remove("updating");
@@ -864,7 +903,7 @@ function Zoom(canvas, min, max, maxI) {
     document.getElementById("spectrum-mz-max").value = fancyRound(max, min, max);
     document.getElementById("spectrum-intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
 
-    SpectrumUpdateLabels(document.getElementById("spectrum-label-value").value, document.getElementById("spectrum-masses-value").value, canvas);
+    SpectrumUpdateLabels(canvas);
 
     UpdateSpectrumAxes(canvas)
 }
@@ -902,6 +941,8 @@ function spectrumZoomOut(event) {
         min = d.minMz;
         max = d.maxMz;
         maxI = d.maxIntensity;
+
+        SpectrumUpdateLabels(canvas.querySelector(".canvas-spectrum"));
     });
     spectrum.querySelector(".mz-min").value = fancyRound(max, min, min);
     spectrum.querySelector(".mz-max").value = fancyRound(max, min, max);
