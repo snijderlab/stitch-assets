@@ -687,8 +687,11 @@ function SpectrumSettings(event) {
                 event.target.id.substring(0, event.target.id.length - 6)
                 : event.target.id + "-value");
         ele.value = event.target.value;
-        spectrum_wrapper.querySelectorAll(".canvas").forEach(
-            canvas => SpectrumUpdateLabels(Number(event.target.value), canvas, event.target.id.includes("label") ? "label" : "mass-label"))
+
+        var label = document.getElementById("spectrum-label-value").value;
+        var masses = document.getElementById("spectrum-masses-value").value;
+        spectrum_wrapper.querySelectorAll(".spectrum").forEach(
+            canvas => SpectrumUpdateLabels(label, masses, canvas))
     }
 }
 
@@ -697,19 +700,27 @@ function SpectrumSettings(event) {
  * @param {Element} canvas the canvas to work on
  * @param {String} parameter the class to toggle 
 */
-function SpectrumUpdateLabels(value, canvas, parameter) {
+function SpectrumUpdateLabels(label_value, masses_value, canvas) {
     var style = window.getComputedStyle(canvas);
     var max = Number(style.getPropertyValue("--max-intensity"));
 
-    var peaks = canvas.children;
-    for (let i = 0; i < peaks.length; i++) {
-        var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
-        if (v > max * (100 - value) / 100) {
-            peaks[i].classList.add(parameter);
-        } else {
-            peaks[i].classList.remove(parameter);
-        }
-    }
+    canvas.classList.add("updating");
+    setTimeout(() => {
+        canvas.querySelectorAll(".peak").forEach(peak => {
+            var v = 100 - Number(window.getComputedStyle(peak).getPropertyValue("--intensity")) / max * 100;
+            if (label_value != 0 && v <= label_value) {
+                peak.dataset.showLabel = "true";
+            } else {
+                peak.dataset.showLabel = "";
+            }
+            if (masses_value != 0 && v <= masses_value) {
+                peak.dataset.showMasses = "true";
+            } else {
+                peak.dataset.showMasses = "";
+            }
+        })
+        canvas.classList.remove("updating");
+    }, 1)
 }
 
 var startPoint;
@@ -852,6 +863,8 @@ function Zoom(canvas, min, max, maxI) {
     document.getElementById("spectrum-mz-min").value = fancyRound(max, min, min);
     document.getElementById("spectrum-mz-max").value = fancyRound(max, min, max);
     document.getElementById("spectrum-intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
+
+    SpectrumUpdateLabels(document.getElementById("spectrum-label-value").value, document.getElementById("spectrum-masses-value").value, canvas);
 
     UpdateSpectrumAxes(canvas)
 }

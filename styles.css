@@ -2788,7 +2788,7 @@ footer .version {
     left: calc(100% * (var(--mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
     width: var(--stroke-spectrum);
     background-color: var(--color);
-    transition: opacity 125ms;
+    /* transition: opacity 125ms; */
     z-index: 1;
 
     &:hover {
@@ -2821,7 +2821,7 @@ footer .version {
     }
 
 
-    &.label span {
+    &[data-show-label=true] span {
         opacity: 1;
     }
 
@@ -2858,7 +2858,7 @@ footer .version {
     }
 
     &:not(.cut):hover::after,
-    &.mass-label::after {
+    &[data-show-masses=true]::after {
         content: attr(data-label);
         color: var(--color);
         padding-left: calc(var(--stroke-spectrum) * 2);
