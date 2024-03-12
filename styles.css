@@ -145,6 +145,15 @@ sup+sub {
     margin-left: -1ch;
 }
 
+dialog {
+    border: 2px solid var(--color-foreground);
+    background-color: var(--color-background);
+}
+
+output {
+    margin-left: 1rem;
+}
+
 .report {
     padding: 0 1em;
 }
@@ -196,6 +205,10 @@ sup+sub {
 }
 
 /* Input general */
+
+.block {
+    display: block
+}
 
 @layer base {
     button {
@@ -271,16 +284,52 @@ sup+sub {
         }
     }
 
-    input[type=checkbox]:not([switch]) {
-        display: none;
+    input[type=checkbox]:not([switch]),
+    :not(.select-box)>input[type=radio] {
+        border-radius: 5%;
+        background-color: var(--color-light);
+        border: 2px solid var(--color-halfway);
+        background-color: var(--color-halfway);
+        box-shadow: none;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 1rem;
+        width: 1rem;
+        vertical-align: middle;
+        margin-right: 1rem;
+
+
+        &:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+
+            &::before {
+                content: "";
+                height: calc(.5rem - 2px);
+                width: calc(.5rem - 2px);
+                background-color: var(--color-background);
+                float: none;
+                margin: 0;
+                top: calc(.25rem - 1px);
+                left: calc(.25rem - 1px);
+                display: block;
+                position: relative;
+            }
+        }
+
+        &:focus-visible,
+        &:hover {
+            box-shadow: none;
+            border-color: var(--color-halfway-fg);
+        }
     }
 
-    input[type="radio"] {
-        display: none;
+    :not(.select-box)>input[type=radio],
+    :not(.select-box)>input[type=radio]:checked::before {
+        border-radius: 50%;
     }
-}
 
-@layer base1 {
     input[type=checkbox][switch] {
         appearance: none;
         width: 3ch;
@@ -334,6 +383,10 @@ sup+sub {
         padding-bottom: 1px;
         width: max-content;
         cursor: pointer;
+
+        & input {
+            display: none;
+        }
 
         &:hover {
             --_clr-border: var(--color-halfway-fg);
