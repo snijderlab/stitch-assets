@@ -1303,22 +1303,6 @@ summary {
 }
 
 
-/* footer */
-
-footer {
-    margin: 1em;
-}
-
-footer p {
-    color: var(--color-halfway);
-}
-
-footer .version {
-    color: var(--color-foreground);
-    user-select: all;
-}
-
-
 /* ScoreTree */
 
 .phylogenetic-tree .container {
