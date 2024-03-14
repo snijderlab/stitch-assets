@@ -141,7 +141,7 @@ sub {
     font-family: "Roboto Mono", monospace;
 }
 
-sup+sub {
+.spectrum sup+sub {
     margin-left: -1ch;
 }
 
