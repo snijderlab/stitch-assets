@@ -204,6 +204,13 @@ output {
     font-style: italic;
 }
 
+.formula {
+    font-family: monospace;
+    border: 2px solid var(--color-halfway-bg);
+    border-radius: 6px;
+    padding: 2px;
+}
+
 /* Input general */
 
 .block {
