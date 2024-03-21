@@ -423,7 +423,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
         let end = e.target.dataset.pos.split("-");
         if (start[0] == end[0]) {
             let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
-            document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
+            document.querySelectorAll(".spectrum .peptide>span[title]").forEach(element => {
                 let pos = element.dataset.pos.split("-");
                 element.classList.remove("select");
                 if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
@@ -453,7 +453,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
         let end = e.target.dataset.pos.split("-");
         if (start[0] == end[0]) {
             let range = [Math.min(Number(start[1]), Number(end[1])), Math.max(Number(start[1]), Number(end[1]))];
-            document.querySelectorAll(".spectrum .peptide>span").forEach(element => {
+            document.querySelectorAll(".spectrum .peptide>span[title]").forEach(element => {
                 let pos = element.dataset.pos.split("-");
                 if (pos[0] == start[0] && Number(pos[1]) >= range[0] && Number(pos[1]) <= range[1]) {
                     element.classList.add("select");
