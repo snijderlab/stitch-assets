@@ -622,6 +622,8 @@ function GraphicsSettings(event) {
         spectrum_wrapper.style.setProperty("--fs-spectrum", event.target.value);
     } else if (cl == "stroke-spectrum") {
         spectrum_wrapper.style.setProperty("--stroke-spectrum", event.target.value);
+    } else if (cl == "stroke-spectrum-unassigned") {
+        spectrum_wrapper.style.setProperty("--stroke-spectrum-unassigned", event.target.value);
     }
 }
 

@@ -1946,6 +1946,7 @@ summary {
     --stroke-peptide: 2px;
     --fs-spectrum: 1rem;
     --stroke-spectrum: 2px;
+    --stroke-spectrum-unassigned: 1px;
     --width: 100%;
     --height: 250px;
 
@@ -2360,12 +2361,12 @@ summary {
         --color: var(--color-blue);
     }
 
-    & .b,
-    & .glycan {
+    & .b {
         --color: var(--color-green);
     }
 
-    & .c {
+    & .c,
+    & .Y {
         --color: var(--color-red);
     }
 
@@ -2394,8 +2395,12 @@ summary {
         --color: var(--color-red-dark);
     }
 
-    & .multi {
+    & .oxonium {
         --color: var(--color-red-light);
+    }
+
+    & .multi {
+        --color: var(--color-yellow);
     }
 
     & .precursor {
@@ -2855,6 +2860,7 @@ summary {
     &.unassigned {
         display: none;
         z-index: 0;
+        width: var(--stroke-spectrum-unassigned);
     }
 
     &>span {
