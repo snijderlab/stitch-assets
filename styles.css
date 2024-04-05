@@ -272,6 +272,11 @@ output {
         select,
         textarea,
         .peptide-input) {
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 0;
+        padding: .2rem;
+        cursor: pointer;
         border: 2px solid var(--color-halfway);
         cursor: pointer;
         background: var(--color-background);
