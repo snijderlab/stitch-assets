@@ -344,8 +344,8 @@ output {
 
     input[type=checkbox][switch] {
         appearance: none;
-        width: 3ch;
-        height: 2ch;
+        width: 2.25ch;
+        height: 1.25ch;
         box-sizing: content-box;
         border-radius: 1000px;
         background: var(--color-halfway);
