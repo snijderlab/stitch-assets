@@ -2362,7 +2362,9 @@ summary {
 
 
 .spectrum.legend-ion {
-    & .a {
+
+    & .a,
+    & .Y {
         --color: var(--color-blue);
     }
 
@@ -2370,8 +2372,7 @@ summary {
         --color: var(--color-green);
     }
 
-    & .c,
-    & .Y {
+    & .c {
         --color: var(--color-red);
     }
 
@@ -2401,7 +2402,7 @@ summary {
     }
 
     & .oxonium {
-        --color: var(--color-red-light);
+        --color: var(--color-blue-light);
     }
 
     & .multi {
