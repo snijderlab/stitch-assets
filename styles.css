@@ -2243,7 +2243,7 @@ summary {
 
     &>.name {
         border: 2px solid var(--color-foreground);
-        border-radius: 50%;
+        border-radius: 100000px;
         text-align: center;
         margin: auto .5em auto 0;
         padding: 0 .25em !important;
@@ -2277,6 +2277,10 @@ summary {
 
         &.modification {
             color: var(--color-blue);
+        }
+
+        &.cross-link {
+            color: var(--color-green);
         }
 
         &.possible-modification {
@@ -2347,6 +2351,19 @@ summary {
 
         &.term::before {
             top: calc(50% - var(--stroke-peptide));
+        }
+    }
+
+    &>.cross-link {
+        &::before {
+            content: attr(data-cross-links);
+            display: block;
+            position: absolute;
+            top: calc(-1rem - 3 * var(--spacing));
+            left: calc(-1 * var(--spacing));
+            width: fit-content;
+            height: 1rem;
+            font-size: calc(0.75 * var(--fs-peptide));
         }
     }
 }
