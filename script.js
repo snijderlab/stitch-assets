@@ -289,9 +289,9 @@ function SpectrumSetUp() {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("click", GraphicsSettings);
     }
-    document.querySelectorAll("#spectrum-wrapper .spectrum-graph-settings input")
+    document.querySelectorAll("#spectrum-wrapper .error-graph-settings input")
         .forEach(ele => ele.addEventListener("change", SpectrumGraphSettings));
-    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-graph-settings .manual-zoom input");
+    var elements = document.querySelectorAll("#spectrum-wrapper .error-graph-settings .manual-zoom input");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoomSpectrumGraph);
     }
@@ -374,7 +374,7 @@ function SpectrumSetUp() {
     })
 
     // Spectrum graph
-    var elements = document.querySelectorAll("#spectrum-wrapper .spectrum-graph");
+    var elements = document.querySelectorAll("#spectrum-wrapper .error-graph");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mousemove", SpectrumGraphMouseMove)
     }
@@ -468,7 +468,7 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
 function SetUpSpectrumInterface() {
     SpectrumSetUp();
     var event = new Event('change');
-    document.getElementById("spectrum-graph-y-max").dispatchEvent(event);
+    document.getElementById("error-graph-y-max").dispatchEvent(event);
 }
 
 var highlight;
@@ -597,11 +597,11 @@ function ManualZoom(event) {
  * @param {Event} event
 */
 function ManualZoomSpectrumGraph(event) {
-    var min_y = Number(document.getElementById("spectrum-graph-y-min").value);
-    var max_y = Number(document.getElementById("spectrum-graph-y-max").value);
+    var min_y = Number(document.getElementById("error-graph-y-min").value);
+    var max_y = Number(document.getElementById("error-graph-y-max").value);
 
     document.getElementById("spectrum-wrapper")
-        .querySelectorAll(".spectrum-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_y, max_y));
+        .querySelectorAll(".error-graph").forEach(canvas => ZoomSpectrumGraph(canvas, min_y, max_y));
 }
 
 /** Setup properties of the spectrum for publication
@@ -633,14 +633,14 @@ function GraphicsSettings(event) {
 function SpectrumGraphSettings(event) {
     var id = event.target.id;
     let spectrum_wrapper = document.getElementById("spectrum-wrapper");
-    if (id == "spectrum-graph-type-absolute") {
-        spectrum_wrapper.classList.toggle("spectrum-graph-absolute");
-        spectrum_wrapper.classList.remove("spectrum-graph-relative");
-    } else if (id == "spectrum-graph-type-relative") {
-        spectrum_wrapper.classList.remove("spectrum-graph-absolute");
-        spectrum_wrapper.classList.toggle("spectrum-graph-relative");
+    if (id == "error-graph-type-absolute") {
+        spectrum_wrapper.classList.toggle("error-graph-absolute");
+        spectrum_wrapper.classList.remove("error-graph-relative");
+    } else if (id == "error-graph-type-relative") {
+        spectrum_wrapper.classList.remove("error-graph-absolute");
+        spectrum_wrapper.classList.toggle("error-graph-relative");
     } else if (id == "intensity") {
-        spectrum_wrapper.classList.toggle("spectrum-graph-intensity");
+        spectrum_wrapper.classList.toggle("error-graph-intensity");
     }
 }
 
@@ -919,8 +919,8 @@ function ZoomSpectrumGraph(canvas, min_y, max_y) {
     spectrum_graph.querySelector(".y-min").value = fancyRound(max_y, min_y, min_y);
     spectrum_graph.querySelector(".y-max").value = fancyRound(max_y, min_y, max_y);
 
-    spectrum_graph.parentElement.querySelector('.spectrum-graph-y-axis .min').innerText = fancyRound(max_y, min_y, min_y);
-    spectrum_graph.parentElement.querySelector('.spectrum-graph-y-axis .max').innerText = fancyRound(max_y, min_y, max_y);
+    spectrum_graph.parentElement.querySelector('.error-graph-y-axis .min').innerText = fancyRound(max_y, min_y, min_y);
+    spectrum_graph.parentElement.querySelector('.error-graph-y-axis .max').innerText = fancyRound(max_y, min_y, max_y);
 
     if (max_y > 0 && min_y > 0) spectrum_graph.querySelector(".x-axis").classList.add("hug-bottom");
     else spectrum_graph.querySelector(".x-axis").classList.remove("hug-bottom");
@@ -968,8 +968,8 @@ function UpdateSpectrumAxes(canvas_wrapper) {
         ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
     }
     // update spectrum graph axes
-    canvas_wrapper.parentElement.querySelector('.spectrum-graph .x-axis .min').innerText = fancyRound(max, min, min);
-    canvas_wrapper.parentElement.querySelector('.spectrum-graph .x-axis .max').innerText = fancyRound(max, min, max);
+    canvas_wrapper.parentElement.querySelector('.error-graph .x-axis .min').innerText = fancyRound(max, min, min);
+    canvas_wrapper.parentElement.querySelector('.error-graph .x-axis .max').innerText = fancyRound(max, min, max);
 
     // Update y-axis
     var axis = canvas_wrapper.parentElement.getElementsByClassName("y-axis")[0];
