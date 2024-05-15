@@ -897,7 +897,6 @@ input:not(:checked)+.collapsible {
             content: "";
             right: 0;
             left: 0;
-            top: 0;
             height: 2ch;
             position: absolute;
         }
