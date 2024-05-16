@@ -1,4 +1,5 @@
 "use strict";
+const { invoke } = window.__TAURI__.tauri;
 var assets_folder = undefined;
 
 function sortTable(id, column_number, type) {
@@ -381,6 +382,9 @@ function SpectrumSetUp() {
 
     // Make the axes look nice
     UpdateSpectrumAxes(document.querySelector("#spectrum-wrapper .canvas-wrapper"));
+
+    // Update error graph
+    UpdateErrorGraph()
 }
 
 /**
@@ -465,7 +469,8 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
     }
 }
 
-function SetUpSpectrumInterface() {
+export function SetUpSpectrumInterface() {
+    document.getElementById("spectrum-wrapper").classList.add("error-graph-relative");
     SpectrumSetUp();
     var event = new Event('change');
     document.getElementById("error-graph-y-max").dispatchEvent(event);
@@ -670,81 +675,88 @@ function UpdateErrorGraph() {
         "peaks as compared to " +
         (assigned_mode ? "the annotation" : "the closest theoretical ion") +
         " (" + (relative ? "ppm" : "Da") + ")";
+    let points_y = Array();
 
     points.forEach((point) => {
-        console.log(point.dataset);
         let y = Infinity;
         let label = "";
         if (assigned_mode) {
             if (relative) {
-                y = point.dataset.aRel;
+                y = Number(point.dataset.aRel);
             } else {
-                y = point.dataset.aAbs;
+                y = Number(point.dataset.aAbs);
             }
         } else {
             if (!show_assigned && point.dataset.aRel != "undefined") {
                 // hide
             } else if (relative) {
-                if (use_a && Math.abs(y) > Math.abs(point.dataset.uARelValue)) {
-                    y = point.dataset.uARelValue;
+                if (use_a && Math.abs(y) > Math.abs(Number(point.dataset.uARelValue))) {
+                    y = Number(point.dataset.uARelValue);
                     label = point.dataset.uARelFragment
                 }
-                if (use_b && Math.abs(y) > Math.abs(point.dataset.uBRelValue)) {
-                    y = point.dataset.uBRelValue;
+                if (use_b && Math.abs(y) > Math.abs(Number(point.dataset.uBRelValue))) {
+                    y = Number(point.dataset.uBRelValue);
                     label = point.dataset.uBRelFragment
                 }
-                if (use_c && Math.abs(y) > Math.abs(point.dataset.uCRelValue)) {
-                    y = point.dataset.uCRelValue;
+                if (use_c && Math.abs(y) > Math.abs(Number(point.dataset.uCRelValue))) {
+                    y = Number(point.dataset.uCRelValue);
                     label = point.dataset.uCRelFragment
                 }
-                if (use_x && Math.abs(y) > Math.abs(point.dataset.uXRelValue)) {
-                    y = point.dataset.uXRelValue;
+                if (use_x && Math.abs(y) > Math.abs(Number(point.dataset.uXRelValue))) {
+                    y = Number(point.dataset.uXRelValue);
                     label = point.dataset.uXRelFragment
                 }
-                if (use_y && Math.abs(y) > Math.abs(point.dataset.uYRelValue)) {
-                    y = point.dataset.uYRelValue;
+                if (use_y && Math.abs(y) > Math.abs(Number(point.dataset.uYRelValue))) {
+                    y = Number(point.dataset.uYRelValue);
                     label = point.dataset.uYRelFragment
                 }
-                if (use_z && Math.abs(y) > Math.abs(point.dataset.uZRelValue)) {
-                    y = point.dataset.uZRelValue;
+                if (use_z && Math.abs(y) > Math.abs(Number(point.dataset.uZRelValue))) {
+                    y = Number(point.dataset.uZRelValue);
                     label = point.dataset.uZRelFragment
                 }
             } else {
-                if (use_a && Math.abs(y) > Math.abs(point.dataset.uAAbsValue)) {
-                    y = point.dataset.uAAbsValue;
+                if (use_a && Math.abs(y) > Math.abs(Number(point.dataset.uAAbsValue))) {
+                    y = Number(point.dataset.uAAbsValue);
                     label = point.dataset.uAAbsFragment
                 }
-                if (use_b && Math.abs(y) > Math.abs(point.dataset.uBAbsValue)) {
-                    y = point.dataset.uBAbsValue;
+                if (use_b && Math.abs(y) > Math.abs(Number(point.dataset.uBAbsValue))) {
+                    y = Number(point.dataset.uBAbsValue);
                     label = point.dataset.uBAbsFragment
                 }
-                if (use_c && Math.abs(y) > Math.abs(point.dataset.uCAbsValue)) {
-                    y = point.dataset.uCAbsValue;
+                if (use_c && Math.abs(y) > Math.abs(Number(point.dataset.uCAbsValue))) {
+                    y = Number(point.dataset.uCAbsValue);
                     label = point.dataset.uCAbsFragment
                 }
-                if (use_x && Math.abs(y) > Math.abs(point.dataset.uXAbsValue)) {
-                    y = point.dataset.uXAbsValue;
+                if (use_x && Math.abs(y) > Math.abs(Number(point.dataset.uXAbsValue))) {
+                    y = Number(point.dataset.uXAbsValue);
                     label = point.dataset.uXAbsFragment
                 }
-                if (use_y && Math.abs(y) > Math.abs(point.dataset.uYAbsValue)) {
-                    y = point.dataset.uYAbsValue;
+                if (use_y && Math.abs(y) > Math.abs(Number(point.dataset.uYAbsValue))) {
+                    y = Number(point.dataset.uYAbsValue);
                     label = point.dataset.uYAbsFragment
                 }
-                if (use_z && Math.abs(y) > Math.abs(point.dataset.uZAbsValue)) {
-                    y = point.dataset.uZAbsValue;
+                if (use_z && Math.abs(y) > Math.abs(Number(point.dataset.uZAbsValue))) {
+                    y = Number(point.dataset.uZAbsValue);
                     label = point.dataset.uZAbsFragment
                 }
             }
         }
-        if (y == "undefined" || y == Infinity) {
+        if (Number.isNaN(y) || y == Infinity) {
             point.classList.toggle("hidden", true);
         } else {
             point.classList.toggle("hidden", false);
             point.style.setProperty("--y", y);
             point.dataset.label = label;
+            points_y.push(y);
         }
     })
 
+    // Call 
+    invoke("density_graph", { data: points_y }).then((result) => {
+        document.getElementById("error-graph-density").innerHTML = result;
+    }).catch((error) => {
+        console.error("density estimation wrong", error)
+    })
 }
 
 /** Setup properties of the spectrum for publication
