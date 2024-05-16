@@ -290,7 +290,7 @@ function SpectrumSetUp() {
         elements[i].addEventListener("click", GraphicsSettings);
     }
     document.querySelectorAll("#spectrum-wrapper .error-graph-settings input")
-        .forEach(ele => ele.addEventListener("change", SpectrumGraphSettings));
+        .forEach(ele => ele.addEventListener("change", ErrorGraphSettings));
     var elements = document.querySelectorAll("#spectrum-wrapper .error-graph-settings .manual-zoom input");
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("change", ManualZoomSpectrumGraph);
@@ -630,18 +630,121 @@ function GraphicsSettings(event) {
 /** Setup properties of the spectrum for publication
  * @param {Event} event
 */
-function SpectrumGraphSettings(event) {
+function ErrorGraphSettings(event) {
     var id = event.target.id;
     let spectrum_wrapper = document.getElementById("spectrum-wrapper");
-    if (id == "error-graph-type-absolute") {
+    if (id == "error-graph-y-type-absolute") {
         spectrum_wrapper.classList.toggle("error-graph-absolute");
         spectrum_wrapper.classList.remove("error-graph-relative");
-    } else if (id == "error-graph-type-relative") {
+        UpdateErrorGraph()
+    } else if (id == "error-graph-y-type-relative") {
         spectrum_wrapper.classList.remove("error-graph-absolute");
         spectrum_wrapper.classList.toggle("error-graph-relative");
-    } else if (id == "intensity") {
+        UpdateErrorGraph()
+    } else if (id == "error-graph-intensity") {
         spectrum_wrapper.classList.toggle("error-graph-intensity");
+    } else {
+        UpdateErrorGraph()
     }
+}
+
+/**
+ * Update for the whole error graph the --y values for all points
+ */
+function UpdateErrorGraph() {
+    let spectrum_wrapper = document.getElementById("spectrum-wrapper");
+    let graph = document.getElementById("error-graph");
+    let points = graph.querySelectorAll(".point");
+    let relative = spectrum_wrapper.classList.contains("error-graph-relative");
+    let assigned_mode = document.getElementById("error-graph-x-type-assigned").checked;
+    let use_a = document.getElementById("error-graph-ion-a").checked;
+    let use_b = document.getElementById("error-graph-ion-b").checked;
+    let use_c = document.getElementById("error-graph-ion-c").checked;
+    let use_x = document.getElementById("error-graph-ion-x").checked;
+    let use_y = document.getElementById("error-graph-ion-y").checked;
+    let use_z = document.getElementById("error-graph-ion-z").checked;
+    let show_assigned = document.getElementById("error-graph-show-assigned").checked;
+    document.getElementById("error-graph-y-title").innerText =
+        "The error for all " +
+        (assigned_mode ? "assigned " : (show_assigned ? "" : "unassigned ")) +
+        "peaks as compared to " +
+        (assigned_mode ? "the annotation" : "the closest theoretical ion") +
+        " (" + (relative ? "ppm" : "Da") + ")";
+
+    points.forEach((point) => {
+        console.log(point.dataset);
+        let y = Infinity;
+        let label = "";
+        if (assigned_mode) {
+            if (relative) {
+                y = point.dataset.aRel;
+            } else {
+                y = point.dataset.aAbs;
+            }
+        } else {
+            if (!show_assigned && point.dataset.aRel != "undefined") {
+                // hide
+            } else if (relative) {
+                if (use_a && Math.abs(y) > Math.abs(point.dataset.uARelValue)) {
+                    y = point.dataset.uARelValue;
+                    label = point.dataset.uARelFragment
+                }
+                if (use_b && Math.abs(y) > Math.abs(point.dataset.uBRelValue)) {
+                    y = point.dataset.uBRelValue;
+                    label = point.dataset.uBRelFragment
+                }
+                if (use_c && Math.abs(y) > Math.abs(point.dataset.uCRelValue)) {
+                    y = point.dataset.uCRelValue;
+                    label = point.dataset.uCRelFragment
+                }
+                if (use_x && Math.abs(y) > Math.abs(point.dataset.uXRelValue)) {
+                    y = point.dataset.uXRelValue;
+                    label = point.dataset.uXRelFragment
+                }
+                if (use_y && Math.abs(y) > Math.abs(point.dataset.uYRelValue)) {
+                    y = point.dataset.uYRelValue;
+                    label = point.dataset.uYRelFragment
+                }
+                if (use_z && Math.abs(y) > Math.abs(point.dataset.uZRelValue)) {
+                    y = point.dataset.uZRelValue;
+                    label = point.dataset.uZRelFragment
+                }
+            } else {
+                if (use_a && Math.abs(y) > Math.abs(point.dataset.uAAbsValue)) {
+                    y = point.dataset.uAAbsValue;
+                    label = point.dataset.uAAbsFragment
+                }
+                if (use_b && Math.abs(y) > Math.abs(point.dataset.uBAbsValue)) {
+                    y = point.dataset.uBAbsValue;
+                    label = point.dataset.uBAbsFragment
+                }
+                if (use_c && Math.abs(y) > Math.abs(point.dataset.uCAbsValue)) {
+                    y = point.dataset.uCAbsValue;
+                    label = point.dataset.uCAbsFragment
+                }
+                if (use_x && Math.abs(y) > Math.abs(point.dataset.uXAbsValue)) {
+                    y = point.dataset.uXAbsValue;
+                    label = point.dataset.uXAbsFragment
+                }
+                if (use_y && Math.abs(y) > Math.abs(point.dataset.uYAbsValue)) {
+                    y = point.dataset.uYAbsValue;
+                    label = point.dataset.uYAbsFragment
+                }
+                if (use_z && Math.abs(y) > Math.abs(point.dataset.uZAbsValue)) {
+                    y = point.dataset.uZAbsValue;
+                    label = point.dataset.uZAbsFragment
+                }
+            }
+        }
+        if (y == "undefined" || y == Infinity) {
+            point.classList.toggle("hidden", true);
+        } else {
+            point.classList.toggle("hidden", false);
+            point.style.setProperty("--y", y);
+            point.dataset.label = label;
+        }
+    })
+
 }
 
 /** Setup properties of the spectrum for publication
