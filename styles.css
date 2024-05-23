@@ -209,6 +209,11 @@ output {
     border: 2px solid var(--color-halfway-bg);
     border-radius: 6px;
     padding: 2px;
+    user-select: all;
+
+    &.empty {
+        color: var(--color-halfway-fg);
+    }
 }
 
 /* Input general */
@@ -880,7 +885,7 @@ input:not(:checked)+.collapsible {
         content: "+";
     }
 
-    & .collapsible-content {
+    & *:not(:first-child):not(legend) {
         display: none;
     }
 }
