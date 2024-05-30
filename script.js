@@ -466,6 +466,12 @@ function SequenceElementEvent(e, permanent, turn_on = null) {
                 }
             })
         }
+    } else if (sequence_element_start == undefined && e.type == "mouseenter") {
+        let state = e.target.classList.contains(selected_colour);
+        ToggleHighlight(e.target, false, true, selected_colour);
+    } else if (sequence_element_start == undefined && e.type == "mouseleave") {
+        let state = e.target.classList.contains(selected_colour);
+        ToggleHighlight(e.target, false, false, selected_colour);
     }
 }
 
@@ -545,8 +551,7 @@ function ToggleHighlight(t, permanent, state, selected_colour) {
             var cl = t.classList[1];
             selector = "." + cl;
         } else if (t.classList.contains("name")) {
-            var cl = Number(t.innerText) - 1;
-            selector = ".p" + cl;
+            selector = ".p" + t.dataset.pos;
         } else {
             selector = ".p" + t.dataset.pos;
         }
