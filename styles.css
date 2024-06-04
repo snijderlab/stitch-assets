@@ -281,7 +281,8 @@ output {
     :is(input,
         select,
         textarea,
-        .peptide-input) {
+        .peptide-input,
+        .input[contentEditable]) {
         -webkit-appearance: none;
         appearance: none;
         border-radius: 0;
@@ -310,6 +311,13 @@ output {
             background-color: var(--color-halfway-bg);
             cursor: not-allowed;
         }
+    }
+
+    .input[contentEditable]:empty::after {
+        content: attr(placeholder);
+        display: inline;
+        color: var(--color-halfway);
+        text-overflow: ellipsis;
     }
 
     textarea.wide {
