@@ -259,7 +259,7 @@ output {
         }
 
         &.secondary {
-            --_clr-main: var(--color-halfway);
+            --_clr-main: var(--color-primary-s2);
             --_clr-text: var(--color-background);
             --_clr-active: var(--color-foreground);
             --_clr-hover: var(--color-halfway-fg);
