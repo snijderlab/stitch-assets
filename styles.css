@@ -148,6 +148,10 @@ sub {
 dialog {
     border: 2px solid var(--color-foreground);
     background-color: var(--color-background);
+
+    &>h1:first-child {
+        margin-top: 0;
+    }
 }
 
 output {
@@ -204,7 +208,8 @@ output {
     font-style: italic;
 }
 
-.formula {
+.formula,
+.example {
     font-family: monospace;
     border: 2px solid var(--color-halfway-bg);
     border-radius: 6px;
@@ -286,19 +291,31 @@ output {
         cursor: pointer;
         background: var(--color-background);
         font-size: 1rem;
+        font-family: inherit;
 
-        &:hover {
+        &:not(:disabled):hover {
             border-color: var(--color-halfway-fg);
         }
 
-        &:focus-visible {
+        &:not(:disabled):focus-visible {
             border-color: var(--color-foreground);
             outline: none;
         }
 
-        &:active {
+        &:not(:disabled):active {
             border-color: var(--color-primary);
         }
+
+        &:disabled {
+            background-color: var(--color-halfway-bg);
+            cursor: not-allowed;
+        }
+    }
+
+    textarea.wide {
+        width: 100%;
+        resize: vertical;
+        min-height: 1rem;
     }
 
     input[type=checkbox]:not([switch]),
@@ -483,6 +500,10 @@ output {
         &:active::-webkit-slider-thumb {
             border-color: var(--color-primary);
         }
+    }
+
+    .justify-end {
+        justify-self: end;
     }
 }
 
@@ -881,11 +902,11 @@ input:not(:checked)+.collapsible {
     border-bottom: none;
     padding-bottom: 0;
 
-    & legend::after {
+    &>legend::after {
         content: "+";
     }
 
-    & *:not(:first-child):not(legend) {
+    &>*:not(:first-child):not(legend) {
         display: none;
     }
 }
@@ -894,7 +915,7 @@ input:not(:checked)+.collapsible {
     margin-top: 1rem;
     position: relative;
 
-    & legend {
+    &>legend {
         cursor: pointer;
         user-select: none;
         font-size: 1.5rem;
