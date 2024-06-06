@@ -221,6 +221,28 @@ output {
     }
 }
 
+.mass,
+.aminoacid {
+    color: var(--color-yellow);
+}
+
+.ontology {
+    color: var(--color-purple);
+}
+
+.name,
+.position {
+    color: var(--color-green);
+}
+
+.index {
+    color: var(--color-blue);
+}
+
+.cross-id-system {
+    color: var(--color-halfway-fg);
+}
+
 /* Input general */
 
 .block {
