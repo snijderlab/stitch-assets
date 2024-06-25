@@ -494,7 +494,7 @@ output {
         -webkit-appearance: none;
         appearance: none;
         background: none;
-        border: none;
+        border: none !important;
 
         &::-webkit-slider-runnable-track {
             -webkit-appearance: none;
@@ -2963,13 +2963,22 @@ summary {
 
     &>span {
         position: absolute;
-        top: -1.6em;
-        left: -.5em;
+        top: -1.2em;
+        left: -.2em;
         text-anchor: end;
         z-index: 10;
         cursor: default;
         opacity: 0;
         width: max-content;
+
+        .spectrum.show-charge & {
+            top: -1.6em;
+        }
+
+        .spectrum.show-charge &,
+        .spectrum.show-series & {
+            left: -.5em;
+        }
     }
 
 
@@ -3011,8 +3020,8 @@ summary {
     }
 
     &:not(.cut):hover::after,
-    &[data-show-mass=true]::after,
-    &[data-show-mass-manually=true]::after {
+    &[data-show-m-z=true]::after,
+    &[data-show-m-z-manually=true]::after {
         content: attr(data-label);
         color: var(--color);
         padding-left: calc(var(--stroke-spectrum) * 2);
@@ -3020,18 +3029,37 @@ summary {
     }
 
     &.theoretical,
-    &.theoretical:not(:hover) span {
+    &.theoretical:not(:hover) span,
+    & .charge,
+    & .series,
+    & .neutral-losses {
         display: none;
     }
 }
 
 .spectrum.force-show-label .peak,
-.spectrum.force-show-mass .peak {
+.spectrum.force-show-m-z .peak {
     cursor: crosshair;
 }
 
 .spectrum.show-unassigned .peak.unassigned {
     display: block;
+}
+
+.spectrum.show-charge .charge,
+.spectrum.show-neutral-losses .neutral-losses {
+    display: inline;
+}
+
+.spectrum.show-charge.show-series .series {
+    display: inline-block;
+    margin-left: calc(-1ch * var(--charge-width, 0));
+    min-width: calc(1ch * var(--charge-width, 0));
+}
+
+.spectrum:not(.show-charge).show-series .series {
+    display: inline;
+    margin-left: 0;
 }
 
 .spectrum .second .peak {

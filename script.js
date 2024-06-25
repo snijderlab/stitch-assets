@@ -397,13 +397,13 @@ function ForceShowLabels(e) {
         if ("showLabelManually" in e.target.dataset) {
             delete e.target.dataset.showLabelManually;
         } else {
-            e.target.dataset.showLabelManually = true;
+            e.target.dataset.showLabelManually = "true";
         }
-    } else if (spectrum.classList.contains("force-show-mass")) {
-        if ("showMassManually" in e.target.dataset) {
-            delete e.target.dataset.showMassManually;
+    } else if (spectrum.classList.contains("force-show-m-z")) {
+        if ("showMZManually" in e.target.dataset) {
+            delete e.target.dataset.showMZManually;
         } else {
-            e.target.dataset.showMassManually = true;
+            e.target.dataset.showMZManually = "true";
         }
     }
 }
@@ -804,15 +804,15 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.remove("legend-ion", "legend-peptide");
         spectrum_wrapper.classList.add("legend-none");
     } else if (t.id == "force-show-none") {
-        spectrum_wrapper.classList.remove("force-show-label", "force-show-mass");
+        spectrum_wrapper.classList.remove("force-show-label", "force-show-m-z");
     } else if (t.id == "force-show-label") {
         spectrum_wrapper.classList.add("force-show-label");
-        spectrum_wrapper.classList.remove("force-show-mass");
-    } else if (t.id == "force-show-mass") {
+        spectrum_wrapper.classList.remove("force-show-m-z");
+    } else if (t.id == "force-show-m-z") {
         spectrum_wrapper.classList.remove("force-show-label");
-        spectrum_wrapper.classList.add("force-show-mass");
+        spectrum_wrapper.classList.add("force-show-m-z");
     } else if (t.id == "force-show-clear") {
-        spectrum_wrapper.querySelectorAll(".peak").forEach(element => { delete element.dataset.showLabelManually; delete element.dataset.showMassManually; });
+        spectrum_wrapper.querySelectorAll(".peak").forEach(element => { delete element.dataset.showLabelManually; delete element.dataset.showMZManually; });
     } else if (cl == "unassigned") {
         if (t.checked) { // Will be adding all background peaks
             spectrum_wrapper.classList.add('show-unassigned');
@@ -829,6 +829,12 @@ function SpectrumSettings(event) {
                 UpdateSpectrumAxes(canvas)
             }
         }
+    } else if (t.id == "spectrum-label-charge") {
+        spectrum_wrapper.classList.toggle("show-charge", t.checked);
+    } else if (t.id == "spectrum-label-series") {
+        spectrum_wrapper.classList.toggle("show-series", t.checked);
+    } else if (t.id == "spectrum-label-neutral-losses") {
+        spectrum_wrapper.classList.toggle("show-neutral-losses", t.checked);
     } else if (t.id == "spectrum-mz-min") {
         canvas.dataset.minMz = Number(t.value);
         canvas.style.setProperty("--min-mz", canvas.dataset.minMz);
@@ -860,7 +866,7 @@ function SpectrumSettings(event) {
 */
 function SpectrumUpdateLabels(canvas) {
     var label_value = document.getElementById("spectrum-label-value").value;
-    var masses_value = document.getElementById("spectrum-masses-value").value;
+    var mz_value = document.getElementById("spectrum-m-z-value").value;
 
     var style = window.getComputedStyle(canvas);
     var max = Number(style.getPropertyValue("--max-intensity"));
@@ -874,10 +880,10 @@ function SpectrumUpdateLabels(canvas) {
             } else {
                 peak.dataset.showLabel = "";
             }
-            if (masses_value != 0 && v <= masses_value) {
-                peak.dataset.showMass = "true";
+            if (mz_value != 0 && v <= mz_value) {
+                peak.dataset.showMZ = "true";
             } else {
-                peak.dataset.showMass = "";
+                peak.dataset.showMZ = "";
             }
         })
         canvas.classList.remove("updating");
