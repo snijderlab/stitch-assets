@@ -833,6 +833,10 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.toggle("show-charge", t.checked);
     } else if (t.id == "spectrum-label-series") {
         spectrum_wrapper.classList.toggle("show-series", t.checked);
+    } else if (t.id == "spectrum-label-glycan-id") {
+        spectrum_wrapper.classList.toggle("show-glycan-id", t.checked);
+    } else if (t.id == "spectrum-label-peptide-id") {
+        spectrum_wrapper.classList.toggle("show-peptide-id", t.checked);
     } else if (t.id == "spectrum-label-neutral-losses") {
         spectrum_wrapper.classList.toggle("show-neutral-losses", t.checked);
     } else if (t.id == "spectrum-mz-min") {

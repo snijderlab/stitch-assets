@@ -141,10 +141,6 @@ sub {
     font-family: "Roboto Mono", monospace;
 }
 
-.spectrum sup+sub {
-    margin-left: -1ch;
-}
-
 dialog {
     border: 2px solid var(--color-foreground);
     background-color: var(--color-background);
@@ -391,6 +387,7 @@ output {
     }
 
     .multi-checkbox>label {
+        display: inline-block;
         margin-right: .5rem;
 
         &>input[type=checkbox] {
@@ -3032,6 +3029,8 @@ summary {
     &.theoretical:not(:hover) span,
     & .charge,
     & .series,
+    & .glycan-id,
+    & .peptide-id,
     & .neutral-losses {
         display: none;
     }
@@ -3047,19 +3046,17 @@ summary {
 }
 
 .spectrum.show-charge .charge,
+.spectrum.show-series .series,
+.spectrum.show-glycan-id .glycan-id,
+.spectrum.show-peptide-id .peptide-id,
 .spectrum.show-neutral-losses .neutral-losses {
     display: inline;
 }
 
-.spectrum.show-charge.show-series .series {
+.spectrum.show-charge sub {
     display: inline-block;
     margin-left: calc(-1ch * var(--charge-width, 0));
     min-width: calc(1ch * var(--charge-width, 0));
-}
-
-.spectrum:not(.show-charge).show-series .series {
-    display: inline;
-    margin-left: 0;
 }
 
 .spectrum .second .peak {
