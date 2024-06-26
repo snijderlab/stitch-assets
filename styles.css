@@ -2498,7 +2498,7 @@ summary {
         --color: var(--color-yellow);
     }
 
-    & .precursor {
+    & .p {
         --color: var(--color-purple-dark);
     }
 
