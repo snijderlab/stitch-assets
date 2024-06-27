@@ -150,8 +150,11 @@ dialog {
     }
 }
 
-output {
+.wrap {
     margin-left: 1rem;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: pre-wrap;
 }
 
 .report {
@@ -217,26 +220,30 @@ output {
     }
 }
 
-.mass,
-.aminoacid {
-    color: var(--color-yellow);
-}
+.modification,
+#custom-mod-dialog {
 
-.ontology {
-    color: var(--color-purple);
-}
+    .mass,
+    .aminoacid {
+        color: var(--color-yellow);
+    }
 
-.name,
-.position {
-    color: var(--color-green);
-}
+    .ontology {
+        color: var(--color-purple);
+    }
 
-.index {
-    color: var(--color-blue);
-}
+    .name,
+    .position {
+        color: var(--color-green);
+    }
 
-.cross-id-system {
-    color: var(--color-halfway-fg);
+    .index {
+        color: var(--color-blue);
+    }
+
+    .cross-id-system {
+        color: var(--color-halfway-fg);
+    }
 }
 
 /* Input general */
@@ -2424,6 +2431,35 @@ summary {
         &.term::before {
             top: calc(50% - var(--stroke-peptide));
         }
+    }
+
+    &>.possible-modification {
+        &.term {
+            width: var(--spacing);
+        }
+
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: calc(.5em + 1.25 * var(--spacing));
+            left: calc(50% - 0.5 * var(--spacing));
+            width: var(--spacing);
+            height: calc(0.5 * var(--spacing));
+            background-color: var(--color-red);
+        }
+
+        &.term::after {
+            top: calc(50% - var(--stroke-peptide));
+        }
+    }
+
+    &>.modification.possible-modification::before {
+        left: calc(50% - 1.5 * var(--spacing));
+    }
+
+    &>.modification.possible-modification::after {
+        left: calc(50% + 0.5 * var(--spacing));
     }
 
     &>.cross-link {
