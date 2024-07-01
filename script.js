@@ -860,6 +860,12 @@ function SpectrumSettings(event) {
 
         spectrum_wrapper.querySelectorAll(".canvas-spectrum").forEach(
             canvas => SpectrumUpdateLabels(canvas))
+    } else if (t.id == "y-sqrt") {
+        spectrum_wrapper.classList.toggle("y-sqrt", t.checked);
+        UpdateSpectrumAxes(canvas)
+    } else if (t.id == "y-percentage") {
+        spectrum_wrapper.classList.toggle("y-percentage", t.checked);
+        UpdateSpectrumAxes(canvas)
     }
 }
 
@@ -1097,6 +1103,7 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     for (let i = 0; i < ticks.length; i++) {
         ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
     }
+
     // update spectrum graph axes
     canvas_wrapper.parentElement.querySelector('.error-graph .x-axis .min').innerText = fancyRound(max, min, min);
     canvas_wrapper.parentElement.querySelector('.error-graph .x-axis .max').innerText = fancyRound(max, min, max);
@@ -1104,21 +1111,28 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     // Update y-axis
     var axis = canvas_wrapper.parentElement.getElementsByClassName("y-axis")[0];
     var ticks = axis.children;
-    var max = Number(canvas_wrapper.dataset.maxIntensity);
+    var sqrt = document.getElementById("spectrum-wrapper").classList.contains("y-sqrt");
+    var percent = document.getElementById("spectrum-wrapper").classList.contains("y-percentage");
+    var max_y = Number(canvas_wrapper.dataset.maxIntensity);
+    var max_y_initial = Number(canvas_wrapper.dataset.initialMaxIntensity);
+
     for (let i = 0; i < ticks.length; i++) {
+        let v = i / 4 * max_y;
+        if (sqrt) v = Math.sqrt(v);
+        if (percent) v = v / max_y_initial * 100;
+        if (sqrt && percent) v = Math.sqrt(i / 4 * max_y) / Math.sqrt(max_y_initial) * 100;
+
         if (i == 0)
             ticks[i].innerText = "0";
+        else if (percent)
+            ticks[i].innerText = Math.round(v);
         else
-            ticks[i].innerText = Math.round(i / 4 * (max)).toExponential(2);
+            ticks[i].innerText = Math.round(v).toExponential(2);
     }
 
     var peaks = canvas_wrapper.querySelector('.canvas').children;
     for (let i = 0; i < peaks.length; i++) {
         var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
-        if (v > max) {
-            peaks[i].classList.add("cut");
-        } else {
-            peaks[i].classList.remove("cut");
-        }
+        peaks[i].classList.toggle("cut", v > max_y);
     }
 }

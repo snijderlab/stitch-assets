@@ -2826,6 +2826,11 @@ summary {
         font-style: italic;
         color: var(--color-halfway);
         transform: rotate(270deg);
+
+    }
+
+    #spectrum-wrapper.y-percentage &::after {
+        content: "Intensity (%)";
     }
 
     & .tick {
@@ -2967,13 +2972,18 @@ summary {
 
 .spectrum .peak {
     position: absolute;
-    height: min(calc(var(--intensity) / var(--max-intensity) * 100%), 100%);
-    top: clamp(0%, calc(100% - var(--intensity) / var(--max-intensity) * 100%), 100%);
+    --f: var(--intensity) / var(--max-intensity);
+    height: min(calc(var(--f) * 100%), 100%);
+    top: clamp(0%, calc(100% - var(--f) * 100%), 100%);
     left: calc(100% * (var(--mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
     width: var(--stroke-spectrum);
     background-color: var(--color);
     /* transition: opacity 125ms; */
     z-index: 1;
+
+    #spectrum-wrapper.y-sqrt & {
+        --f: sqrt(var(--intensity)) / sqrt(var(--max-intensity));
+    }
 
     &:hover {
         z-index: 2;
