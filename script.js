@@ -878,16 +878,15 @@ function SpectrumSettings(event) {
  * @param {String} parameter the class to toggle 
 */
 function SpectrumUpdateLabels(canvas) {
-    var label_value = document.getElementById("spectrum-label-value").value;
-    var mz_value = document.getElementById("spectrum-m-z-value").value;
+    const label_value = document.getElementById("spectrum-label-value").value;
+    const mz_value = document.getElementById("spectrum-m-z-value").value;
 
-    var style = window.getComputedStyle(canvas);
-    var max = Number(style.getPropertyValue("--max-intensity"));
-
-    canvas.classList.add("updating");
     setTimeout(() => {
-        canvas.querySelectorAll(".peak").forEach(peak => {
-            var v = 100 - Number(window.getComputedStyle(peak).getPropertyValue("--intensity")) / max * 100;
+        const max = Number(canvas.style.getPropertyValue("--max-intensity"));
+
+        for (let index = 1; index < canvas.children.length; index++) {
+            const peak = canvas.children[index];
+            var v = 100 - Number(peak.style.getPropertyValue("--intensity")) / max * 100;
             if (label_value != 0 && v <= label_value) {
                 peak.dataset.showLabel = "true";
             } else {
@@ -898,9 +897,8 @@ function SpectrumUpdateLabels(canvas) {
             } else {
                 peak.dataset.showMZ = "";
             }
-        })
-        canvas.classList.remove("updating");
-    }, 1)
+        }
+    }, 0)
 }
 
 var startPoint;
@@ -1040,7 +1038,6 @@ function spectrumScroll(event) {
     const wrapper = target.parentElement;
     const minMz = Number(wrapper.dataset.minMz);
     const maxMz = Number(wrapper.dataset.maxMz);
-    console.log(event, Math.abs(event.deltaX) != 0, Math.abs(event.deltaY) != 0, (Math.abs(event.deltaY) != 0 && event.shiftKey));
     // TODO: Limit Y axis to highest peak in range for very smooth scrolling?
     if (Math.abs(event.deltaX) != 0 || (Math.abs(event.deltaY) != 0 && event.shiftKey)) { // Horizontal scroll
         let delta = Math.abs(event.deltaX) != 0 ? event.deltaX : event.deltaY;
@@ -1063,13 +1060,13 @@ function Zoom(canvas, min, max, maxI) {
     canvas.style.setProperty("--max-mz", max);
     canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
 
-    document.getElementById("spectrum-mz-min").value = fancyRound(max, min, min);
-    document.getElementById("spectrum-mz-max").value = fancyRound(max, min, max);
-    document.getElementById("spectrum-intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
-
     SpectrumUpdateLabels(canvas);
 
     UpdateSpectrumAxes(canvas)
+
+    document.getElementById("spectrum-mz-min").value = fancyRound(max, min, min);
+    document.getElementById("spectrum-mz-max").value = fancyRound(max, min, max);
+    document.getElementById("spectrum-intensity-max").value = fancyRound(canvas.dataset.maxIntensity, 0, canvas.dataset.maxIntensity);
 }
 
 function ZoomSpectrumGraph(canvas, min_y, max_y) {
@@ -1121,44 +1118,47 @@ function fancyRound(max, min, value, additional = 0) {
 
 // Give the canvas element
 function UpdateSpectrumAxes(canvas_wrapper) {
+    const max_y = Number(canvas_wrapper.dataset.maxIntensity);
+    const spectrum_wrapper = canvas_wrapper.parentElement.parentElement;
+
+    // Update cut peaks
+    const peaks = canvas_wrapper.children[1].children;
+    for (let i = 1; i < peaks.length; i++) {
+        const v = Number(peaks[i].style.getPropertyValue("--intensity"));
+        peaks[i].classList.toggle("cut", v > max_y);
+    }
+
     // Update x-axis
-    var axis = canvas_wrapper.parentElement.getElementsByClassName("x-axis")[0];
-    var ticks = axis.children;
-    var min = Number(canvas_wrapper.dataset.minMz);
-    var max = Number(canvas_wrapper.dataset.maxMz);
-    for (let i = 0; i < ticks.length; i++) {
-        ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
+    const x_axis = canvas_wrapper.children[2]; // x-axis
+    const x_ticks = x_axis.children;
+    const min = Number(canvas_wrapper.dataset.minMz);
+    const max = Number(canvas_wrapper.dataset.maxMz);
+    for (let i = 0; i < x_ticks.length; i++) {
+        x_ticks[i].innerText = fancyRound(max, min, min + i / 4 * (max - min))
     }
 
     // update spectrum graph axes
-    canvas_wrapper.parentElement.querySelector('.error-graph .x-axis .min').innerText = fancyRound(max, min, min);
-    canvas_wrapper.parentElement.querySelector('.error-graph .x-axis .max').innerText = fancyRound(max, min, max);
+    canvas_wrapper.querySelector('.error-graph .x-axis .min').innerText = fancyRound(max, min, min);
+    canvas_wrapper.querySelector('.error-graph .x-axis .max').innerText = fancyRound(max, min, max);
 
     // Update y-axis
-    var axis = canvas_wrapper.parentElement.getElementsByClassName("y-axis")[0];
-    var ticks = axis.children;
-    var sqrt = document.getElementById("spectrum-wrapper").classList.contains("y-sqrt");
-    var percent = document.getElementById("spectrum-wrapper").classList.contains("y-percentage");
-    var max_y = Number(canvas_wrapper.dataset.maxIntensity);
-    var max_y_initial = Number(canvas_wrapper.dataset.initialMaxIntensity);
+    const y_axis = canvas_wrapper.children[0]; // y-axis
+    const y_ticks = y_axis.children;
+    const sqrt = spectrum_wrapper.classList.contains("y-sqrt");
+    const percent = spectrum_wrapper.classList.contains("y-percentage");
+    const max_y_initial = Number(canvas_wrapper.dataset.initialMaxIntensity);
 
-    for (let i = 0; i < ticks.length; i++) {
-        let v = i / 4 * max_y;
+    for (let i = 0; i < y_ticks.length; i++) {
+        const v = i / 4 * max_y;
         if (sqrt) v = Math.sqrt(v);
         if (percent) v = v / max_y_initial * 100;
         if (sqrt && percent) v = Math.sqrt(i / 4 * max_y) / Math.sqrt(max_y_initial) * 100;
 
         if (i == 0)
-            ticks[i].innerText = "0";
+            y_ticks[i].innerText = "0";
         else if (percent)
-            ticks[i].innerText = Math.round(v);
+            y_ticks[i].innerText = Math.round(v);
         else
-            ticks[i].innerText = Math.round(v).toExponential(2);
-    }
-
-    var peaks = canvas_wrapper.querySelector('.canvas').children;
-    for (let i = 0; i < peaks.length; i++) {
-        var v = Number(window.getComputedStyle(peaks[i]).getPropertyValue("--intensity"));
-        peaks[i].classList.toggle("cut", v > max_y);
+            y_ticks[i].innerText = Math.round(v).toExponential(2);
     }
 }
