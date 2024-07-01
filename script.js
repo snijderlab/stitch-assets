@@ -373,6 +373,9 @@ function SpectrumSetUp() {
     document.querySelectorAll("#spectrum-wrapper .peak:not(.fragment)").forEach(element => {
         element.addEventListener("click", ForceShowLabels)
     })
+    document.querySelectorAll("#spectrum-wrapper .canvas-spectrum").forEach(element => {
+        element.addEventListener("wheel", spectrumScroll)
+    })
 
     // Spectrum graph
     var elements = document.querySelectorAll("#spectrum-wrapper .error-graph");
@@ -1025,6 +1028,29 @@ function spectrumDragEnd(event) {
         if (linked_selection != undefined) Zoom(linked_selection.parentElement, min, max, maxI);
         spectrumDragOut(event)
         last_selection = undefined;
+    }
+}
+
+function spectrumScroll(event) {
+    event.preventDefault(); // Prevent page scrolling (also when not on the canvas)
+    let target = event.target;
+    while (!target.classList.contains("canvas")) {
+        target = target.parentElement;
+    }
+    const wrapper = target.parentElement;
+    const minMz = Number(wrapper.dataset.minMz);
+    const maxMz = Number(wrapper.dataset.maxMz);
+    console.log(event, Math.abs(event.deltaX) != 0, Math.abs(event.deltaY) != 0, (Math.abs(event.deltaY) != 0 && event.shiftKey));
+    // TODO: Limit Y axis to highest peak in range for very smooth scrolling?
+    if (Math.abs(event.deltaX) != 0 || (Math.abs(event.deltaY) != 0 && event.shiftKey)) { // Horizontal scroll
+        let delta = Math.abs(event.deltaX) != 0 ? event.deltaX : event.deltaY;
+        delta = Math.max(-minMz, delta / 10000 * (maxMz - minMz)); // Prevent scrolling past 0
+        Zoom(wrapper, minMz + delta, maxMz + delta, Number(wrapper.dataset.maxIntensity));
+    } else if (Math.abs(event.deltaY) != 0) { // Vertical scroll
+        // Smaller thing (95%) centred to location
+        let center = event.offsetX / target.getBoundingClientRect().width;
+        let delta = event.deltaY / 10000 * 5 * (wrapper.dataset.maxMz - wrapper.dataset.minMz);
+        Zoom(wrapper, Math.max(0, minMz + delta * center), maxMz - delta * (1 - center), Number(wrapper.dataset.maxIntensity));
     }
 }
 
