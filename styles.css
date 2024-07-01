@@ -3129,9 +3129,12 @@ summary {
 .spectrum .highlight .peak {
     opacity: .2;
 
-    &.highlight,
-    &.highlight span:not(.multi) {
+    &.highlight {
         opacity: 1;
+    }
+
+    &:not(.highlight) span {
+        opacity: 0;
     }
 }
 
@@ -3485,11 +3488,6 @@ summary {
         height: auto;
     }
 
-    .phylogenetic-tree label,
-    .graph label {
-        display: none;
-    }
-
     .phylogenetic-tree input:checked+label,
     .graph input:checked+label {
         display: inline-block;
@@ -3504,10 +3502,6 @@ summary {
     .phylogenetic-tree .info-link text {
         fill: var(--color-foreground);
         font-size: 16px;
-    }
-
-    .phylogenetic-tree .info-link rect {
-        display: none;
     }
 
     .table-header {
@@ -3525,12 +3519,14 @@ summary {
         width: max-content;
     }
 
+    .phylogenetic-tree label,
+    .graph label,
+    .phylogenetic-tree .info-link rect,
     .text-header,
     .copy-data,
     .source-code,
     .user-help,
     .zoom-out,
-    table,
     .report label::after,
     .overview h3,
     .overview p,
@@ -3539,7 +3535,15 @@ summary {
     [id$="segment-joining"] p,
     [id$="segment-joining"] pre,
     [id$="segment-joining"] .title,
-    input[type=range] {
+    input[type=range],
+    input,
+    button,
+    footer,
+    .settings,
+    input[type=checkbox]:not(:checked)+.collapsible,
+    .input-settings,
+    label,
+    .input {
         display: none !important;
     }
 
