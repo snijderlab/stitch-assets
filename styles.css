@@ -2976,7 +2976,6 @@ summary {
     left: calc(100% * (var(--mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
     width: var(--stroke-spectrum);
     background-color: var(--color);
-    /* transition: opacity 125ms; */
     z-index: 1;
 
     #spectrum-wrapper.y-sqrt & {
