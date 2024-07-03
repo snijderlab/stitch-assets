@@ -2470,8 +2470,15 @@ summary {
             width: fit-content;
             height: 1rem;
             font-size: calc(0.75 * var(--fs-peptide));
+            color: var(--color-xl, --color-purple-light);
         }
     }
+}
+
+.spectrum.legend-peptide .peptide>.name,
+.spectrum.legend-peptidoform .peptide>.name {
+    border-color: var(--color);
+    color: var(--color);
 }
 
 .spectrum.compact .peptide {
@@ -2484,7 +2491,7 @@ summary {
 }
 
 
-.spectrum.legend-ion {
+#spectrum-wrapper.legend-ion {
 
     & .a,
     & .Y {
@@ -2541,110 +2548,95 @@ summary {
     }
 }
 
-.spectrum.legend-peptide {
+.spectrum.legend-peptidoform {
     & .ion-series {
         --color: var(--color-halfway);
     }
 
-    & .peptide:nth-child(15n+1),
     & .p0,
     & .p15,
     & .p30 {
         --color: var(--color-blue);
     }
 
-    & .peptide:nth-child(15n+2),
     & .p1,
     & .p16,
     & .p31 {
         --color: var(--color-green);
     }
 
-    & .peptide:nth-child(15n+3),
     & .p2,
     & .p17,
     & .p32 {
         --color: var(--color-red);
     }
 
-    & .peptide:nth-child(15n+4),
     & .p3,
     & .p18,
     & .p33 {
         --color: var(--color-yellow);
     }
 
-    & .peptide:nth-child(15n+5),
     & .p4,
     & .p19,
     & .p34 {
         --color: var(--color-purple);
     }
 
-    & .peptide:nth-child(15n+6),
     & .p5,
     & .p20,
     & .p35 {
         --color: var(--color-blue-dark);
     }
 
-    & .peptide:nth-child(15n+7),
     & .p6,
     & .p21,
     & .p36 {
         --color: var(--color-green-dark);
     }
 
-    & .peptide:nth-child(15n+8),
     & .p7,
     & .p22,
     & .p37 {
         --color: var(--color-red-dark);
     }
 
-    & .peptide:nth-child(15n+9),
     & .p8,
     & .p23,
     & .p38 {
         --color: var(--color-yellow-dark);
     }
 
-    & .peptide:nth-child(15n+10),
     & .p9,
     & .p24,
     & .p39 {
         --color: var(--color-purple-dark);
     }
 
-    & .peptide:nth-child(15n+11),
     & .p10,
     & .p25,
     & .p40 {
         --color: var(--color-blue-light);
     }
 
-    & .peptide:nth-child(15n+12),
     & .p11,
     & .p26,
     & .p41 {
         --color: var(--color-green-light);
     }
 
-    & .peptide:nth-child(15n+13),
     & .p12,
     & .p27,
     & .p42 {
         --color: var(--color-red-light);
     }
 
-    & .peptide:nth-child(15n+14),
     & .p13,
     & .p28,
     & .p43 {
         --color: var(--color-yellow-light);
     }
 
-    & .peptide:nth-child(15n+0),
     & .p14,
     & .p29,
     & .p44 {
@@ -2657,6 +2649,203 @@ summary {
 
     & .unassigned {
         --color: var(--color-halfway);
+    }
+}
+
+.spectrum.legend-peptide {
+    & .ion-series {
+        --color: var(--color-halfway);
+    }
+
+    & .pu0,
+    & .pu15,
+    & .pu30 {
+        --color: var(--color-blue);
+    }
+
+    & .pu1,
+    & .pu16,
+    & .pu31 {
+        --color: var(--color-green);
+    }
+
+    & .pu2,
+    & .pu17,
+    & .pu32 {
+        --color: var(--color-red);
+    }
+
+    & .pu3,
+    & .pu18,
+    & .pu33 {
+        --color: var(--color-yellow);
+    }
+
+    & .pu4,
+    & .pu19,
+    & .pu34 {
+        --color: var(--color-purple);
+    }
+
+    & .pu5,
+    & .pu20,
+    & .pu35 {
+        --color: var(--color-blue-dark);
+    }
+
+    & .pu6,
+    & .pu21,
+    & .pu36 {
+        --color: var(--color-green-dark);
+    }
+
+    & .pu7,
+    & .pu22,
+    & .pu37 {
+        --color: var(--color-red-dark);
+    }
+
+    & .pu8,
+    & .pu23,
+    & .pu38 {
+        --color: var(--color-yellow-dark);
+    }
+
+    & .pu9,
+    & .pu24,
+    & .pu39 {
+        --color: var(--color-purple-dark);
+    }
+
+    & .pu10,
+    & .pu25,
+    & .pu40 {
+        --color: var(--color-blue-light);
+    }
+
+    & .pu11,
+    & .pu26,
+    & .pu41 {
+        --color: var(--color-green-light);
+    }
+
+    & .pu12,
+    & .pu27,
+    & .pu42 {
+        --color: var(--color-red-light);
+    }
+
+    & .pu13,
+    & .pu28,
+    & .pu43 {
+        --color: var(--color-yellow-light);
+    }
+
+    & .pu14,
+    & .pu29,
+    & .pu44 {
+        --color: var(--color-purple-light);
+    }
+
+    & .mpp {
+        --color: var(--color-red-light);
+    }
+
+    & .unassigned {
+        --color: var(--color-halfway);
+    }
+}
+
+.cross-link {
+
+    &.c0,
+    &.c15,
+    &.c30 {
+        --color-xl: var(--color-blue);
+    }
+
+    &.c1,
+    &.c16,
+    &.c31 {
+        --color-xl: var(--color-green);
+    }
+
+    &.c2,
+    &.c17,
+    &.c32 {
+        --color-xl: var(--color-red);
+    }
+
+    &.c3,
+    &.c18,
+    &.c33 {
+        --color-xl: var(--color-yellow);
+    }
+
+    &.c4,
+    &.c19,
+    &.c34 {
+        --color-xl: var(--color-purple);
+    }
+
+    &.c5,
+    &.c20,
+    &.c35 {
+        --color-xl: var(--color-blue-dark);
+    }
+
+    &.c6,
+    &.c21,
+    &.c36 {
+        --color-xl: var(--color-green-dark);
+    }
+
+    &.c7,
+    &.c22,
+    &.c37 {
+        --color-xl: var(--color-red-dark);
+    }
+
+    &.c8,
+    &.c23,
+    &.c38 {
+        --color-xl: var(--color-yellow-dark);
+    }
+
+    &.c9,
+    &.c24,
+    &.c39 {
+        --color-xl: var(--color-purple-dark);
+    }
+
+    &.c10,
+    &.c25,
+    &.c40 {
+        --color-xl: var(--color-blue-light);
+    }
+
+    &.c11,
+    &.c26,
+    &.c41 {
+        --color-xl: var(--color-green-light);
+    }
+
+    &.c12,
+    &.c27,
+    &.c42 {
+        --color-xl: var(--color-red-light);
+    }
+
+    &.c13,
+    &.c28,
+    &.c43 {
+        --color-xl: var(--color-yellow-light);
+    }
+
+    &.c14,
+    &.c29,
+    &.c44 {
+        --color-xl: var(--color-purple-light);
     }
 }
 
@@ -2986,13 +3175,14 @@ summary {
         z-index: 2;
     }
 
-    &.cut::after {
+    &[data-cut=true]::before {
         content: "▲";
         display: block;
         position: absolute;
         color: var(--color);
-        left: -.45rem;
-        top: -.3rem;
+        left: -.25rem;
+        top: -.6rem;
+        font-size: .5em;
     }
 
     &.unassigned {

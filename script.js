@@ -799,12 +799,15 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.toggle("theoretical");
     } else if (t.id == "peak-colour-ion") {
         spectrum_wrapper.classList.add("legend-ion");
-        spectrum_wrapper.classList.remove("legend-peptide", "legend-none");
+        spectrum_wrapper.classList.remove("legend-peptide", "legend-peptidoform", "legend-none");
     } else if (t.id == "peak-colour-peptide") {
-        spectrum_wrapper.classList.remove("legend-ion", "legend-none");
+        spectrum_wrapper.classList.remove("legend-ion", "legend-peptidoform", "legend-none");
         spectrum_wrapper.classList.add("legend-peptide");
+    } else if (t.id == "peak-colour-peptidoform") {
+        spectrum_wrapper.classList.remove("legend-ion", "legend-peptide", "legend-none");
+        spectrum_wrapper.classList.add("legend-peptidoform");
     } else if (t.id == "peak-colour-none") {
-        spectrum_wrapper.classList.remove("legend-ion", "legend-peptide");
+        spectrum_wrapper.classList.remove("legend-ion", "legend-peptide", "legend-peptidoform");
         spectrum_wrapper.classList.add("legend-none");
     } else if (t.id == "force-show-none") {
         spectrum_wrapper.classList.remove("force-show-label", "force-show-m-z");
@@ -875,34 +878,37 @@ function SpectrumSettings(event) {
 }
 
 /** Update the spectrum to only show the label for peaks within the given percentage group
- * @param {Number} value the percentage to include (0-100)
- * @param {Element} canvas the canvas to work on
- * @param {String} parameter the class to toggle 
+ * @param {Element} canvas the canvas ('.canvas') to work on
 */
 function SpectrumUpdateLabels(canvas) {
-    const label_value = document.getElementById("spectrum-label-value").value;
-    const mz_value = document.getElementById("spectrum-m-z-value").value;
+    const max = Number(canvas.parentElement.style.getPropertyValue("--max-intensity"));
+    const label_value = Number(document.getElementById("spectrum-label-value").value);
+    const mz_value = Number(document.getElementById("spectrum-m-z-value").value);
+    const label_threshold = (100 - label_value) / 100 * max;
+    const mz_threshold = (100 - mz_value) / 100 * max;
 
     setTimeout(() => {
-        const max = Number(canvas.style.getPropertyValue("--max-intensity"));
-
         for (let index = 1; index < canvas.children.length; index++) {
             const peak = canvas.children[index];
             const intensity = Number(peak.style.getPropertyValue("--intensity"));
-            var v = 100 - intensity / max * 100;
+            console.log(intensity)
             // Update shown labels
-            if (label_value != 0 && v <= label_value) {
+            if (label_value != 0 && intensity >= label_threshold) {
                 peak.dataset.showLabel = "true";
             } else {
                 peak.dataset.showLabel = "";
             }
-            if (mz_value != 0 && v <= mz_value) {
+            if (mz_value != 0 && intensity >= mz_threshold) {
                 peak.dataset.showMZ = "true";
             } else {
                 peak.dataset.showMZ = "";
             }
             // Update cut peaks
-            peak.classList.toggle("cut", intensity > max);
+            if (intensity > max) {
+                peak.dataset.cut = "true";
+            } else {
+                peak.dataset.cut = "";
+            }
         }
     }, 0)
 }
@@ -1045,13 +1051,17 @@ function spectrumScroll(event) {
     const minMz = Number(wrapper.dataset.minMz);
     const maxMz = Number(wrapper.dataset.maxMz);
     // TODO: Limit Y axis to highest peak in range for very smooth scrolling?
-    if (Math.abs(event.deltaX) != 0 || (Math.abs(event.deltaY) != 0 && event.shiftKey)) { // Horizontal scroll
+    if (Math.abs(event.deltaY) != 0 && event.ctrlKey) { // Vertical scroll + control so intensity
+        let factor = 1 + 5 * event.deltaY / 10000; // Prevent scrolling past 0
+        Zoom(wrapper, minMz, maxMz, Number(wrapper.dataset.maxIntensity) * factor);
+    } else if (Math.abs(event.deltaX) != 0 || (Math.abs(event.deltaY) != 0 && event.shiftKey)) { // Horizontal scroll
         let delta = Math.abs(event.deltaX) != 0 ? event.deltaX : event.deltaY;
         delta = Math.max(-minMz, delta / 10000 * (maxMz - minMz)); // Prevent scrolling past 0
         Zoom(wrapper, minMz + delta, maxMz + delta, Number(wrapper.dataset.maxIntensity));
     } else if (Math.abs(event.deltaY) != 0) { // Vertical scroll
         // Smaller thing (95%) centred to location
-        let center = event.offsetX / target.getBoundingClientRect().width;
+        let box = target.getBoundingClientRect();
+        let center = (event.pageX - box.x) / box.width;
         let delta = event.deltaY / 10000 * 5 * (wrapper.dataset.maxMz - wrapper.dataset.minMz);
         Zoom(wrapper, Math.max(0, minMz + delta * center), maxMz - delta * (1 - center), Number(wrapper.dataset.maxIntensity));
     }
@@ -1067,8 +1077,10 @@ function Zoom(canvas_wrapper, min, max, maxI) {
     canvas_wrapper.style.setProperty("--max-mz", max);
     canvas_wrapper.style.setProperty("--max-intensity", canvas_wrapper.dataset.maxIntensity);
 
-    if (last_max_intensity != maxI)
-        SpectrumUpdateLabels(canvas_wrapper);
+    console.log(last_max_intensity, maxI);
+    if (last_max_intensity != maxI) {
+        SpectrumUpdateLabels(canvas_wrapper.querySelector(".canvas"));
+    }
 
     UpdateSpectrumAxes(canvas_wrapper)
 
@@ -1151,7 +1163,7 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     const max_y_initial = Number(canvas_wrapper.dataset.initialMaxIntensity);
 
     for (let i = 0; i < y_ticks.length; i++) {
-        const v = i / 4 * max_y;
+        let v = i / 4 * max_y;
         if (sqrt) v = Math.sqrt(v);
         if (percent) v = v / max_y_initial * 100;
         if (sqrt && percent) v = Math.sqrt(i / 4 * max_y) / Math.sqrt(max_y_initial) * 100;
