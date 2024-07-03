@@ -3011,13 +3011,30 @@ summary {
         opacity: 0;
         width: max-content;
 
-        .spectrum.show-charge & {
+        #spectrum-wrapper.show-charge:not(.rotate-label) & {
             top: -1.6em;
         }
 
-        .spectrum.show-charge &,
-        .spectrum.show-series & {
+        #spectrum-wrapper.show-charge:not(.rotate-label) &,
+        #spectrum-wrapper.show-series:not(.rotate-label) & {
             left: -.5em;
+        }
+
+        #spectrum-wrapper.rotate-label & {
+            transform: rotate(-90deg);
+            transform-origin: left center;
+            top: -1em;
+            left: .15em;
+        }
+
+        #spectrum-wrapper.rotate-label.show-charge & {
+            top: -1.1em;
+            left: -.15em;
+        }
+
+        #spectrum-wrapper.rotate-label.show-charge.show-series & {
+            top: -1.4em;
+            left: -.15em;
         }
     }
 

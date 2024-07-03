@@ -842,6 +842,8 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.toggle("show-peptide-id", t.checked);
     } else if (t.id == "spectrum-label-neutral-losses") {
         spectrum_wrapper.classList.toggle("show-neutral-losses", t.checked);
+    } else if (t.id == "rotate-label") {
+        spectrum_wrapper.classList.toggle("rotate-label", t.checked);
     } else if (t.id == "spectrum-mz-min") {
         canvas.dataset.minMz = Number(t.value);
         canvas.style.setProperty("--min-mz", canvas.dataset.minMz);
