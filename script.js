@@ -859,6 +859,8 @@ function SpectrumSettings(event) {
         canvas.dataset.maxIntensity = Number(t.value);
         canvas.style.setProperty("--max-intensity", canvas.dataset.maxIntensity);
         UpdateSpectrumAxes(canvas)
+    } else if (t.id == "spectrum-ticks-y" || t.id == "spectrum-ticks-x") {
+        UpdateSpectrumAxes(canvas)
     } else if (t.type == "range" || t.type == "number") { // Peak labels + masses
         var ele = document.getElementById(
             (t.type == "number") ?
@@ -1144,11 +1146,24 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     // Update x-axis
     const x_axis = canvas_wrapper.children[2]; // x-axis
     const x_ticks = x_axis.children;
+    const x_ticks_number = Number(document.getElementById("spectrum-ticks-x").value);
+    const x_ticks_delta = x_ticks.length - x_ticks_number;
+    if (x_ticks_delta < 0) {
+        for (let i = 0; i < Math.abs(x_ticks_delta); i++) {
+            let new_tick = document.createElement("span");
+            new_tick.classList.add("tick");
+            x_axis.appendChild(new_tick);
+        }
+    } else if (x_ticks_delta > 0) {
+        for (let i = 0; i < Math.abs(x_ticks_delta); i++) {
+            x_axis.children[0].remove();
+        }
+    }
     const min = Number(canvas_wrapper.dataset.minMz);
     const max = Number(canvas_wrapper.dataset.maxMz);
     const factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1; // inlined fancyRound
     for (let i = 0; i < x_ticks.length; i++) {
-        x_ticks[i].innerText = Math.round(min + i / 4 * (max - min) * factor) / factor;
+        x_ticks[i].innerText = Math.round(min + i / (x_ticks.length - 1) * (max - min) * factor) / factor;
     }
 
     // Update spectrum graph axes
@@ -1156,17 +1171,31 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     canvas_wrapper.querySelector('.error-graph .x-axis .max').innerText = Math.round(max * factor) / factor;
 
     // Update y-axis
-    const y_ticks = canvas_wrapper.children[0].children; // y-axis
+    const y_axis = canvas_wrapper.children[0]; // y-axis
+    const y_ticks = y_axis.children; // y-axis
+    const y_ticks_number = Number(document.getElementById("spectrum-ticks-y").value);
+    const y_ticks_delta = y_ticks.length - y_ticks_number;
+    if (y_ticks_delta < 0) {
+        for (let i = 0; i < Math.abs(y_ticks_delta); i++) {
+            let new_tick = document.createElement("span");
+            new_tick.classList.add("tick");
+            y_axis.appendChild(new_tick);
+        }
+    } else if (y_ticks_delta > 0) {
+        for (let i = 0; i < y_ticks_delta; i++) {
+            y_axis.children[0].remove();
+        }
+    }
     const sqrt = spectrum_wrapper.classList.contains("y-sqrt");
     const percent = spectrum_wrapper.classList.contains("y-percentage");
     const max_y = Number(canvas_wrapper.dataset.maxIntensity);
     const max_y_initial = Number(canvas_wrapper.dataset.initialMaxIntensity);
 
     for (let i = 0; i < y_ticks.length; i++) {
-        let v = i / 4 * max_y;
+        let v = i / (y_ticks.length - 1) * max_y;
         if (sqrt) v = Math.sqrt(v);
         if (percent) v = v / max_y_initial * 100;
-        if (sqrt && percent) v = Math.sqrt(i / 4 * max_y) / Math.sqrt(max_y_initial) * 100;
+        if (sqrt && percent) v = Math.sqrt(i / (y_ticks.length - 1) * max_y) / Math.sqrt(max_y_initial) * 100;
 
         if (i == 0)
             y_ticks[i].innerText = "0";
