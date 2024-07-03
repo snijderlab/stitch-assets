@@ -2356,10 +2356,6 @@ summary {
             color: var(--color-blue);
         }
 
-        &.cross-link {
-            color: var(--color-green);
-        }
-
         &.possible-modification {
             color: var(--color-red);
         }
@@ -2461,16 +2457,20 @@ summary {
     }
 
     &>.cross-link {
+        color: var(--color-xl, --color-purple-light);
+
         &::before {
             content: attr(data-cross-links);
             display: block;
             position: absolute;
-            top: calc(-1rem - 3 * var(--spacing));
+            top: calc(-3 * var(--spacing));
             left: calc(-1 * var(--spacing));
-            width: fit-content;
             height: 1rem;
-            font-size: calc(0.75 * var(--fs-peptide));
+            font-size: calc(0.5 * var(--fs-peptide));
             color: var(--color-xl, --color-purple-light);
+            text-align: center;
+            min-width: calc(var(--pad-left) * 2 + var(--pad-right) * 2 + var(--pad) * 4 + 2ch + 2 * var(--spacing));
+            width: fit-content;
         }
     }
 }
@@ -2487,6 +2487,17 @@ summary {
 
     &>* {
         padding: var(--pad) var(--pad-right) var(--pad) var(--pad-left);
+    }
+
+    &>.cross-link {
+        &::before {
+            content: attr(data-cross-links-compact);
+            top: calc(2 * var(--pad));
+            left: calc(0.5* var(--pad));
+            transform: rotate(-90deg);
+            transform-origin: left center;
+            min-width: calc(var(--pad-left) + var(--pad-right) + var(--fs-peptide));
+        }
     }
 }
 

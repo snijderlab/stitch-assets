@@ -1050,19 +1050,19 @@ function spectrumScroll(event) {
     const wrapper = target.parentElement;
     const minMz = Number(wrapper.dataset.minMz);
     const maxMz = Number(wrapper.dataset.maxMz);
-    // TODO: Limit Y axis to highest peak in range for very smooth scrolling?
-    if (Math.abs(event.deltaY) != 0 && event.ctrlKey) { // Vertical scroll + control so intensity
+
+    if (Math.abs(event.deltaY) != 0 && event.ctrlKey) { // Vertical scroll + control -> zoom in on Y axis
         let factor = 1 + 5 * event.deltaY / 10000; // Prevent scrolling past 0
         Zoom(wrapper, minMz, maxMz, Number(wrapper.dataset.maxIntensity) * factor);
-    } else if (Math.abs(event.deltaX) != 0 || (Math.abs(event.deltaY) != 0 && event.shiftKey)) { // Horizontal scroll
+    } else if (Math.abs(event.deltaX) != 0 || (Math.abs(event.deltaY) != 0 && event.shiftKey)) { // Horizontal scroll -> pan X axis
         let delta = Math.abs(event.deltaX) != 0 ? event.deltaX : event.deltaY;
         delta = Math.max(-minMz, delta / 10000 * (maxMz - minMz)); // Prevent scrolling past 0
         Zoom(wrapper, minMz + delta, maxMz + delta, Number(wrapper.dataset.maxIntensity));
-    } else if (Math.abs(event.deltaY) != 0) { // Vertical scroll
+    } else if (Math.abs(event.deltaY) != 0) { // Vertical scroll -> zoom in on X axis
         // Smaller thing (95%) centred to location
         let box = target.getBoundingClientRect();
         let center = (event.pageX - box.x) / box.width;
-        let delta = event.deltaY / 10000 * 5 * (wrapper.dataset.maxMz - wrapper.dataset.minMz);
+        let delta = -event.deltaY / 10000 * 5 * (wrapper.dataset.maxMz - wrapper.dataset.minMz);
         Zoom(wrapper, Math.max(0, minMz + delta * center), maxMz - delta * (1 - center), Number(wrapper.dataset.maxIntensity));
     }
 }
