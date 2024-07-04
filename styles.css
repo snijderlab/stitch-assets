@@ -3240,8 +3240,8 @@ summary {
     }
 
 
-    &[data-show-label=true] span,
-    &[data-show-label-manually=true] span {
+    &[data-show-label=true]:not([data-show-label-manually=false]) span:not(.multi),
+    &[data-show-label-manually=true] span:not(.multi) {
         opacity: 1;
     }
 
@@ -3278,7 +3278,7 @@ summary {
     }
 
     &:not(.cut):hover::after,
-    &[data-show-m-z=true]::after,
+    &[data-show-m-z=true]:not([data-show-m-z-manually=false])::after,
     &[data-show-m-z-manually=true]::after {
         content: attr(data-label);
         color: var(--color);
@@ -3298,7 +3298,8 @@ summary {
 }
 
 .spectrum.force-show-label .peak,
-.spectrum.force-show-m-z .peak {
+.spectrum.force-show-m-z .peak,
+.spectrum.force-show-hide .peak {
     cursor: crosshair;
 }
 

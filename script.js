@@ -408,6 +408,9 @@ function ForceShowLabels(e) {
         } else {
             e.target.dataset.showMZManually = "true";
         }
+    } else if (spectrum.classList.contains("force-show-hide")) {
+        e.target.dataset.showLabelManually = "false";
+        e.target.dataset.showMZManually = "false";
     }
 }
 
@@ -810,13 +813,16 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.remove("legend-ion", "legend-peptide", "legend-peptidoform");
         spectrum_wrapper.classList.add("legend-none");
     } else if (t.id == "force-show-none") {
-        spectrum_wrapper.classList.remove("force-show-label", "force-show-m-z");
+        spectrum_wrapper.classList.remove("force-show-label", "force-show-m-z", "force-show-hide");
     } else if (t.id == "force-show-label") {
+        spectrum_wrapper.classList.remove("force-show-m-z", "force-show-hide");
         spectrum_wrapper.classList.add("force-show-label");
-        spectrum_wrapper.classList.remove("force-show-m-z");
     } else if (t.id == "force-show-m-z") {
-        spectrum_wrapper.classList.remove("force-show-label");
+        spectrum_wrapper.classList.remove("force-show-label", "force-show-hide");
         spectrum_wrapper.classList.add("force-show-m-z");
+    } else if (t.id == "force-show-hide") {
+        spectrum_wrapper.classList.remove("force-show-label", "force-show-m-z");
+        spectrum_wrapper.classList.add("force-show-hide");
     } else if (t.id == "force-show-clear") {
         spectrum_wrapper.querySelectorAll(".peak").forEach(element => { delete element.dataset.showLabelManually; delete element.dataset.showMZManually; });
     } else if (cl == "unassigned") {
