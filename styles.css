@@ -3292,7 +3292,8 @@ summary {
     & .series,
     & .glycan-id,
     & .peptide-id,
-    & .neutral-losses {
+    & .neutral-losses,
+    & .cross-links {
         display: none;
     }
 }
@@ -3311,7 +3312,8 @@ summary {
 .spectrum.show-series .series,
 .spectrum.show-glycan-id .glycan-id,
 .spectrum.show-peptide-id .peptide-id,
-.spectrum.show-neutral-losses .neutral-losses {
+.spectrum.show-neutral-losses .neutral-losses,
+.spectrum.show-cross-links .cross-links {
     display: inline;
 }
 
@@ -3809,5 +3811,34 @@ summary {
 
     .spectrum .legend>.ion.permanent {
         outline-color: var(--color-secondary);
+    }
+}
+
+/* Custom symbols */
+
+.cs-xl-intact,
+.cs-xl-broken {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.cs-xl-intact {
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" version="1.1" viewBox="0 0 26.458 26.458" xmlns="http://www.w3.org/2000/svg"> <path fill="%231e1e1e" d="m3.1758 5.291v8.5996h18.785v7.2754h1.3223v-8.5977h-18.785v-7.2773z"/></svg>');
+}
+
+.cs-xl-broken {
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" version="1.1" viewBox="0 0 26.458 26.458" xmlns="http://www.w3.org/2000/svg"><path fill="%231e1e1e1" d="m3.1745 5.2917v8.5995h7.3809l0.76378-1.3224h-6.8208v-7.2771zm12.701 2.0293-6.4394 11.156 1.1467 0.66042 6.4394-11.154zm0.02791 5.2477-0.76326 1.3224h6.8192v7.2755h1.3245v-8.5979z"/></svg>');
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    .cs-xl-intact {
+        background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" version="1.1" viewBox="0 0 26.458 26.458" xmlns="http://www.w3.org/2000/svg"> <path fill="%23d4d4d4" d="m3.1758 5.291v8.5996h18.785v7.2754h1.3223v-8.5977h-18.785v-7.2773z"/></svg>');
+    }
+
+    .cs-xl-broken {
+        background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" version="1.1" viewBox="0 0 26.458 26.458" xmlns="http://www.w3.org/2000/svg"><path fill="%23d4d4d4" d="m3.1745 5.2917v8.5995h7.3809l0.76378-1.3224h-6.8208v-7.2771zm12.701 2.0293-6.4394 11.156 1.1467 0.66042 6.4394-11.154zm0.02791 5.2477-0.76326 1.3224h6.8192v7.2755h1.3245v-8.5979z"/></svg>');
     }
 }
