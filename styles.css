@@ -3293,7 +3293,10 @@ summary {
     & .glycan-id,
     & .peptide-id,
     & .neutral-losses,
-    & .cross-links {
+    & .cross-links,
+    & .ambiguous-amino-acids,
+    & .modifications,
+    & .charge-carriers {
         display: none;
     }
 }
@@ -3313,7 +3316,10 @@ summary {
 .spectrum.show-glycan-id .glycan-id,
 .spectrum.show-peptide-id .peptide-id,
 .spectrum.show-neutral-losses .neutral-losses,
-.spectrum.show-cross-links .cross-links {
+.spectrum.show-cross-links .cross-links,
+.spectrum.show-ambiguous-amino-acids .ambiguous-amino-acids,
+.spectrum.show-modifications .modifications,
+.spectrum.show-charge-carriers .charge-carriers {
     display: inline;
 }
 

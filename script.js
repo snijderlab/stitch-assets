@@ -853,6 +853,12 @@ function SpectrumSettings(event) {
         spectrum_wrapper.classList.toggle("show-neutral-losses", t.checked);
     } else if (t.id == "spectrum-label-cross-links") {
         spectrum_wrapper.classList.toggle("show-cross-links", t.checked);
+    } else if (t.id == "spectrum-label-ambiguous-amino-acids") {
+        spectrum_wrapper.classList.toggle("show-ambiguous-amino-acids", t.checked);
+    } else if (t.id == "spectrum-label-modifications") {
+        spectrum_wrapper.classList.toggle("show-modifications", t.checked);
+    } else if (t.id == "spectrum-label-charge-carriers") {
+        spectrum_wrapper.classList.toggle("show-charge-carriers", t.checked);
     } else if (t.id == "rotate-label") {
         spectrum_wrapper.classList.toggle("rotate-label", t.checked);
     } else if (t.id == "spectrum-mz-min") {
