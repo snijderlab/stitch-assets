@@ -907,7 +907,6 @@ function SpectrumUpdateLabels(canvas) {
         for (let index = 1; index < canvas.children.length; index++) {
             const peak = canvas.children[index];
             const intensity = Number(peak.style.getPropertyValue("--intensity"));
-            console.log(intensity)
             // Update shown labels
             if (label_value != 0 && intensity >= label_threshold) {
                 peak.dataset.showLabel = "true";
@@ -1093,7 +1092,6 @@ function Zoom(canvas_wrapper, min, max, maxI) {
     canvas_wrapper.style.setProperty("--max-mz", max);
     canvas_wrapper.style.setProperty("--max-intensity", canvas_wrapper.dataset.maxIntensity);
 
-    console.log(last_max_intensity, maxI);
     if (last_max_intensity != maxI) {
         SpectrumUpdateLabels(canvas_wrapper.querySelector(".canvas"));
     }
@@ -1177,7 +1175,7 @@ function UpdateSpectrumAxes(canvas_wrapper) {
     const max = Number(canvas_wrapper.dataset.maxMz);
     const factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1; // inlined fancyRound
     for (let i = 0; i < x_ticks.length; i++) {
-        x_ticks[i].innerText = Math.round(min + i / (x_ticks.length - 1) * (max - min) * factor) / factor;
+        x_ticks[i].innerText = Math.round((min + i / (x_ticks.length - 1) * (max - min)) * factor) / factor;
     }
 
     // Update spectrum graph axes
