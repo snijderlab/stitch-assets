@@ -304,12 +304,18 @@ dialog {
     }
 
     :is(input,
-        select,
         textarea,
         .peptide-input,
         .input[contentEditable]) {
         -webkit-appearance: none;
         appearance: none;
+    }
+
+    :is(input,
+        select,
+        textarea,
+        .peptide-input,
+        .input[contentEditable]) {
         border-radius: 0;
         padding: .2rem;
         cursor: pointer;
