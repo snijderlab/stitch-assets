@@ -3296,6 +3296,11 @@ summary {
         bottom: min(100%, var(--height));
     }
 
+    &:not(.cut):where(.multi, .mp, .mpp):hover::after {
+        display: block;
+        transform: translateY(-3.5rem);
+    }
+
     &.theoretical,
     &.theoretical:not(:hover) span,
     & .charge,
