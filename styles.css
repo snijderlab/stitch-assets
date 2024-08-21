@@ -2067,6 +2067,8 @@ summary {
         flex-direction: column;
         justify-content: center;
         grid-area: side;
+        flex-wrap: wrap;
+        max-height: 6rem;
     }
 
     & .n-term {
@@ -2889,7 +2891,9 @@ summary {
 }
 
 .spectrum .n-term,
-.spectrum .c-term {
+.spectrum .c-term,
+.spectrum .neutral-loss,
+.spectrum .diagnostic {
     --color: var(--color-foreground);
 }
 
