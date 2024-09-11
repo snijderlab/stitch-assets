@@ -2890,10 +2890,10 @@ summary {
     }
 }
 
-.spectrum .n-term,
-.spectrum .c-term,
-.spectrum .neutral-loss,
-.spectrum .diagnostic {
+.spectrum .ion-series .n-term,
+.spectrum .ion-series .c-term,
+.spectrum .ion-series .neutral-loss,
+.spectrum .ion-series .diagnostic {
     --color: var(--color-foreground);
 }
 
