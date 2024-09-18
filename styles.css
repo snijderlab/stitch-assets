@@ -3187,6 +3187,11 @@ summary {
     width: var(--stroke-spectrum);
     background-color: var(--color);
     z-index: 1;
+    cursor: pointer;
+
+    & * {
+        cursor: inherit;
+    }
 
     #spectrum-wrapper.y-sqrt & {
         --f: sqrt(var(--intensity)) / sqrt(var(--max-intensity));
@@ -3218,7 +3223,6 @@ summary {
         left: -.2em;
         text-anchor: end;
         z-index: 10;
-        cursor: default;
         opacity: 0;
         width: max-content;
 
@@ -3324,6 +3328,49 @@ summary {
 
 .spectrum.show-unassigned .peak.unassigned {
     display: block;
+}
+
+.spectrum.distance {
+    cursor: ew-resize;
+
+    & * {
+        cursor: inherit;
+    }
+
+    & .peak {
+        cursor: pointer;
+    }
+}
+
+.spectrum .distance {
+    position: absolute;
+    --f: var(--intensity) / var(--max-intensity);
+    --_clr: var(--color-halfway-fg);
+    left: calc(100% * (var(--start-mz) - var(--min-mz)) / (var(--max-mz) - var(--min-mz)));
+    width: calc(100% * (var(--end-mz) - var(--start-mz)) / (var(--max-mz) - var(--min-mz)));
+    height: 0;
+    bottom: min(calc(var(--f) * 100% - 1px), 100%);
+    border: 1px dashed var(--_clr);
+    z-index: 2;
+    cursor: pointer;
+
+    &::before {
+        content: attr(data-label);
+        position: absolute;
+        width: 100%;
+        top: -1.5em;
+        color: var(--_clr);
+        text-align: center;
+        font-size: calc(0.8 * var(--fs-spectrum));
+    }
+
+    &:hover {
+        --_clr: var(--color-foreground);
+    }
+
+    &:active {
+        --_clr: var(--color-primary);
+    }
 }
 
 .spectrum.show-charge .charge,

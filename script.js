@@ -364,6 +364,10 @@ function SpectrumSetUp() {
         element.addEventListener("mouseup", spectrumDragEnd)
         element.addEventListener("mouseout", spectrumDragOut)
     })
+    document.querySelectorAll("#spectrum-wrapper .peak").forEach(element => {
+        element.addEventListener("mousedown", spectrumDistanceStart)
+        element.addEventListener("mouseup", spectrumDistanceEnd)
+    })
     document.querySelectorAll("#spectrum-wrapper .canvas-wrapper").forEach(element => {
         var d = element.dataset;
         d.minMz = 0;
@@ -375,6 +379,18 @@ function SpectrumSetUp() {
     })
     document.querySelectorAll("#spectrum-wrapper .canvas-spectrum").forEach(element => {
         element.addEventListener("wheel", spectrumScroll)
+    })
+    document.addEventListener("keyup", e => {
+        if (e.key == "0" && e.ctrlKey) {
+            spectrumZoomOut(e)
+        } else if ((e.key == "=" || e.key == "-") && e.ctrlKey) {
+            const wrapper = document.querySelector(".canvas-wrapper");
+            const minMz = Number(wrapper.dataset.minMz);
+            const maxMz = Number(wrapper.dataset.maxMz);
+            const delta = 0.05 * (maxMz - minMz);
+            const direction = (e.key == "-") ? -1 : 1;
+            Zoom(wrapper, Math.max(0, minMz + direction * delta * 0.5), maxMz - direction * delta * 0.5, Number(wrapper.dataset.maxIntensity));
+        }
     })
 
     // Spectrum graph
@@ -1014,10 +1030,12 @@ function spectrumDragOut(event) {
             linked_selection.hidden = true;
             linked_selection.classList.remove("linked");
         }
-        selection = undefined
-        linked_selection = undefined
-        startPoint = undefined
+        selection = undefined;
+        linked_selection = undefined;
+        startPoint = undefined;
+        first_anchor = undefined;
 
+        document.querySelector("#spectrum-wrapper").classList.remove("distance");
         document.querySelectorAll(".wrapper.dragging").forEach(e => e.classList.remove("dragging"));
     }
 }
@@ -1056,6 +1074,55 @@ function spectrumDragEnd(event) {
     }
 }
 
+var first_anchor;
+
+function spectrumDistanceStart(event) {
+    startPoint = undefined;
+    first_anchor = event.target;
+    while (!first_anchor.classList.contains("peak")) {
+        first_anchor = first_anchor.parentElement;
+    }
+    event.preventDefault();
+    document.querySelector("#spectrum-wrapper").classList.add("distance");
+}
+
+function spectrumDistanceEnd(event) {
+    if (first_anchor != undefined) {
+        let second_anchor = event.target;
+        while (!second_anchor.classList.contains("peak")) {
+            second_anchor = second_anchor.parentElement;
+        }
+        if (first_anchor == second_anchor) {
+            document.querySelector("#spectrum-wrapper").classList.remove("distance");
+            first_anchor = undefined;
+            return;
+        }
+
+        const canvasWrapper = document.querySelector("#spectrum-wrapper .canvas-wrapper");
+        const intensity = Math.min(Number(first_anchor.style.getPropertyValue("--intensity")), Number(second_anchor.style.getPropertyValue("--intensity"))) / 2;
+        const start_mz = Math.min(Number(first_anchor.style.getPropertyValue("--mz")), Number(second_anchor.style.getPropertyValue("--mz")));
+        const end_mz = Math.max(Number(first_anchor.style.getPropertyValue("--mz")), Number(second_anchor.style.getPropertyValue("--mz")));
+        const text = distanceLabel(Number(canvasWrapper.dataset.maxMz), Number(canvasWrapper.dataset.minMz), end_mz - start_mz);
+
+        let distance = document.createElement("span");
+        distance.className = "distance";
+        distance.style.setProperty("--start-mz", start_mz);
+        distance.style.setProperty("--end-mz", end_mz);
+        distance.style.setProperty("--intensity", intensity);
+        distance.dataset.distance = end_mz - start_mz;
+        distance.dataset.label = text;
+        distance.addEventListener("click", event => event.target.remove());
+
+        document.querySelector("#spectrum-wrapper .canvas").appendChild(distance);
+        first_anchor = undefined;
+        document.querySelector("#spectrum-wrapper").classList.remove("distance");
+    }
+}
+
+export function spectrumClearDistanceLabels() {
+    document.querySelectorAll("#spectrum-wrapper .distance").forEach(element => element.remove());
+}
+
 function spectrumScroll(event) {
     event.preventDefault(); // Prevent page scrolling (also when not on the canvas)
     let target = event.target;
@@ -1077,7 +1144,7 @@ function spectrumScroll(event) {
         // Smaller thing (95%) centred to location
         let box = target.getBoundingClientRect();
         let center = (event.pageX - box.x) / box.width;
-        let delta = -event.deltaY / 10000 * 5 * (wrapper.dataset.maxMz - wrapper.dataset.minMz);
+        let delta = -event.deltaY / 10000 * 5 * (maxMz - minMz);
         Zoom(wrapper, Math.max(0, minMz + delta * center), maxMz - delta * (1 - center), Number(wrapper.dataset.maxIntensity));
     }
 }
@@ -1100,7 +1167,7 @@ function Zoom(canvas_wrapper, min, max, maxI) {
 
     document.getElementById("spectrum-mz-min").value = fancyRound(max, min, min);
     document.getElementById("spectrum-mz-max").value = fancyRound(max, min, max);
-    document.getElementById("spectrum-intensity-max").value = fancyRound(canvas_wrapper.dataset.maxIntensity, 0, canvas_wrapper.dataset.maxIntensity);
+    document.getElementById("spectrum-intensity-max").value = fancyRound(Number(canvas_wrapper.dataset.maxIntensity), 0, Number(canvas_wrapper.dataset.maxIntensity));
     last_max_intensity = maxI;
 }
 
@@ -1121,7 +1188,7 @@ function ZoomSpectrumGraph(canvas, min_y, max_y) {
 }
 
 function spectrumZoomOut(event) {
-    var spectrum = event.target.parentElement.parentElement.parentElement.parentElement;
+    var spectrum = document.querySelector("#spectrum-wrapper");
     var min, max, maxI = 0;
     spectrum.querySelectorAll(".canvas-wrapper").forEach(canvas => {
         var d = canvas.dataset;
@@ -1134,9 +1201,9 @@ function spectrumZoomOut(event) {
         canvas.classList.remove("zoomed");
 
         UpdateSpectrumAxes(canvas)
-        min = d.minMz;
-        max = d.maxMz;
-        maxI = d.maxIntensity;
+        min = Number(d.minMz);
+        max = Number(d.maxMz);
+        maxI = Number(d.maxIntensity);
 
         SpectrumUpdateLabels(canvas.querySelector(".canvas-spectrum"));
     });
@@ -1146,9 +1213,16 @@ function spectrumZoomOut(event) {
 }
 
 function fancyRound(max, min, value, additional = 0) {
-    var factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1;
-    factor *= Math.pow(10, additional);
-    return Math.round(value * factor) / factor;
+    const diff = max - min;
+    const digits = Math.max(Math.ceil(-Math.log10(diff) + 2 + additional), 0);
+    return value.toFixed(digits + additional);
+}
+
+function distanceLabel(max, min, value) {
+    const diff = max - min;
+    const zoom_digits = Math.max(Math.ceil(-Math.log10(diff) + 2), 0);
+    const number_digits = Math.max(Math.ceil(-Math.log10(value) + 3), 0);
+    return value.toFixed(Math.max(zoom_digits, number_digits));
 }
 
 // Give the canvas element
@@ -1171,16 +1245,17 @@ function UpdateSpectrumAxes(canvas_wrapper) {
             x_axis.children[0].remove();
         }
     }
-    const min = Number(canvas_wrapper.dataset.minMz);
-    const max = Number(canvas_wrapper.dataset.maxMz);
-    const factor = max - min < 5 ? 100 : max - min < 50 ? 10 : 1; // inlined fancyRound
+    const min_mz = Number(canvas_wrapper.dataset.minMz);
+    const max_mz = Number(canvas_wrapper.dataset.maxMz);
+    const diff_mz = max_mz - min_mz;
+    const digits_mz = Math.max(Math.ceil(-Math.log10(diff_mz) + 2), 0)
     for (let i = 0; i < x_ticks.length; i++) {
-        x_ticks[i].innerText = Math.round((min + i / (x_ticks.length - 1) * (max - min)) * factor) / factor;
+        x_ticks[i].innerText = (min_mz + i / (x_ticks.length - 1) * (diff_mz)).toFixed(digits_mz);
     }
 
     // Update spectrum graph axes
-    canvas_wrapper.querySelector('.error-graph .x-axis .min').innerText = Math.round(min * factor) / factor;
-    canvas_wrapper.querySelector('.error-graph .x-axis .max').innerText = Math.round(max * factor) / factor;
+    canvas_wrapper.querySelector('.error-graph .x-axis .min').innerText = min_mz.toFixed(digits_mz);
+    canvas_wrapper.querySelector('.error-graph .x-axis .max').innerText = max_mz.toFixed(digits_mz);
 
     // Update y-axis
     const y_axis = canvas_wrapper.children[0]; // y-axis
@@ -1216,4 +1291,11 @@ function UpdateSpectrumAxes(canvas_wrapper) {
         else
             y_ticks[i].innerText = Math.round(v).toExponential(2);
     }
+
+    // Update distance labels 
+    canvas_wrapper.querySelectorAll(".distance").forEach(element => {
+        const distance = Number(element.dataset.distance);
+        const digits_number = Math.max(Math.ceil(-Math.log10(distance) + 3), 0)
+        element.dataset.label = distance.toFixed(Math.max(digits_mz, digits_number));
+    });
 }
