@@ -828,6 +828,14 @@ function SpectrumSettings(event) {
     } else if (t.id == "peak-colour-none") {
         spectrum_wrapper.classList.remove("legend-ion", "legend-peptide", "legend-peptidoform");
         spectrum_wrapper.classList.add("legend-none");
+    } else if (t.id == "peak-distance") {
+        if (spectrum_wrapper.classList.contains("ruler")) {
+            spectrum_wrapper.classList.remove("ruler");
+            ruler_mode = false;
+        } else {
+            spectrum_wrapper.classList.add("ruler");
+            ruler_mode = true;
+        }
     } else if (t.id == "force-show-none") {
         spectrum_wrapper.classList.remove("force-show-label", "force-show-m-z", "force-show-hide");
     } else if (t.id == "force-show-label") {
@@ -948,6 +956,7 @@ var startPoint;
 var selection;
 var linked_selection;
 var last_selection;
+var ruler_mode = false;
 
 function spectrumDragStart(event) {
     var wrapper = event.target;
